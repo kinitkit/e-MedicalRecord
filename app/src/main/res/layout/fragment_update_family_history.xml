@@ -1,0 +1,64 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_10">
+
+    <CheckBox
+        android:id="@+id/cb_grandP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:text="@string/grandparent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="@dimen/sp_17" />
+
+        <CheckBox
+            android:id="@+id/cb_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:text="@string/parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/sp_17"/>
+
+        <CheckBox
+            android:id="@+id/cb_sibling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:text="@string/sibling"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/sp_17"/>
+
+        <CheckBox
+            android:id="@+id/cb_child"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:text="@string/child"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/sp_17"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@color/colorAccent"
+        android:padding="12dp"
+        android:text="@string/save"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/sp_17" />
+
+</LinearLayout>

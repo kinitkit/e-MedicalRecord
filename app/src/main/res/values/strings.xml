@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">e-Medical Record</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">Search</string>
+    <string name="Search">Search</string>
+    <string name="edit">Edit</string>
+    <string name="logout">Logout</string>
+    <string name="title_activity_family__history">Family_History</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="surgery_title">Surgery Title</string>
+    <string name="surgery_year">Surgery Year</string>
+    <string name="grandparent">Grandparent</string>
+    <string name="parent">Parent</string>
+    <string name="sibling">Sibling</string>
+    <string name="child">Child</string>
+    <string name="Year">Year</string>
+    <string name="Currently_Use">Currently Use</string>
+    <string name="Previously_Used">Previously Used</string>
+    <string name="Frequency">Frequency</string>
+    <string name="How_Long">How Long? (Years)</string>
+    <string name="If_Stopped">If stopped, when? (Year)</string>
+
+    <string-array name="spinner_gender_options">
+        <item name="male">Male</item>
+        <item name="female">Female</item>
+    </string-array>
+
+    <string-array name="spinner_type_options">
+        <item name="physician">Physician</item>
+        <item name="nurse">Nurse</item>
+        <item name="medTech">Medical Technician</item>
+    </string-array>
+
+    <string-array name="spinner_user_type">
+        <item name="physician">Patient</item>
+        <item name="nurse">Medical Personnel</item>
+    </string-array>
+
+    <string-array name="spinner_type_months">
+        <item name="january">January</item>
+        <item name="february">February</item>
+        <item name="march">March</item>
+        <item name="april">April</item>
+        <item name="may">May</item>
+        <item name="june">June</item>
+        <item name="july">July</item>
+        <item name="august">August</item>
+        <item name="september">September</item>
+        <item name="october">October</item>
+        <item name="november">November</item>
+        <item name="december">December</item>
+    </string-array>
+</resources>
