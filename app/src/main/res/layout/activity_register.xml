@@ -44,16 +44,15 @@
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textColorHint="@color/colorTextSecondary">
+                        android:layout_height="wrap_content">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_fName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="First Name"
                             android:inputType="text"
+                            android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="17sp" />
@@ -61,16 +60,15 @@
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textColorHint="@color/colorTextSecondary">
+                        android:layout_height="wrap_content">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_mName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Middle Name"
                             android:inputType="text"
+                            android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="17sp" />
@@ -79,15 +77,15 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
                         android:textColorHint="@color/colorTextSecondary">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_lName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Last Name"
                             android:inputType="text"
+                            android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="17sp" />
@@ -109,7 +107,25 @@
                         android:layout_marginBottom="8dp"
                         android:spinnerMode="dropdown" />
 
-                    <TextView
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/et_bday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Date of Birth"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textColorHint="@color/colorTextPrimary"
+                            android:textSize="@dimen/sp_17"
+                            android:paddingTop="3dp"
+                            android:focusable="false"
+                            android:clickable="true" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <!--<TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Birthday"
@@ -128,7 +144,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="2dp"
-                            android:spinnerMode="dialog" />
+                            android:spinnerMode="dialog"
+                            android:textSize="@dimen/sp_17"
+                            android:padding="0dp"/>
 
                         <android.support.v7.widget.AppCompatSpinner
                             android:id="@+id/spinner_day"
@@ -136,33 +154,168 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="2dp"
-                            android:spinnerMode="dialog" />
+                            android:spinnerMode="dialog"
+                            android:textSize="@dimen/sp_17"
+                            android:padding="0dp"/>
 
                         <android.support.v7.widget.AppCompatSpinner
                             android:id="@+id/spinner_year"
                             style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:spinnerMode="dialog" />
-                    </LinearLayout>
+                            android:spinnerMode="dialog"
+                            android:textSize="@dimen/sp_17"
+                            android:padding="0dp"/>
+                    </LinearLayout>-->
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
                         android:textColorHint="@color/colorTextSecondary">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Address"
-                            android:inputType="text|textMultiLine"
+                            android:inputType="textMultiLine"
                             android:maxLines="4"
+                            android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="17sp" />
                     </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="User Type"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="13sp" />
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spinner_user"
+                        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dropdown"
+                        android:textSize="@dimen/sp_17"
+                        android:padding="0dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/layout_medicalStaff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Medical Profession"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="13sp" />
+
+                        <android.support.v7.widget.AppCompatSpinner
+                            android:id="@+id/spinner_type"
+                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:spinnerMode="dropdown"
+                            android:textSize="@dimen/sp_17"
+                            android:padding="0dp"/>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/colorTextSecondary">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_license"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="License Number"
+                                android:inputType="number"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_patient"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Civil Status"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="13sp" />
+
+                        <android.support.v7.widget.AppCompatSpinner
+                            android:id="@+id/spinner_civilStatus"
+                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:spinnerMode="dropdown"
+                            android:textSize="@dimen/sp_17"
+                            android:padding="0dp"/>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_occupation"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Occupation"
+                                android:inputType="text"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_nationality"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Nationality"
+                                android:inputType="text"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_religion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Religion"
+                                android:inputType="text"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -192,33 +345,33 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
                         android:textColorHint="@color/colorTextSecondary">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_contactNo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Contact Number"
                             android:inputType="number"
                             android:maxLength="11"
+                            android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp"/>
+                            android:textSize="17sp" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
                         android:textColorHint="@color/colorTextSecondary">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_eAddress"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="E-mail Address"
                             android:inputType="textEmailAddress"
+                            android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="17sp" />
@@ -248,73 +401,18 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/colorPrimaryDark" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="User Type"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="13sp" />
-                    <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/spinner_user"
-                        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:spinnerMode="dropdown" />
-
-                    <LinearLayout
-                        android:id="@+id/layout_medicalStaff"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="5dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Medical Profession"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="13sp" />
-                        <android.support.v7.widget.AppCompatSpinner
-                            android:id="@+id/spinner_type"
-                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:spinnerMode="dropdown" />
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                            android:textColorHint="@color/colorTextSecondary">
-
-                            <EditText
-                                android:id="@+id/et_license"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="License Number"
-                                android:inputType="number"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/colorTextPrimary"
-                                android:textSize="17sp" />
-                        </android.support.design.widget.TextInputLayout>
-                    </LinearLayout>
-
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:layout_marginTop="@dimen/activity_textInputLayout_margin"
                         android:textColorHint="@color/colorTextSecondary">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_username"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Username"
                             android:inputType="text"
+                            android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="17sp" />
@@ -323,15 +421,15 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
                         android:textColorHint="@color/colorTextSecondary">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Password"
                             android:inputType="textPassword"
+                            android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="17sp" />
@@ -340,15 +438,15 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
                         android:textColorHint="@color/colorTextSecondary">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_cPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Confirm Password"
                             android:inputType="textPassword"
+                            android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="17sp" />
@@ -366,7 +464,7 @@
                 android:padding="12dp"
                 android:text="Register"
                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                android:textColor="#ffffff"/>
+                android:textColor="#ffffff" />
 
         </LinearLayout>
     </LinearLayout>

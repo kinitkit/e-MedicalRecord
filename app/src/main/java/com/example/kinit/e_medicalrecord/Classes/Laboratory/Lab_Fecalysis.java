@@ -7,8 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Lab_Fecalysis {
+    public static final String TABLE_NAME = "lab_fecalysis";
     public int id, userDataId;
-    public String physicianName, labName, datePerformed, color, consistency, microscopicExamination, ascarisLumbricoides, trichurisTrichiura, enterobiusVermicularis,
+    public String physicianName, labName, datePerformed, color, consistency, ascarisLumbricoides, trichurisTrichiura, enterobiusVermicularis,
             hookwormOva, giardiaLambia, blastocystisHominis, cyst, trophozoite, occultBlood, pusCells, rbc, fatGlobules, yeastCells,
             undigestedFood, starchGranules, remark;
     public Calendar calendar = Calendar.getInstance();
@@ -32,6 +33,13 @@ public class Lab_Fecalysis {
             physicianName = jsonObject.getString("physician_name");
             labName = jsonObject.getString("lab_name");
             setDate(jsonObject.getString("date_performed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setValues(JSONObject jsonObject) {
+        try {
             color = jsonObject.getString("color");
             consistency = jsonObject.getString("consistency");
             ascarisLumbricoides = jsonObject.getString("ascaris_lumbricoides");

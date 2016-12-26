@@ -11,26 +11,37 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="56dp"
+        android:paddingTop="10dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:weightSum="1">
 
         <ImageView
-            android:layout_width="63dp"
-            android:layout_height="72dp"
-            android:layout_marginBottom="24dp"
+            android:src="@mipmap/ic_logo"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="3.13" />
+            android:id="@+id/imageView" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="e-Medical Records"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textStyle="bold"
+            android:textSize="25sp"/>
 
         <!-- Label -->
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/et_username"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -38,16 +49,17 @@
                 android:textColorHint="@color/colorTextPrimary"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="17sp"
-                android:hint="Username" />
+                android:maxLength="25"
+                android:hint="Username"
+                android:paddingTop="3dp"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/et_password"
+            android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -55,7 +67,9 @@
                 android:textColorHint="@color/colorTextPrimary"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="17sp"
-                android:hint="Password"/>
+                android:hint="Password"
+                android:paddingTop="3dp"
+                android:maxLength="25"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
@@ -85,7 +99,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
-            android:text="Register as a Medical Staff"
+            android:text="No Account Yet? Register Here"
             android:gravity="center"
             android:textColor="@color/colorTextSecondary"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-<android.support.v4.widget.NestedScrollView
-    android:id="@+id/main_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,81 +30,40 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
                         android:text="Result"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginBottom="10dp"/>
+                        android:textColor="@color/colorPrimaryDark" />
 
-                    <LinearLayout
-                        android:id="@+id/layout_medResult"
+
+                    <TextView
+                        android:id="@+id/tv_consultationResult"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:clickable="true">
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_medical_result1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Consultation Result"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
 
-                        <ImageView
-                            android:id="@+id/ivContactItem3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/ic_medical_result1"/>
+                    <include layout="@layout/layout_item_divider" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp">
-
-                            <TextView
-                                android:id="@+id/tv_profile_medResult"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:text="Medical Result"
-                                android:layout_centerInParent="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textSize="17sp"
-                                android:textColor="@color/colorTextPrimary"/>
-
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true">
-                                <include layout="@layout/item_divider"/>
-
-                            </RelativeLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/layout_labResult"
+                    <TextView
+                        android:id="@+id/tv_labResult"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:clickable="true">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/ic_laboratory1"/>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:text="Laboratory"
-                                android:layout_centerInParent="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textSize="17sp"
-                                android:textColor="@color/colorTextPrimary"/>
-                        </RelativeLayout>
-                    </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_laboratory1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Laboratory Result"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -123,41 +82,24 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
                         android:text="Medication"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginBottom="10dp"/>
+                        android:textColor="@color/colorPrimaryDark" />
 
-                    <LinearLayout
-                        android:id="@+id/layout_medPresc"
+                    <TextView
+                        android:id="@+id/tv_medPresc"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/ic_prescription1"/>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:text="Medical Prescription"
-                                android:layout_centerInParent="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textSize="17sp"
-                                android:textColor="@color/colorTextPrimary"/>
-
-                        </RelativeLayout>
-                    </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_prescription1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Medical Prescription"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -176,156 +118,91 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
                         android:text="History"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginBottom="10dp"/>
+                        android:textColor="@color/colorPrimaryDark" />
 
-                    <LinearLayout
-                        android:id="@+id/layout_family"
+                    <TextView
+                        android:id="@+id/tv_admissionHistory"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_family1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Admission History"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/ic_family1"/>
+                    <include layout="@layout/layout_item_divider" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:text="Family History"
-                                android:layout_centerInParent="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textSize="17sp"
-                                android:textColor="@color/colorTextPrimary"/>
-
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true">
-                                <include layout="@layout/item_divider"/>
-                            </RelativeLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/layout_pastMedical"
+                    <TextView
+                        android:id="@+id/tv_familyHistory"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_family1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Family History"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/ic_past_medical1"/>
+                    <include layout="@layout/layout_item_divider" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:text="Past Medical History"
-                                android:layout_centerInParent="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textSize="17sp"
-                                android:textColor="@color/colorTextPrimary"/>
-
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true">
-                                <include layout="@layout/item_divider"/>
-                            </RelativeLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/layout_social"
+                    <TextView
+                        android:id="@+id/tv_pastMedicalHistory"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_past_medical1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Past Medical History"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/ic_social1"/>
+                    <include layout="@layout/layout_item_divider" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:text="Social History"
-                                android:layout_centerInParent="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textSize="17sp"
-                                android:textColor="@color/colorTextPrimary"/>
-
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true">
-                                <include layout="@layout/item_divider"/>
-                            </RelativeLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/layout_surgery"
+                    <TextView
+                        android:id="@+id/tv_socialHistory"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_social1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Social History"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/ic_surgery1"/>
+                    <include layout="@layout/layout_item_divider" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:text="Surgical History"
-                                android:layout_centerInParent="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textSize="17sp"
-                                android:textColor="@color/colorTextPrimary"/>
-
-                        </RelativeLayout>
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_surgicalHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_surgery1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Surgical History"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="30dp"
                 card_view:cardCornerRadius="0dp">
 
                 <LinearLayout
@@ -338,40 +215,39 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
                         android:text="Other"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="10dp"/>
+                        android:textColor="@color/colorPrimaryDark" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tv_allergy"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_allergy1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Allergy"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
+
+                    <include layout="@layout/layout_item_divider" />
+
+                    <TextView
+                        android:id="@+id/tv_myPhysicians"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/ic_allergy1"/>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:text="Allergy"
-                                android:layout_centerInParent="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textSize="17sp"
-                                android:textColor="@color/colorTextPrimary"/>
-
-                        </RelativeLayout>
-                    </LinearLayout>
+                        android:drawableLeft="@mipmap/ic_profession"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="My Physicians"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>

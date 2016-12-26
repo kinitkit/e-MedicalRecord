@@ -1,8 +1,11 @@
 package com.example.kinit.e_medicalrecord.BusStation;
 
-/**
- * Created by Kinit on 03/12/2016.
- */
+import com.example.kinit.e_medicalrecord.Enum.Mode;
 
 public class Bus_Mode {
+    public Mode mode;
+
+    public Bus_Mode(Mode mode) {
+        this.mode = mode;
+    }
 }

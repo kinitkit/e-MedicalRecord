@@ -24,6 +24,33 @@
     <string name="Frequency">Frequency</string>
     <string name="How_Long">How Long? (Years)</string>
     <string name="If_Stopped">If stopped, when? (Year)</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="nothing_to_display">Nothing to display</string>
+    <string name="Strength">Strength:</string>
+    <string name="Amount">Amount:</string>
+    <string name="Route">Route:</string>
+    <string name="frequency">Frequency:</string>
+    <string name="Why">Why:</string>
+    <string name="how_many">How Many:</string>
+    <string name="Refill">Refill:</string>
+    <string name="clinic_name">Clinic Name</string>
+    <string name="add_drug">Add Drug</string>
+    <string name="drugs_list">Drugs List</string>
+    <string name="Mode">Mode</string>
+    <string name="drug_medication">Drug/Medication</string>
+    <string name="strength">Strength</string>
+    <string name="amount">Amount</string>
+    <string name="route">Route</string>
+    <string name="why">Why</string>
+    <string name="How_Many">How Many</string>
+    <string name="refill">Refill</string>
+    <string name="add">ADD</string>
+    <string name="remarks">Remarks</string>
+    <string name="surgery_date">Surgery Date</string>
+    <string name="name_of_physician">Name of Physician</string>
+    <string name="date_of_prescription">Date of Prescription</string>
+    <string name="dosage">Dosage</string>
+    <string name="indication">Indication</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>
@@ -33,12 +60,11 @@
     <string-array name="spinner_type_options">
         <item name="physician">Physician</item>
         <item name="nurse">Nurse</item>
-        <item name="medTech">Medical Technician</item>
     </string-array>
 
     <string-array name="spinner_user_type">
-        <item name="physician">Patient</item>
-        <item name="nurse">Medical Personnel</item>
+        <item name="patient">Patient</item>
+        <item name="medicalPersonnel">Medical Personnel</item>
     </string-array>
 
     <string-array name="spinner_type_months">
@@ -54,5 +80,146 @@
         <item name="october">October</item>
         <item name="november">November</item>
         <item name="december">December</item>
+    </string-array>
+
+    <string-array name="spinner_civil_status">
+        <item name="single">Single</item>
+        <item name="married">Married</item>
+        <item name="widowed">Widowed</item>
+        <item name="divorced">Divorced</item>
+        <item name="separated">Separated</item>
+        <item name="living">Living common law</item>
+    </string-array>
+
+    <string-array name="spinner_route">
+        <item name="po">By Mouth</item>
+        <item name="pr">Per Rectum</item>
+        <item name="im">Intramuscular</item>
+        <item name="iv">Intravenous</item>
+        <item name="id">Intradermal</item>
+        <item name="in">Intranasal</item>
+        <item name="tp">Topical</item>
+        <item name="sl">Sublingual</item>
+        <item name="bucc">Buccal</item>
+        <item name="ip">Intraperitoneal</item>
+    </string-array>
+
+    <string-array name="spinner_frequency">
+        <item name="d">Daily</item>
+        <item name="eod">Every Other Day</item>
+        <item name="bid">Twice a Day</item>
+        <item name="tid">Three Times a Day</item>
+        <item name="qid">Four Times a Day</item>
+        <item name="qhs">Every Bedtime</item>
+        <item name="q4h">Every 4 hours</item>
+        <item name="q46h">Every 4 to 6 hours</item>
+        <item name="qwk">Every Week</item>
+    </string-array>
+
+    <string-array name="spinner_lab_chem">
+        <item name="laboratory">Laboratory</item>
+        <item name="fbs">FBS (Glucose)</item>
+        <item name="creatine">Creatine</item>
+        <item name="cholesterol">Cholesterol</item>
+        <item name="triglycerides">Triglycerides</item>
+        <item name="hdl">HDL</item>
+        <item name="ldl">LDL</item>
+        <item name="uric_acid">Uric Acid</item>
+        <item name="sgpt_alat">SGPT / ALAT</item>
+        <item name="sodium">Sodium</item>
+        <item name="potassium">Potassium</item>
+        <item name="calcium">Calcium</item>
+        <item name="remark">Remark</item>
+    </string-array>
+
+    <string-array name="spinner_lab_fecalysis">
+        <item name="laboratory">Laboratory</item>
+        <item name="color">Color</item>
+        <item name="consistency">Consistency</item>
+        <item name="ascaris_lumbricoides">Ascaris Lumbricoides</item>
+        <item name="trichuris_trichiura">Trichuris trichiura</item>
+        <item name="enterobius_vermicularis">Enterobius Vermicularis</item>
+        <item name="hookworm_ova">Hookworm Ova</item>
+        <item name="giardia_lambia">Giardia Lambia</item>
+        <item name="blastocystis_hominis">Blastocystis Hominis</item>
+        <item name="eHistolyticaCyst">Entamoeba Histolytica Cyst</item>
+        <item name="eHistolyticaTroph">Entamoeba Histolytica Troph</item>
+        <item name="occult_blood">Occult Blood</item>
+        <item name="pus_cells">Pus Cells</item>
+        <item name="rbc">Red Blood Cells</item>
+        <item name="fat_globules">Fat Globules</item>
+        <item name="yeast_cells">Yeast Cells</item>
+        <item name="undigested_food">Undigested Food</item>
+        <item name="starch_granules">Starch Granules</item>
+        <item name="remark">Remark</item>
+    </string-array>
+
+    <string-array name="spinner_lab_hematology">
+        <item name="lab_name">Laboratory</item>
+        <item name="hemoglobin">Hemoglobin</item>
+        <item name="hematrocit">Hematocrit</item>
+        <item name="RBC">RBC</item>
+        <item name="WBC">WBC</item>
+        <item name="platelets">Platelets</item>
+        <item name="reticulocytes">Reticulocytes</item>
+        <item name="MCV">MCV</item>
+        <item name="MCH">MCH</item>
+        <item name="MCHC">MCHC</item>
+        <item name="ESR">ESR (Sedimentation Rate)</item>
+        <item name="segmenters">Segmenters</item>
+        <item name="stab">Stab</item>
+        <item name="lymphocytes">Lymphocytes</item>
+        <item name="monocytes">Monocytes</item>
+        <item name="eosinophils">Eosinophils</item>
+        <item name="basophils">Basophils</item>
+        <item name="malarial_smear">Malarial Smear</item>
+        <item name="bleeding_time">Bleeding Time</item>
+        <item name="clotting_time">Clotting Time</item>
+        <item name="blood_type">Blood Type</item>
+        <item name="rh">Rh</item>
+        <item name="remark">Remarks</item>
+    </string-array>
+
+    <string-array name="spinner_blood_type">
+        <item name="oP">O +</item>
+        <item name="oN">O -</item>
+        <item name="aP">A +</item>
+        <item name="aN">A -</item>
+        <item name="bP">B +</item>
+        <item name="bN">B -</item>
+        <item name="abP">AB +</item>
+        <item name="abN">AB -</item>
+    </string-array>
+
+    <string-array name="spinner_lab_urinalysis">
+        <item name="lab_name">Laboratory</item>
+        <item name="color">Color</item>
+        <item name="transparency">Transparency</item>
+        <item name="reaction">Reaction</item>
+        <item name="specific_gravity">Specific Gravity</item>
+        <item name="pus_cells">Pus Cells</item>
+        <item name="RBC">RBC</item>
+        <item name="epith_cells">Epith Cells</item>
+        <item name="renal_cells">Renal Cells</item>
+        <item name="mucus_threads">Mucus Threads</item>
+        <item name="bacteria">Bacteria</item>
+        <item name="yeast_cells">Yeast Cells</item>
+        <item name="sugar">Sugar</item>
+        <item name="albumin">Albumin</item>
+        <item name="ketone">Ketone</item>
+        <item name="bilirubin">Bilirubin</item>
+        <item name="blood">Blood</item>
+        <item name="urobilinogen">Urobilinogen</item>
+        <item name="bacteriaNit">BacteriaNit</item>
+        <item name="leukocyte">Leukocyte</item>
+        <item name="amorphous_subs">Amorphous Subs</item>
+        <item name="uric_acid">Uric Acid</item>
+        <item name="calcium_oxalate">Calcium Oxalate</item>
+        <item name="triple_phosphate">Triple Phosphate</item>
+        <item name="pus_cast">Pus Cast</item>
+        <item name="hyaline">Hyaline</item>
+        <item name="fine_granular">Fine Granular</item>
+        <item name="coarse_granular">Coarse Granular</item>
+        <item name="remarks">Remarks</item>
     </string-array>
 </resources>

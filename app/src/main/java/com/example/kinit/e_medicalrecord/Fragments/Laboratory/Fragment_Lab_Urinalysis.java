@@ -21,11 +21,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.Bus_ToolbarTitle;
-import com.example.kinit.e_medicalrecord.BusStation.Pop_BackStack;
-import com.example.kinit.e_medicalrecord.Classes.DatePickerFragment;
+import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
+import com.example.kinit.e_medicalrecord.BusStation.General.Pop_BackStack;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
-import com.example.kinit.e_medicalrecord.Classes.Viewer;
+import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.Request.UrlString;
@@ -242,7 +242,7 @@ public class Fragment_Lab_Urinalysis extends Fragment implements AdapterView.OnI
                         params.put("user_data_id", String.valueOf(viewer.user_id));
                     }
                     for (int x = 0; x < inps.length; x++) {
-                        if(x == 2){
+                        if (x == 2) {
                             params.put("args[" + (x) + "]", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
                         } else {
                             params.put("args[" + (x) + "]", inps[x]);

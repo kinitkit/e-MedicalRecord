@@ -11,7 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.kinit.e_medicalrecord.Classes.Viewer;
+import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
+import com.example.kinit.e_medicalrecord.Enum.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.R;
 
 import java.util.ArrayList;
@@ -22,10 +23,14 @@ public class Fragment_View_Lab_Result extends Fragment {
     View rootView;
     ViewPager viewPager;
 
+    //Enum
+    Laboratory_Tests enum_laboratoryTests;
     //Classes
     Viewer viewer;
 
     //Fragments
+    Fragment_View_Laboratory fragmentLab;
+    Fragment_View_Lab_Tagged fragmentViewLabTagged;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,7 +46,15 @@ public class Fragment_View_Lab_Result extends Fragment {
     }
 
     void init() {
+        initializeViewPager();
+    }
 
+    public void setLabResultAndViewer(Laboratory_Tests enum_laboratoryTests, Object object, Viewer viewer) {
+        this.viewer = viewer;
+        this.enum_laboratoryTests = enum_laboratoryTests;
+        fragmentLab = new Fragment_View_Laboratory();
+        fragmentLab.setLab(enum_laboratoryTests, object);
+        fragmentViewLabTagged = new Fragment_View_Lab_Tagged();
     }
 
     void initializeViewPager() {
@@ -74,6 +87,9 @@ public class Fragment_View_Lab_Result extends Fragment {
 
     private void setupViewPager() {
         Fragment_View_Lab_Result.ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+        viewPagerAdapter.addFragment(fragmentLab, "Laboratory Test");
+        viewPagerAdapter.addFragment(fragmentViewLabTagged, "Tagged Physicians");
+        this.viewPager.setAdapter(viewPagerAdapter);
     }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {

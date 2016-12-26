@@ -15,10 +15,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.kinit.e_medicalrecord.Adapters.RecyclerViewAdapter_Search;
+import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Search;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.Bus_Search_Item;
-import com.example.kinit.e_medicalrecord.Classes.Search_Item;
+import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item;
+import com.example.kinit.e_medicalrecord.Classes.Search.Search_Item;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
@@ -26,7 +26,6 @@ import com.example.kinit.e_medicalrecord.Request.UrlString;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -73,7 +72,7 @@ public class Fragment_Search extends Fragment {
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
     }
 
-    void fetch_data() {
+    void fetchData() {
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
                     new Response.Listener<String>() {
@@ -152,6 +151,6 @@ public class Fragment_Search extends Fragment {
         this.name = busSearchItem.name;
         this.user_id = busSearchItem.user_id;
         search_item = new Search_Item();
-        fetch_data();
+        fetchData();
     }
 }

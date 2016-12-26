@@ -7,11 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Lab_Urinalysis {
+    public static final String TABLE_NAME = "lab_urinalysis";
     public int id, userDataId;
     public String physicianName, labName, datePerformed, color, transparency, pusCells, rbc, epithCells,
             renalCells, mucusThreads, bacteria, yeastCells, amorphousSubs, uricAcid,
-            calciumOxalate, triplePhosphate, pusCast, hyaline, fineGranular, coarseGranular, remark;
-    public double reaction, specificGravity, urobilinogen;
+            calciumOxalate, triplePhosphate, pusCast, hyaline, fineGranular, coarseGranular, remark, reaction, specificGravity, urobilinogen;
     public boolean sugar, albumin, ketone, bilirubin, blood, bacteriaNit, leukocyte;
     public Calendar calendar = Calendar.getInstance();
 
@@ -34,10 +34,17 @@ public class Lab_Urinalysis {
             physicianName = jsonObject.getString("physician_name");
             labName = jsonObject.getString("lab_name");
             setDate(jsonObject.getString("date_performed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setValues(JSONObject jsonObject) {
+        try {
             color = jsonObject.getString("color");
             transparency = jsonObject.getString("transparency");
-            reaction = jsonObject.getDouble("reaction");
-            specificGravity = jsonObject.getDouble("specific_gravity");
+            reaction = jsonObject.getString("reaction");
+            specificGravity = jsonObject.getString("specific_gravity");
             pusCells = jsonObject.getString("pus_cells");
             rbc = jsonObject.getString("RBC");
             epithCells = jsonObject.getString("epith_cells");
@@ -50,7 +57,7 @@ public class Lab_Urinalysis {
             ketone = jsonObject.getString("ketone").equals("1");
             bilirubin = jsonObject.getString("bilirubin").equals("1");
             blood = jsonObject.getString("blood").equals("1");
-            urobilinogen = jsonObject.getDouble("urobilinogen");
+            urobilinogen = jsonObject.getString("urobilinogen");
             bacteriaNit = jsonObject.getString("bacteriaNit").equals("1");
             leukocyte = jsonObject.getString("leukocyte").equals("1");
             amorphousSubs = jsonObject.getString("amorphous_subs");

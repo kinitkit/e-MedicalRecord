@@ -78,7 +78,7 @@ public class Login extends AppCompatActivity {
         link_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(getBaseContext(), Register_MedicalStaff.class);
+                intent = new Intent(getBaseContext(), Register.class);
                 startActivity(intent);
             }
         });

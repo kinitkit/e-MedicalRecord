@@ -9,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.kinit.e_medicalrecord.Adapters.RecyclerViewAdapter_LabResult_Container;
-import com.example.kinit.e_medicalrecord.Classes.Lab_Chemistry;
-import com.example.kinit.e_medicalrecord.Classes.Lab_Fecalysis;
-import com.example.kinit.e_medicalrecord.Classes.Lab_Hematology;
-import com.example.kinit.e_medicalrecord.Classes.Lab_Urinalysis;
+import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_LabResult_Container;
+import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Chemistry;
+import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Fecalysis;
+import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Hematology;
+import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Urinalysis;
 import com.example.kinit.e_medicalrecord.R;
 
 import java.util.ArrayList;

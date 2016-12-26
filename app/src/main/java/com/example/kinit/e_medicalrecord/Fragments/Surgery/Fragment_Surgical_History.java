@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +17,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.kinit.e_medicalrecord.Adapters.RecyclerViewAdapter_Surgery;
+import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Surgery;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.Bus_Resume_Fragment;
-import com.example.kinit.e_medicalrecord.BusStation.Bus_Surgical_History_Item;
-import com.example.kinit.e_medicalrecord.BusStation.Bus_ToolbarTitle;
+import com.example.kinit.e_medicalrecord.BusStation.General.Bus_Resume_Fragment;
+import com.example.kinit.e_medicalrecord.BusStation.Surgical_History.Bus_Surgical_History_Item;
+import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
-import com.example.kinit.e_medicalrecord.Classes.Surgical_History;
+import com.example.kinit.e_medicalrecord.Classes.Surgical_History.Surgical_History;
 import com.example.kinit.e_medicalrecord.Enum.Medical_Transaction;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
@@ -256,7 +255,7 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
         super.onResume();
         BusStation.getBus().register(this);
         setToolbarTitle();
-        surgical_history = new com.example.kinit.e_medicalrecord.Classes.Surgical_History();
+        surgical_history = new Surgical_History();
         fetchData();
     }
 

@@ -21,11 +21,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.Bus_ToolbarTitle;
-import com.example.kinit.e_medicalrecord.BusStation.Pop_BackStack;
-import com.example.kinit.e_medicalrecord.Classes.DatePickerFragment;
+import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
+import com.example.kinit.e_medicalrecord.BusStation.General.Pop_BackStack;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
-import com.example.kinit.e_medicalrecord.Classes.Viewer;
+import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.Request.UrlString;
@@ -33,7 +33,6 @@ import com.example.kinit.e_medicalrecord.Request.UrlString;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -199,7 +198,7 @@ public class Fragment_Lab_Hematology extends Fragment implements AdapterView.OnI
             }
         }
 
-        inps.add(20, spinner_bloodType.getSelectedItem().toString());
+        inps.add(22, spinner_bloodType.getSelectedItem().toString());
 
         if (isLabNameEmpty == 0 && isLabTestEmpty == 0) {
             insertData(inps);

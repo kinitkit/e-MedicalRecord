@@ -2,14 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Fragments.Fragment_Profile">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBackground"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        tools:context="com.letsnurture.ln_202.coordinatorlayoutpart1.ScrollingActivity">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar"
@@ -45,14 +45,15 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
-                app:tabMode="fixed" />
+                app:tabMode="fixed"
+                app:tabIndicatorColor="@color/colorBackground"/>
 
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </android.support.design.widget.CoordinatorLayout>

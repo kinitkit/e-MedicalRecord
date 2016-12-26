@@ -7,18 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Bus_Mode;
-import com.example.kinit.e_medicalrecord.Classes.User;
-import com.example.kinit.e_medicalrecord.Classes.Viewer;
+import com.example.kinit.e_medicalrecord.Classes.User.User;
+import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
-import com.example.kinit.e_medicalrecord.Fragments.Fragment_Medical_History;
-import com.example.kinit.e_medicalrecord.Fragments.Fragment_Profile_BasicInfo;
+import com.example.kinit.e_medicalrecord.Fragments.Medical_History.Fragment_Medical_History;
 import com.example.kinit.e_medicalrecord.R;
 import com.squareup.otto.Subscribe;
 
@@ -122,9 +120,7 @@ public class Fragment_Profile extends Fragment {
     @Subscribe
     public void changeMode(Bus_Mode busMode) {
         mode = busMode.mode;
-        viewPager = null;
         initializeViewPager();
-        setupViewPager();
     }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {

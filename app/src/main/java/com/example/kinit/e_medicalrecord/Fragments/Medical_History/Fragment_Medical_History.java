@@ -7,18 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.example.kinit.e_medicalrecord.Classes.User;
-import com.example.kinit.e_medicalrecord.Classes.Viewer;
+import com.example.kinit.e_medicalrecord.Activities.My_Physician;
+import com.example.kinit.e_medicalrecord.Classes.User.User;
+import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Medical_Transaction;
 import com.example.kinit.e_medicalrecord.Activities.Medical;
 import com.example.kinit.e_medicalrecord.R;
 
 
 public class Fragment_Medical_History extends Fragment {
-
-    LinearLayout layout_medResult, layout_labResult, layout_medPresc, layout_family, layout_surgery, layout_pastMedical, layout_social,
-            layout_allergy;
+    TextView tv_consultationResult, tv_labResult, tv_medPresc, tv_admissionHistory, tv_familyHistory, tv_pastMedicalHistory,
+            tv_socialHistory, tv_surgicalHistory, tv_allergy, tv_myPhysicians;
     Intent myIntent;
 
     //User Class
@@ -35,56 +36,81 @@ public class Fragment_Medical_History extends Fragment {
     }
 
     public void init(View view){
-        //Layout initialization
-        layout_medResult = (LinearLayout)view.findViewById(R.id.layout_medResult);
-        layout_labResult = (LinearLayout)view.findViewById(R.id.layout_labResult);
-        layout_medPresc = (LinearLayout)view.findViewById(R.id.layout_medPresc);
-        layout_family = (LinearLayout)view.findViewById(R.id.layout_family);
-        layout_surgery = (LinearLayout)view.findViewById(R.id.layout_surgery);
-        layout_pastMedical = (LinearLayout)view.findViewById(R.id.layout_pastMedical);
-        layout_social = (LinearLayout)view.findViewById(R.id.layout_social);
-        layout_allergy = (LinearLayout)view.findViewById(R.id.layout_allergy);
 
-        //Set onClick for each textViews
-        layout_medResult.setOnClickListener(new View.OnClickListener() {
+        //TextView initialization
+        tv_consultationResult = (TextView) view.findViewById(R.id.tv_consultationResult);
+        tv_labResult = (TextView) view.findViewById(R.id.tv_labResult);
+        tv_medPresc = (TextView) view.findViewById(R.id.tv_medPresc);
+        tv_admissionHistory = (TextView) view.findViewById(R.id.tv_admissionHistory);
+        tv_familyHistory = (TextView) view.findViewById(R.id.tv_familyHistory);
+        tv_pastMedicalHistory = (TextView) view.findViewById(R.id.tv_pastMedicalHistory);
+        tv_socialHistory = (TextView) view.findViewById(R.id.tv_socialHistory);
+        tv_surgicalHistory = (TextView) view.findViewById(R.id.tv_surgicalHistory);
+        tv_allergy = (TextView) view.findViewById(R.id.tv_allergy);
+        tv_myPhysicians = (TextView) view.findViewById(R.id.tv_myPhysicians);
+
+        tv_consultationResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
         });
-        layout_labResult.setOnClickListener(new View.OnClickListener() {
+        tv_labResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 newActivityInitializer(Medical_Transaction.LAB_RESULT.ordinal());
             }
         });
-        layout_medPresc.setOnClickListener(new View.OnClickListener() {
+        tv_medPresc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 newActivityInitializer(Medical_Transaction.MEDICAL_PRESCRIPTION.ordinal());
             }
         });
-        layout_family.setOnClickListener(new View.OnClickListener() {
+        tv_admissionHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        tv_familyHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 newActivityInitializer(Medical_Transaction.FAMILY_HISTORY.ordinal());
             }
         });
-        layout_surgery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newActivityInitializer(Medical_Transaction.SURGICAL_HISTORY.ordinal());
-            }
-        });
-        layout_pastMedical.setOnClickListener(new View.OnClickListener() {
+        tv_pastMedicalHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 newActivityInitializer(Medical_Transaction.PAST_MEDICAL_HISTORY.ordinal());
             }
         });
-        layout_social.setOnClickListener(new View.OnClickListener() {
+        tv_socialHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 newActivityInitializer(Medical_Transaction.SOCIAL_HISTORY.ordinal());
+            }
+        });
+        tv_surgicalHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newActivityInitializer(Medical_Transaction.SURGICAL_HISTORY.ordinal());
+            }
+        });
+        tv_allergy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        tv_myPhysicians.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), My_Physician.class);
+                intent.putExtra("patient_id", user.getPatient_id());
+                intent.putExtra("patient_name", user.getFullName());
+                intent.putExtra("user_id", user.getUser_data_id());
+                startActivity(intent);
             }
         });
     }
@@ -113,5 +139,4 @@ public class Fragment_Medical_History extends Fragment {
         this.user = user;
         this.viewer = viewer;
     }
-
 }

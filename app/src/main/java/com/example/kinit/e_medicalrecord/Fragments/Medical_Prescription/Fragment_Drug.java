@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.Bus_Drug;
-import com.example.kinit.e_medicalrecord.BusStation.Bus_Open_Add_Drug;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Drug;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Open_Add_Drug;
 import com.example.kinit.e_medicalrecord.Enum.Query_Type;
 import com.example.kinit.e_medicalrecord.R;
 
