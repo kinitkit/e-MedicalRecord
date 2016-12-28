@@ -1,5 +1,6 @@
 package com.example.kinit.e_medicalrecord.Request;
 public class UrlString {
+    public static final int POST = 1;
     //public static final String URL = "http://192.168.56.2:80/Medical%20Record/main.php";
     //public static final String URL = "http://192.168.0.104:80/Medical%20Record/main.php"; // sa balay
     public static final String URL = "http://192.168.0.104:80/Medical%20Record/main.php"; // sa balay

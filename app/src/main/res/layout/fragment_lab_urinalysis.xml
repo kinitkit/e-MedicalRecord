@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
     tools:context="com.example.kinit.e_medicalrecord.Fragments.Laboratory.Fragment_Lab_Urinalysis">
 
     <android.support.v4.widget.NestedScrollView
@@ -641,9 +642,9 @@
                 android:id="@+id/btn_save"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
                 android:background="@color/colorAccent"
                 android:padding="12dp"
-                android:layout_marginBottom="50dp"
                 android:text="@string/save"
                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
                 android:textColor="#ffffff" />

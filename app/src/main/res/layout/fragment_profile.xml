@@ -2,7 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="true">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -45,8 +46,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
-                app:tabMode="fixed"
-                app:tabIndicatorColor="@color/colorBackground"/>
+                app:tabIndicatorColor="@color/colorBackground"
+                app:tabMode="fixed"/>
 
         </android.support.design.widget.AppBarLayout>
 

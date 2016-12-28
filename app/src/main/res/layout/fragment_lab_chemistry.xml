@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
+    android:clickable="true"
     tools:context="com.example.kinit.e_medicalrecord.Fragments.Laboratory.Fragment_Lab_Chemistry">
 
     <android.support.design.widget.CoordinatorLayout
@@ -21,7 +22,7 @@
                 android:background="@color/colorBackground"
                 android:orientation="vertical">
 
-                <include layout="@layout/view_laboratory"/>
+                <include layout="@layout/view_laboratory" />
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -272,36 +273,37 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             card_view:cardCornerRadius="0dp">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:paddingLeft="@dimen/dp_5"
-            android:paddingRight="@dimen/dp_5">
 
-            <TextView
-                android:id="@+id/tv_goTo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="Go to:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textColor="@color/colorTextSecondary"
-                android:textSize="17sp" />
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/spinner_lab_search"
-                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_toRightOf="@+id/tv_goTo"
-                android:padding="0dp"
-                android:spinnerMode="dialog"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textColor="@color/colorTextSecondary"
-                android:textSize="17sp" />
-        </RelativeLayout>
+                android:background="#ffffff"
+                android:paddingLeft="@dimen/dp_5"
+                android:paddingRight="@dimen/dp_5">
+
+                <TextView
+                    android:id="@+id/tv_goTo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Go to:"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/colorTextSecondary"
+                    android:textSize="17sp" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_lab_search"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_toRightOf="@+id/tv_goTo"
+                    android:padding="0dp"
+                    android:spinnerMode="dialog"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/colorTextSecondary"
+                    android:textSize="17sp" />
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
 
     </android.support.design.widget.CoordinatorLayout>

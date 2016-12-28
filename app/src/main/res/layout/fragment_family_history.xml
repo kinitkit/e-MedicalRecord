@@ -3,6 +3,6 @@
     android:id="@+id/elv_familyHistory"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:clickable="true"
     android:divider="@color/colorBackground"
-    android:headerDividersEnabled="false"
-    tools:context=".Activities.Family_History" />
+    android:headerDividersEnabled="false" />

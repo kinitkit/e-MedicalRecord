@@ -2,17 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
     android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar_with_backbtn"/>
+        layout="@layout/toolbar_with_backbtn" />
 
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
-        android:background="@color/colorBackground"/>
+        android:background="@color/colorBackground" />
 
 </RelativeLayout>

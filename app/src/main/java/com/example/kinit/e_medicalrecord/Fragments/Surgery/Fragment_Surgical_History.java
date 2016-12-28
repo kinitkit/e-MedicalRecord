@@ -5,9 +5,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,9 @@ import com.example.kinit.e_medicalrecord.BusStation.General.Bus_Resume_Fragment;
 import com.example.kinit.e_medicalrecord.BusStation.Surgical_History.Bus_Surgical_History_Item;
 import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Surgical_History.Surgical_History;
+import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Medical_Transaction;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
@@ -37,7 +41,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Fragment_Surgical_History extends Fragment implements View.OnClickListener {
+public class Fragment_Surgical_History extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     //View
     View rootView;
 
@@ -47,9 +51,11 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
 
     //Classes
     Surgical_History surgical_history;
+    Viewer viewer;
 
     //Dialog
     Custom_AlertDialog alertDialog;
+    Custom_ProgressDialog progressDialog;
 
     //Widgets
     //FAB
@@ -58,6 +64,7 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
     RecyclerView recyclerView_Content;
     RecyclerView.Adapter recyclerViewAdapter_Content;
     RecyclerView.LayoutManager recyclerViewLayoutM_Content;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     /*============================
         END OF GLOBAL VARIABLES
@@ -88,13 +95,27 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
     }
 
     void init() {
+        progressDialog = new Custom_ProgressDialog(getActivity());
         alertDialog = new Custom_AlertDialog(getActivity());
 
+        recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.rv_surgical_history);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         btn_add = (FloatingActionButton) rootView.findViewById(R.id.btn_add);
-        btn_add.setOnClickListener(this);
     }
 
+    void btn_initializer(boolean isButtonViewable) {
+        if (isButtonViewable) {
+            btn_add.setOnClickListener(this);
+            btn_add.setVisibility(View.VISIBLE);
+        } else {
+            btn_add.setVisibility(View.GONE);
+        }
+    }
+
+
     void fetchData() {
+        progressDialog.show("Loading...");
         surgical_history = new Surgical_History();
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
@@ -102,11 +123,20 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
                         @Override
                         public void onResponse(String response) {
                             try {
+                                Log.d("error", response);
+                                boolean isButtonViewable = true;
+                                int counter = 1;
                                 JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                 if (jsonObject.getString("code").equals("successful")) {
-                                    JSONArray jsonArray = rootJsonArray.getJSONArray(1);
-                                    int jsonArrayLength = rootJsonArray.getJSONArray(1).length();
+                                    JSONArray jsonArray = rootJsonArray.getJSONArray(counter);
+                                    jsonObject = jsonArray.getJSONObject(0);
+                                    if (jsonObject.has("isMyPhysician")) {
+                                        isButtonViewable = jsonObject.getString("isMyPhysician").equals("1");
+                                        ++counter;
+                                    }
+                                    jsonArray = rootJsonArray.getJSONArray(counter);
+                                    int jsonArrayLength = rootJsonArray.getJSONArray(counter).length();
                                     for (int x = 0; x < jsonArrayLength; x++) {
                                         jsonObject = jsonArray.getJSONObject(x);
                                         surgical_history.setSurgicalIdItem(jsonObject.getInt("id"));
@@ -114,10 +144,13 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
                                         surgical_history.setSurgicalDateItem(jsonObject.getString("date_performed"));
                                         surgical_history.setSurgicalAttachName(jsonObject.getString("first_name"), jsonObject.getString("middle_name"), jsonObject.getString("last_name"));
                                     }
+                                    btn_initializer(isButtonViewable);
                                     loadToRecyclerView();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
                         }
                     },
@@ -125,6 +158,7 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             error.printStackTrace();
+                            progressDialog.dismiss();
                         }
                     }) {
                 @Override
@@ -133,18 +167,19 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
                     params.put("action", "getSurgicalHistoryData");
                     params.put("device", "mobile");
                     params.put("patient_id", String.valueOf(patient_id));
+                    params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
                     return params;
                 }
             };
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            progressDialog.dismiss();
         }
     }
 
     void loadToRecyclerView() {
         //RecyclerView
-        recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.rv_surgical_history);
         recyclerViewAdapter_Content = new RecyclerViewAdapter_Surgery(surgical_history, patient_id);
         recyclerViewLayoutM_Content = new LinearLayoutManager(getActivity());
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
@@ -200,26 +235,32 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
     void deleteItem(final int position, final RecyclerViewAdapter_Surgery adapter_surgery) {
         alertDialog.dismiss();
         alertDialog.setPositiveButton();
+        progressDialog.show("Deleting");
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             try {
+                                Log.d("error", response);
                                 JSONArray jsonArray = new JSONArray(response);
                                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                                 if (jsonObject.has("error")) {
                                     adapter_surgery.remove(position, false);
+                                    progressDialog.dismiss();
                                     alertDialog.show("Error", jsonObject.getString("error"));
                                 } else if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
+                                        progressDialog.dismiss();
                                         adapter_surgery.remove(position, true);
                                     } else {
+                                        progressDialog.dismiss();
                                         adapter_surgery.remove(position, false);
                                         alertDialog.show("Error", "Please try again.");
                                     }
                                 }
                             } catch (JSONException e) {
+                                progressDialog.dismiss();
                                 e.printStackTrace();
                             }
                         }
@@ -242,12 +283,17 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
             };
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
+            progressDialog.dismiss();
             alertDialog.show("Error", e.getMessage());
         }
     }
 
     void setToolbarTitle() {
         BusStation.getBus().post(new Bus_ToolbarTitle("Surgical History", patient_name));
+    }
+
+    public void setViewer(Viewer viewer) {
+        this.viewer = viewer;
     }
 
     @Override
@@ -268,7 +314,15 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
     @Subscribe
     public void resume(Bus_Resume_Fragment resumeSurgicalHistory) {
         setToolbarTitle();
+        progressDialog.show("Loading...");
         fetchData();
     }
 
+    @Override
+    public void onRefresh() {
+        fetchData();
+        if(swipeRefreshLayout.isRefreshing()){
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
 }

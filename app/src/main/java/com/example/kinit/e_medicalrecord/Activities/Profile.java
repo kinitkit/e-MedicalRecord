@@ -26,6 +26,7 @@ import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Bus_Mode;
 import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item;
 import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item_OnClick;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.User.User;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
@@ -58,6 +59,7 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
     //App
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+    Custom_ProgressDialog progressDialog;
 
     //Classes
     Viewer viewer;
@@ -68,6 +70,7 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        progressDialog = new Custom_ProgressDialog(this);
         initIntent();
         getUserData();
     }
@@ -99,7 +102,6 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
     }
 
     void init() {
-
         //SharedPreferences
         sharedPreferences = getSharedPreferences("com.example.kinit.e_medicalrecord", Context.MODE_PRIVATE);
 
@@ -122,6 +124,7 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
     }
 
     void getUserData() {
+        progressDialog.show("Loading...");
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
                     new Response.Listener<String>() {
@@ -168,12 +171,14 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
                                 init();
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    //Log.d("error", error.getStackTrace().toString());
+                    progressDialog.dismiss();
                 }
             }) {
                 @Override
@@ -192,6 +197,7 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
             Custom_Singleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            progressDialog.dismiss();
         }
     }
 

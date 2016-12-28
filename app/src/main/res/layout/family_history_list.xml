@@ -1,54 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_marginTop="5dp"
     android:background="#ffffff"
+    android:clickable="true"
+    android:orientation="vertical"
     android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft">
-        <CheckBox
-            android:id="@+id/cb_grandparent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:clickable="false"
-            android:textColor="@color/colorTextSecondary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:text="@string/grandparent"
-            android:textSize="@dimen/sp_17"/>
 
-        <CheckBox
-            android:id="@+id/cb_parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:clickable="false"
-            android:textColor="@color/colorTextSecondary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:text="@string/parent"
-            android:textSize="@dimen/sp_17"/>
+    <CheckBox
+        android:id="@+id/cb_grandparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="@string/grandparent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="@dimen/sp_17" />
 
-        <CheckBox
-            android:id="@+id/cb_sibling"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:clickable="false"
-            android:textColor="@color/colorTextSecondary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:text="@string/sibling"
-            android:textSize="@dimen/sp_17"/>
+    <CheckBox
+        android:id="@+id/cb_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="@string/parent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="@dimen/sp_17" />
 
-        <CheckBox
-            android:id="@+id/cb_child"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:clickable="false"
-            android:textColor="@color/colorTextSecondary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:text="@string/child"
-            android:textSize="@dimen/sp_17"/>
+    <CheckBox
+        android:id="@+id/cb_sibling"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="@string/sibling"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="@dimen/sp_17" />
+
+    <CheckBox
+        android:id="@+id/cb_child"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="@string/child"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="@dimen/sp_17" />
 
 </LinearLayout>

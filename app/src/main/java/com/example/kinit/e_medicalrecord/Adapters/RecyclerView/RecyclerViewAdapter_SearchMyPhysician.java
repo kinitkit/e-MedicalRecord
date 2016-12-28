@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Add_Physician;
+import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Remove_Physician;
 import com.example.kinit.e_medicalrecord.Classes.My_Physician.Physician_List;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.R;
@@ -24,6 +25,27 @@ public class RecyclerViewAdapter_SearchMyPhysician extends RecyclerView.Adapter<
     public RecyclerViewAdapter_SearchMyPhysician(ArrayList<Physician_List> physicianLists, My_Physician_Button_Mode buttonMode) {
         this.buttonMode = buttonMode;
         this.physicianLists = physicianLists;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_row_layout_myphysician, parent, false);
+        return new ViewHolder(view, buttonMode);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.tv_name.setText(physicianLists.get(position).name);
+    }
+
+    @Override
+    public int getItemCount() {
+        return physicianLists.size();
+    }
+
+    public void removeItem(int position){
+        physicianLists.remove(position);
+        notifyItemRemoved(position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -57,29 +79,9 @@ public class RecyclerViewAdapter_SearchMyPhysician extends RecyclerView.Adapter<
                     BusStation.getBus().post(new Bus_Add_Physician(getAdapterPosition(), physicianLists.get(getAdapterPosition())));
                     break;
                 case R.id.btn_remove:
+                    BusStation.getBus().post(new Bus_Remove_Physician(getAdapterPosition(), physicianLists.get(getAdapterPosition())));
                     break;
             }
         }
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_row_layout_myphysician, parent, false);
-        return new ViewHolder(view, buttonMode);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tv_name.setText(physicianLists.get(position).name);
-    }
-
-    @Override
-    public int getItemCount() {
-        return physicianLists.size();
-    }
-
-    public void removeItem(int position){
-        physicianLists.remove(position);
-        notifyItemRemoved(position);
     }
 }

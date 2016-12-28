@@ -127,6 +127,7 @@ public class Medical extends AppCompatActivity {
             case SURGICAL_HISTORY:
                 Fragment_Surgical_History fragmentSurgicalHistory = new Fragment_Surgical_History();
                 fragmentSurgicalHistory.setArguments(args);
+                fragmentSurgicalHistory.setViewer(viewer);
                 fragmentTransaction.add(R.id.frameLayout, fragmentSurgicalHistory).commit();
                 break;
             case PAST_MEDICAL_HISTORY:

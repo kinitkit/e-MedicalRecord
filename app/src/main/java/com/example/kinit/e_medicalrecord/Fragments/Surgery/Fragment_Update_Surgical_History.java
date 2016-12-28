@@ -195,8 +195,10 @@ public class Fragment_Update_Surgical_History extends Fragment implements View.O
                             params.put("patient_id", String.valueOf(patient_id));
                             if (viewer != null) {
                                 params.put("user_data_id", String.valueOf(viewer.user_id));
+                                params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
                             } else {
                                 params.put("user_data_id", String.valueOf(user_id));
+                                params.put("medical_staff_id", "0");
                             }
                             break;
                         case UPDATE:

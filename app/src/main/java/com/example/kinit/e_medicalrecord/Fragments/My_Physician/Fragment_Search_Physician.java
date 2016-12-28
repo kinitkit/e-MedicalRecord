@@ -20,6 +20,7 @@ import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapt
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Add_Physician;
 import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Search_Physician;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.My_Physician.Physician_List;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.Exception.Codes;
@@ -29,7 +30,6 @@ import com.example.kinit.e_medicalrecord.Request.UrlString;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -50,17 +50,22 @@ public class Fragment_Search_Physician extends Fragment {
     RecyclerViewAdapter_SearchMyPhysician recyclerViewAdapter_Content;
     RecyclerView.LayoutManager recyclerViewLayoutM_Content;
 
+    //App
+    Custom_ProgressDialog progressDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search_physician, container, false);
         recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        progressDialog = new Custom_ProgressDialog(getActivity());
     }
 
     void loadToRecyclerView() {
@@ -72,6 +77,7 @@ public class Fragment_Search_Physician extends Fragment {
 
     void fetchData() {
         physicianLists = new ArrayList<>();
+        progressDialog.show("Loading...");
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
                     new Response.Listener<String>() {
@@ -93,13 +99,15 @@ public class Fragment_Search_Physician extends Fragment {
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            progressDialog.dismiss();
                         }
                     }) {
                 @Override
@@ -115,10 +123,12 @@ public class Fragment_Search_Physician extends Fragment {
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            progressDialog.dismiss();
         }
     }
 
     void addPhysician(final int medicalStaffId) {
+        progressDialog.show("Loading...");
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
                     new Response.Listener<String>() {
@@ -134,20 +144,24 @@ public class Fragment_Search_Physician extends Fragment {
                                     }
                                 } else if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("success")) {
+                                        // Log.d("error", String.valueOf(physicianLists.size()));
                                         recyclerViewAdapter_Content.removeItem(position);
-                                        physicianLists.remove(position);
-                                        Toast.makeText(getActivity(), "Physician added", Toast.LENGTH_SHORT).show();
+                                        //physicianLists.remove(position);
+                                        Log.d("error", String.valueOf(physicianLists.size()));
+                                        Toast.makeText(getActivity(), String.valueOf(physicianLists.size())/*"Physician added"*/, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            progressDialog.dismiss();
                         }
                     }) {
                 @Override
@@ -163,6 +177,7 @@ public class Fragment_Search_Physician extends Fragment {
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            progressDialog.dismiss();
         }
     }
 
@@ -194,7 +209,7 @@ public class Fragment_Search_Physician extends Fragment {
 
     @Subscribe
     public void onClickAdd(Bus_Add_Physician busAddPhysician) {
-        addPhysician(busAddPhysician.physicianList.medicalStaffId);
         this.position = busAddPhysician.position;
+        addPhysician(busAddPhysician.physicianList.medicalStaffId);
     }
 }
