@@ -72,7 +72,7 @@ public class My_Physician extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                BusStation.getBus().post(new Bus_Search_Physician(query, user_id));
+                BusStation.getBus().post(new Bus_Search_Physician(query, user_id, patient_id));
                 searchView.clearFocus();
                 return false;
             }

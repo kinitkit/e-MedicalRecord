@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Add_Physician;
 import com.example.kinit.e_medicalrecord.Classes.My_Physician.Physician_List;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.R;
@@ -36,12 +38,12 @@ public class RecyclerViewAdapter_SearchMyPhysician extends RecyclerView.Adapter<
 
             switch (buttonMode) {
                 case ADD:
-                    btn_remove.setVisibility(View.INVISIBLE);
+                    btn_remove.setVisibility(View.GONE);
                     btn_add.setVisibility(View.VISIBLE);
                     btn_add.setOnClickListener(this);
                     break;
                 case REMOVE:
-                    btn_add.setVisibility(View.INVISIBLE);
+                    btn_add.setVisibility(View.GONE);
                     btn_remove.setVisibility(View.VISIBLE);
                     btn_remove.setOnClickListener(this);
                     break;
@@ -52,10 +54,9 @@ public class RecyclerViewAdapter_SearchMyPhysician extends RecyclerView.Adapter<
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_add:
-                    Log.d("error", physicianLists.get(getAdapterPosition()).name);
+                    BusStation.getBus().post(new Bus_Add_Physician(getAdapterPosition(), physicianLists.get(getAdapterPosition())));
                     break;
                 case R.id.btn_remove:
-                     Log.d("error", physicianLists.get(getAdapterPosition()).name);
                     break;
             }
         }
@@ -75,5 +76,10 @@ public class RecyclerViewAdapter_SearchMyPhysician extends RecyclerView.Adapter<
     @Override
     public int getItemCount() {
         return physicianLists.size();
+    }
+
+    public void removeItem(int position){
+        physicianLists.remove(position);
+        notifyItemRemoved(position);
     }
 }
