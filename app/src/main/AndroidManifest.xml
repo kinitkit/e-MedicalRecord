@@ -31,7 +31,8 @@
         <activity android:name=".Activities.Medical_Prescription.Medical_Prescription" />
         <activity android:name=".Activities.Medical_Prescription.Medical_Prescription_Form" />
         <activity android:name=".Activities.Medical_Prescription.Drug_Form" />
-        <activity android:name=".Activities.Medical_Prescription.Tagged_Medical_Prescription"></activity>
+        <activity android:name=".Activities.Medical_Prescription.Tagged_Medical_Prescription" />
+        <activity android:name=".Activities.Medical_Prescription.Medical_Prescription_View"></activity>
     </application>
 
 </manifest>

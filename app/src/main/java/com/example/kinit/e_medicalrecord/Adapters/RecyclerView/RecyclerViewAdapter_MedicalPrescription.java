@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_MedicalPrescription_Item;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_Click;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_LongClick;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.R;
@@ -41,7 +41,7 @@ public class RecyclerViewAdapter_MedicalPrescription extends RecyclerView.Adapte
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BusStation.getBus().post(new Bus_MedicalPrescription_Item(medicalPrescriptions.get(position).medicalPrescription_id, medicalPrescriptions.get(position).patient_id,
+                BusStation.getBus().post(new Bus_Medical_Prescription_Click(medicalPrescriptions.get(position).medicalPrescription_id, medicalPrescriptions.get(position).patient_id,
                         medicalPrescriptions.get(position).physicianName, medicalPrescriptions.get(position).clinic_name, medicalPrescriptions.get(position).date));
             }
         });

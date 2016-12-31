@@ -22,6 +22,7 @@ import com.example.kinit.e_medicalrecord.BusStation.General.Bus_Resume_Fragment;
 import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Open_MedicalPrescription_Tagged;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Drug_List;
+import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.R;

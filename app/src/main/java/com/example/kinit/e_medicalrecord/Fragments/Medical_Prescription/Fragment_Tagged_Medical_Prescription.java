@@ -75,56 +75,6 @@ public class Fragment_Tagged_Medical_Prescription extends Fragment implements Sw
         recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
     }
 
-    public void setViewer(Viewer viewer){
-        this.viewer = viewer;
-    }
-
-    public void setBusOpenMedicalPrescriptionTagged(Bus_Open_MedicalPrescription_Tagged busOpenMedicalPrescriptionTagged){
-        this.busOpenMedicalPrescriptionTagged = busOpenMedicalPrescriptionTagged;
-    }
-
-    void setToolbarTitle() {
-        BusStation.getBus().post(new Bus_ToolbarTitle("Tagged Physicians", null));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setToolbarTitle();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_search, menu);
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                return true;
-            }
-        });
-
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchView.clearFocus();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
     @Override
     public void onRefresh() {
 

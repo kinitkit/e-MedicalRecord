@@ -1,6 +1,5 @@
 package com.example.kinit.e_medicalrecord.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
@@ -13,7 +12,7 @@ import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_View_Lab_Test;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Drug;
 import com.example.kinit.e_medicalrecord.BusStation.Family_History.Bus_Family_History_Item;
-import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_MedicalPrescription_Item;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_Click;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Open_Add_Drug;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Open_Edit_MedicalPrescription;
 import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_Open_New_Lab_Test;
@@ -285,7 +284,7 @@ public class Medical extends AppCompatActivity {
 
     //Medical Prescription
     @Subscribe
-    public void onClickMedicalPrescription(Bus_MedicalPrescription_Item busMedicalPrescriptionItem) {
+    public void onClickMedicalPrescription(Bus_Medical_Prescription_Click busMedicalPrescriptionItem) {
         Bundle args = new Bundle();
         args.putInt("medicalPrescription_id", busMedicalPrescriptionItem.medicalPrescription_id);
         args.putInt("patient_id", busMedicalPrescriptionItem.patient_id);

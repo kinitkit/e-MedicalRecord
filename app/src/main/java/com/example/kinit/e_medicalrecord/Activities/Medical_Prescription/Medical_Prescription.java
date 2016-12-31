@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_MedicalPrescription;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_Click;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_LongClick;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
@@ -83,7 +84,7 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Medical Prescription");
+        getSupportActionBar().setTitle("Medical Prescription List");
         getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -165,8 +166,8 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
         }
     }
 
-    void btn_initializer(boolean isbuttonViewable) {
-        if (isbuttonViewable) {
+    void btn_initializer(boolean isButtonViewable) {
+        if (isButtonViewable) {
             btn_add.setVisibility(View.VISIBLE);
         } else {
             btn_add.setVisibility(View.GONE);
@@ -221,7 +222,16 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
     }
 
     @Subscribe
-    public void onClickOpenAddDrug(Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick) {
+    public void onClickItem(Bus_Medical_Prescription_Click busMedicalPrescriptionClick){
+        intent = new Intent(this, Medical_Prescription_View.class);
+        intent.putExtra("patient", patient);
+        intent.putExtra("viewer", viewer);
+        intent.putExtra("busMedicalPrescriptionClick", busMedicalPrescriptionClick);
+        startActivity(intent);
+    }
+
+    @Subscribe
+    public void onLongClickItem(Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick) {
         action_AlertDialog(busMedicalPrescriptionLongClick);
     }
 
