@@ -1,32 +1,41 @@
 package com.example.kinit.e_medicalrecord.Classes.User;
 
-public class Patient {
-    public int getId() {
-        return id;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Patient implements Parcelable {
+    public static final Parcelable.Creator<Patient> CREATOR = new Parcelable.Creator<Patient>() {
+        @Override
+        public Patient createFromParcel(Parcel source) {
+            return new Patient(source);
+        }
+
+        @Override
+        public Patient[] newArray(int size) {
+            return new Patient[size];
+        }
+    };
+    public int id, user_data_id;
+    public String name;
+
+    public Patient() {
     }
 
-    public void setId(int id) {
-        this.id = id;
+    protected Patient(Parcel in) {
+        this.id = in.readInt();
+        this.user_data_id = in.readInt();
+        this.name = in.readString();
     }
 
-    private int id;
-
-    public String getOccupation() {
-        return occupation;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
-    private String occupation;
-    private boolean status;
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.user_data_id);
+        dest.writeString(this.name);
     }
 }

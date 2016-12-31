@@ -1,4 +1,4 @@
-package com.example.kinit.e_medicalrecord.Activities;
+package com.example.kinit.e_medicalrecord.Activities.Profile;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.kinit.e_medicalrecord.Activities.Login;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Bus_Mode;
 import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item;
@@ -291,13 +292,19 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
                 switch (which) {
                     case 0:
                         Toast.makeText(getApplicationContext(), "You are now in patient mode", Toast.LENGTH_SHORT).show();
-                        mode = Mode.PATIENT;
-                        BusStation.getBus().post(new Bus_Mode(mode));
+                        if(mode != Mode.PATIENT) {
+                            mode = Mode.PATIENT;
+                            BusStation.getBus().post(new Bus_Mode(mode));
+                        }
                         break;
                     case 1:
                         mode = Mode.MEDICAL_STAFF;
                         Toast.makeText(getApplicationContext(), "You are now in medical staff mode", Toast.LENGTH_SHORT).show();
-                        BusStation.getBus().post(new Bus_Mode(mode));
+                        if (mode != Mode.MEDICAL_STAFF) {
+                            mode = Mode.MEDICAL_STAFF;
+                            BusStation.getBus().post(new Bus_Mode(mode));
+                        }
+
                         break;
                 }
             }

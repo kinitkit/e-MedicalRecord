@@ -1,17 +1,17 @@
-package com.example.kinit.e_medicalrecord.Fragments.Medical_Prescription;
-
+package com.example.kinit.e_medicalrecord.Activities.Medical_Prescription;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -23,13 +23,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Drug_List;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Drug;
-import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Open_Add_Drug;
-import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
 import com.example.kinit.e_medicalrecord.BusStation.General.Pop_BackStack;
-import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Drug;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_LongClick;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Open_Add_Drug;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
+import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Drug_List;
+import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
+import com.example.kinit.e_medicalrecord.Enum.Query_Type;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.Request.UrlString;
@@ -37,18 +41,16 @@ import com.example.kinit.e_medicalrecord.Request.UrlString;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Fragment_New_MedicalPrescription extends Fragment implements View.OnClickListener {
-    //View
-    View rootView;
-
-    //Primitive Data Types
-    int patient_id, user_id;
+public class Medical_Prescription_Form extends AppCompatActivity implements View.OnClickListener {
 
     //Widgets
     EditText et_clinic, et_physicianName, et_prescriptionDate;
@@ -59,52 +61,56 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
 
     //Classes
     ArrayList<Bus_Drug> busDrugs;
+    Patient patient;
     Viewer viewer;
     DatePickerFragment datePickerFragment;
+    Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick;
+    Custom_ProgressDialog progressDialog;
 
     //App
     Custom_AlertDialog alertDialog;
+    Intent intent;
 
     //Utils
     Calendar calendar;
     SimpleDateFormat simpleDateFormat;
 
-    public void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            patient_id = bundle.getInt("patient_id");
-            user_id = bundle.getInt("user_id");
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_new_medical_prescription, container, false);
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        setContentView(R.layout.activity_medical_prescription_form);
         init();
     }
 
     void init() {
-        alertDialog = new Custom_AlertDialog(getActivity());
+        progressDialog = new Custom_ProgressDialog(this);
+        //Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        intent = getIntent();
+        patient = intent.getExtras().getParcelable("patient");
+        viewer = intent.getExtras().getParcelable("viewer");
+        if (intent.hasExtra("busMedicalPrescriptionLongClick")) {
+            busMedicalPrescriptionLongClick = intent.getExtras().getParcelable("busMedicalPrescriptionLongClick");
+            getSupportActionBar().setTitle("Update Medical Prescription");
+        } else {
+            getSupportActionBar().setTitle("Medical Prescription Form");
+        }
+        getSupportActionBar().setSubtitle(patient.name);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        alertDialog = new Custom_AlertDialog(this);
         busDrugs = new ArrayList<>();
-        et_clinic = (EditText) rootView.findViewById(R.id.et_clinic);
-        et_physicianName = (EditText) rootView.findViewById(R.id.et_physicianName);
-        et_prescriptionDate = (EditText) rootView.findViewById(R.id.et_prescriptionDate);
+        et_clinic = (EditText) findViewById(R.id.et_clinic);
+        et_physicianName = (EditText) findViewById(R.id.et_physicianName);
+        et_prescriptionDate = (EditText) findViewById(R.id.et_prescriptionDate);
         et_prescriptionDate.setOnClickListener(this);
 
-        btn_add = (Button) rootView.findViewById(R.id.btn_add);
+        btn_add = (Button) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
-        btn_save = (Button) rootView.findViewById(R.id.btn_save);
+        btn_save = (Button) findViewById(R.id.btn_save);
         btn_save.setOnClickListener(this);
-        recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        loadToRecyclerView();
+        recyclerView_Content = (RecyclerView) findViewById(R.id.recyclerView);
 
         calendar = Calendar.getInstance();
         datePickerFragment = new DatePickerFragment();
@@ -124,17 +130,26 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
             et_physicianName.setKeyListener(null);
             et_physicianName.setText(viewer.name);
         }
+
+        if (busMedicalPrescriptionLongClick != null) {
+            progressDialog.show("Loading...");
+            fetchDrugList();
+        } else {
+            loadToRecyclerView();
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                BusStation.getBus().post(new Bus_Open_Add_Drug());
+                intent = new Intent(this, Drug_Form.class);
+                intent.putExtra("busDrug", new Bus_Drug(Query_Type.INSERT));
+                startActivityForResult(intent, Query_Type.INSERT.ordinal());
                 break;
 
             case R.id.btn_save:
-                Custom_AlertDialog alertDialog = new Custom_AlertDialog(getActivity());
+                Custom_AlertDialog alertDialog = new Custom_AlertDialog(this);
                 String clinic = et_clinic.getText().toString().trim(),
                         physicianName = et_physicianName.getText().toString().trim();
                 if (busDrugs.size() > 0) {
@@ -149,29 +164,26 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
                 break;
 
             case R.id.et_prescriptionDate:
-                datePickerFragment.show(getFragmentManager(), "DatePicker");
+                datePickerFragment.show(getSupportFragmentManager(), "DatePicker");
                 datePickerFragment.setCurrentDate(calendar);
                 break;
         }
     }
 
-    public void setViewer(Viewer viewer) {
-        this.viewer = viewer;
-    }
-
-    public void insertDrug(Bus_Drug busDrug) {
-        this.busDrugs.add(busDrug);
-        recyclerViewAdapter_Content.notifyDataSetChanged();
-    }
-
-    public void updateDrug(Bus_Drug busDrug) {
-        this.busDrugs.set(busDrug.position, busDrug);
-        recyclerViewAdapter_Content.notifyDataSetChanged();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Query_Type.INSERT.ordinal()) {
+            if (resultCode == RESULT_OK) {
+                Bus_Drug busDrug = data.getExtras().getParcelable("busDrug");
+                this.busDrugs.add(busDrug);
+                recyclerViewAdapter_Content.notifyDataSetChanged();
+            }
+        }
     }
 
     void loadToRecyclerView() {
         recyclerViewAdapter_Content = new RecyclerViewAdapter_Drug_List(busDrugs);
-        recyclerViewLayoutM_Content = new LinearLayoutManager(getActivity());
+        recyclerViewLayoutM_Content = new LinearLayoutManager(this);
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
         setupItemTouchHelper();
@@ -200,8 +212,8 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
         alertDialog.builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter_drug.remove(position, true);
                 busDrugs.remove(position);
+                adapter_drug.notifyItemRemoved(position);
                 dialog.dismiss();
             }
         });
@@ -212,10 +224,11 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
                 dialog.dismiss();
             }
         });
-        alertDialog.show("Confirm delete", "Are you sure you want to permanently delete the item?");
+        alertDialog.show("Confirm delete", "This item will be permanently deleted.");
     }
 
     void sendData(final String physicianName, final String clinicName) {
+        progressDialog.show("Saving...");
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
                     new Response.Listener<String>() {
@@ -227,12 +240,27 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
                                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
-                                        BusStation.getBus().post(new Pop_BackStack());
+                                        progressDialog.dismiss();
+                                        Intent intent = new Intent();
+                                        intent.putExtra("result", true);
+                                        setResult(RESULT_OK, intent);
+                                        finish();
                                     } else if (jsonObject.getString("code").equals("unauthorized")) {
+                                        progressDialog.dismiss();
                                         alertDialog.show("Error", getString(R.string.unauthorized_to_insert));
+                                    } else if (jsonObject.getString("code").equals("empty")) {
+                                        progressDialog.dismiss();
+                                        alertDialog.show("Error", "This medical prescription has been deleted.");
+                                    } else {
+                                        progressDialog.dismiss();
+                                        alertDialog.show("Error", "Something happened. Please try again.");
                                     }
+                                } else if (jsonObject.has("exception")) {
+                                    progressDialog.dismiss();
+                                    alertDialog.show("Error", jsonObject.getString("exception"));
                                 }
                             } catch (Exception e) {
+                                progressDialog.dismiss();
                                 e.printStackTrace();
                             }
                         }
@@ -240,14 +268,20 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
+                    progressDialog.dismiss();
                 }
             }) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "insertNewMedPrescription");
+                    if (busMedicalPrescriptionLongClick != null) {
+                        params.put("action", "updateMedPrescription");
+                        params.put("medical_prescription_id", String.valueOf(busMedicalPrescriptionLongClick.medicalPrescription_id));
+                    } else {
+                        params.put("action", "insertNewMedPrescription");
+                    }
                     params.put("device", "mobile");
-                    params.put("patient_id", String.valueOf(patient_id));
+                    params.put("patient_id", String.valueOf(patient.id));
                     params.put("clinic_name", clinicName);
                     params.put("physician_name", physicianName);
                     params.put("date_prescribed", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
@@ -255,7 +289,7 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
                         params.put("user_data_id", String.valueOf(viewer.user_id));
                         params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
                     } else {
-                        params.put("user_data_id", String.valueOf(user_id));
+                        params.put("user_data_id", String.valueOf(patient.user_data_id));
                         params.put("medical_staff_id", "0");
                     }
                     for (int x = 0; x < busDrugs.size(); x++) {
@@ -271,8 +305,9 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
                     return params;
                 }
             };
-            Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
+            progressDialog.dismiss();
             e.printStackTrace();
         }
     }
@@ -282,9 +317,77 @@ public class Fragment_New_MedicalPrescription extends Fragment implements View.O
         et_prescriptionDate.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
+    void setUpdate() {
+        et_physicianName.setText(busMedicalPrescriptionLongClick.physicianName);
+        et_clinic.setText(busMedicalPrescriptionLongClick.clinicName);
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(busMedicalPrescriptionLongClick.calendarStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar.setTime(date);
+        setCalendar(calendar);
+        progressDialog.dismiss();
+    }
+
+    void fetchDrugList() {
+        try {
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                JSONArray rootJsonArray = new JSONArray(response);
+                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                if (jsonObject.has("code")) {
+                                    if (jsonObject.getString("code").equals("successful")) {
+                                        JSONArray jsonArray = rootJsonArray.getJSONArray(1);
+                                        int jsonArrayLength = rootJsonArray.getJSONArray(1).length();
+                                        busDrugs = new ArrayList<>();
+                                        for (int x = 0; x < jsonArrayLength; x++) {
+                                            jsonObject = jsonArray.getJSONObject(x);
+                                            busDrugs.add(new Bus_Drug(jsonObject));
+                                        }
+                                        loadToRecyclerView();
+                                        setUpdate();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "getDrugList");
+                    params.put("device", "mobile");
+                    params.put("medical_prescription_id", String.valueOf(busMedicalPrescriptionLongClick.medicalPrescription_id));
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
-    public void onResume() {
-        super.onResume();
-        BusStation.getBus().post(new Bus_ToolbarTitle("New Medical Prescription", null));
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

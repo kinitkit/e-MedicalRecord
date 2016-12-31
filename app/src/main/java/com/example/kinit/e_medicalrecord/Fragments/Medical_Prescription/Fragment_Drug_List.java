@@ -1,6 +1,7 @@
 package com.example.kinit.e_medicalrecord.Fragments.Medical_Prescription;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,11 +18,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Drug_List;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.General.Bus_Resume_Fragment;
 import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Open_MedicalPrescription_Tagged;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Drug_List;
+import com.example.kinit.e_medicalrecord.Classes.User.Patient;
+import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.Request.UrlString;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,13 +35,17 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Fragment_Drug_List extends Fragment {
+public class Fragment_Drug_List extends Fragment implements View.OnClickListener {
     //View
     View rootView;
 
     //Primitive Data Types
     int medicalPrescription_id, patient_id;
     String physicianName, clinicName, date;
+
+    //Classes
+    Patient patient;
+    Viewer viewer;
 
     //Classes
     Drug_List[] drugLists;
@@ -46,6 +56,7 @@ public class Fragment_Drug_List extends Fragment {
     RecyclerView.Adapter recyclerViewAdapter_Content;
     RecyclerView.LayoutManager recyclerViewLayoutM_Content;
     TextView tv_physicianName, tv_clinicName, tv_date;
+    FloatingActionButton btn_tagged;
 
     /*============================
         END OF GLOBAL VARIABLES
@@ -77,12 +88,14 @@ public class Fragment_Drug_List extends Fragment {
     }
 
     void init() {
-        tv_physicianName = (TextView)  rootView.findViewById(R.id.tv_physicianName);
+        tv_physicianName = (TextView) rootView.findViewById(R.id.tv_physicianName);
         tv_physicianName.setText(physicianName);
-        tv_clinicName = (TextView)  rootView.findViewById(R.id.tv_clinicName);
+        tv_clinicName = (TextView) rootView.findViewById(R.id.tv_clinicName);
         tv_clinicName.setText(clinicName);
-        tv_date = (TextView)  rootView.findViewById(R.id.tv_date);
+        tv_date = (TextView) rootView.findViewById(R.id.tv_date);
         tv_date.setText(date);
+        btn_tagged = (FloatingActionButton) rootView.findViewById(R.id.btn_tagged);
+        btn_tagged.setOnClickListener(this);
 
         recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         fetchData();
@@ -95,7 +108,6 @@ public class Fragment_Drug_List extends Fragment {
                         @Override
                         public void onResponse(String response) {
                             Log.d("error", response);
-
                             try {
                                 JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
@@ -158,9 +170,39 @@ public class Fragment_Drug_List extends Fragment {
         BusStation.getBus().post(new Bus_ToolbarTitle("Drug List", null));
     }
 
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public void setViewer(Viewer viewer) {
+        this.viewer = viewer;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        BusStation.getBus().register(this);
+        setToolbarTitle();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusStation.getBus().unregister(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_tagged:
+                BusStation.getBus().post(new Bus_Open_MedicalPrescription_Tagged(medicalPrescription_id, patient_id));
+                break;
+        }
+    }
+
+    @Subscribe
+    public void resume(Bus_Resume_Fragment resumeSurgicalHistory) {
+        Log.d("error", "wdqdwq");
         setToolbarTitle();
     }
 }

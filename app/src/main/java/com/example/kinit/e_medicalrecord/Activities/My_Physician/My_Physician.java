@@ -1,4 +1,4 @@
-package com.example.kinit.e_medicalrecord.Activities;
+package com.example.kinit.e_medicalrecord.Activities.My_Physician;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;

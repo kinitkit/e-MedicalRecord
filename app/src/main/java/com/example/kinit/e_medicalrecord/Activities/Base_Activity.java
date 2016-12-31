@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.kinit.e_medicalrecord.Activities.Profile.Profile;
 import com.example.kinit.e_medicalrecord.R;
 
 public class Base_Activity extends AppCompatActivity {

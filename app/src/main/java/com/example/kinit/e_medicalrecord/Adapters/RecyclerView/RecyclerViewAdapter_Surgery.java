@@ -17,18 +17,6 @@ public class RecyclerViewAdapter_Surgery extends RecyclerView.Adapter<RecyclerVi
     Surgical_History surgical_history;
     int patient_id;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView_surgicalHistory;
-        TextView tv_surgeryDate, tv_surgeryTitle;
-
-        public ViewHolder(View view) {
-            super(view);
-            cardView_surgicalHistory = (CardView) view.findViewById(R.id.cardView_surgicalHistory);
-            tv_surgeryDate = (TextView) view.findViewById(R.id.tv_surgeryDate);
-            tv_surgeryTitle = (TextView) view.findViewById(R.id.tv_surgeryTitle);
-        }
-    }
-
     //Constructor
     public RecyclerViewAdapter_Surgery(Surgical_History surgical_history, int patient_id) {
         this.patient_id = patient_id;
@@ -61,12 +49,23 @@ public class RecyclerViewAdapter_Surgery extends RecyclerView.Adapter<RecyclerVi
 
     public void remove(int position, boolean isRemove) {
         if(isRemove){
-            surgical_history.removeItem(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, getItemCount());
             notifyDataSetChanged();
         } else {
             notifyItemChanged(position);
+        }
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView_surgicalHistory;
+        TextView tv_surgeryDate, tv_surgeryTitle;
+
+        public ViewHolder(View view) {
+            super(view);
+            cardView_surgicalHistory = (CardView) view.findViewById(R.id.cardView_surgicalHistory);
+            tv_surgeryDate = (TextView) view.findViewById(R.id.tv_surgeryDate);
+            tv_surgeryTitle = (TextView) view.findViewById(R.id.tv_surgeryTitle);
         }
     }
 }

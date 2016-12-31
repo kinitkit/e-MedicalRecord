@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
 import com.example.kinit.e_medicalrecord.BusStation.General.Pop_BackStack;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
 import com.example.kinit.e_medicalrecord.Enum.Medical_Transaction;
@@ -61,6 +62,7 @@ public class Fragment_Update_Surgical_History extends Fragment implements View.O
     //Classes
     Viewer viewer;
     DatePickerFragment datePicker;
+    Custom_AlertDialog alertDialog;
 
     //Utils
     Calendar calendar;
@@ -107,6 +109,8 @@ public class Fragment_Update_Surgical_History extends Fragment implements View.O
     }
 
     void init() {
+        alertDialog = new Custom_AlertDialog(getActivity());
+        alertDialog.builder.setNegativeButton(null, null);
         //Button, TextView, and EditText
         et_surgeryTitle = (TextInputEditText) rootView.findViewById(R.id.et_surgeryTitle);
         et_surgeryDate = (TextInputEditText) rootView.findViewById(R.id.et_surgeryDate);
@@ -120,7 +124,7 @@ public class Fragment_Update_Surgical_History extends Fragment implements View.O
         datePicker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if(view.isShown()) {
+                if (view.isShown()) {
                     calendar.set(year, monthOfYear, dayOfMonth);
                     setCalendar(calendar);
                     Log.d("error", calendar.getTime().toString());
@@ -156,7 +160,7 @@ public class Fragment_Update_Surgical_History extends Fragment implements View.O
         }
     }
 
-    void setCalendar(Calendar calendar){
+    void setCalendar(Calendar calendar) {
         simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
         et_surgeryDate.setText(simpleDateFormat.format(calendar.getTime()));
     }
@@ -167,12 +171,15 @@ public class Fragment_Update_Surgical_History extends Fragment implements View.O
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            Log.d("error", response);
                             try {
                                 JSONArray jsonArray = new JSONArray(response);
                                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
                                         BusStation.getBus().post(new Pop_BackStack(Medical_Transaction.UPDATE_SURGICAL_HISTORY));
+                                    } else if (jsonObject.getString("code").equals("unsuccessful")) {
+                                        alertDialog.show("Error", getString(R.string.unauthorized_to_insert));
                                     }
                                 }
                             } catch (JSONException e) {

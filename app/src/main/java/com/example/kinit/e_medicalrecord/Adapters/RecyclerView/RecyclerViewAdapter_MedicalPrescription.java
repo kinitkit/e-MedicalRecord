@@ -9,15 +9,58 @@ import android.widget.TextView;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_MedicalPrescription_Item;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_LongClick;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.R;
 
+import java.util.ArrayList;
+
 public class RecyclerViewAdapter_MedicalPrescription extends RecyclerView.Adapter<RecyclerViewAdapter_MedicalPrescription.ViewHolder> {
 
-    Medical_Prescription[] medicalPrescriptions;
+    ArrayList<Medical_Prescription> medicalPrescriptions;
 
-    public RecyclerViewAdapter_MedicalPrescription(Medical_Prescription[] medicalPrescriptions) {
+    public RecyclerViewAdapter_MedicalPrescription(ArrayList<Medical_Prescription> medicalPrescriptions) {
         this.medicalPrescriptions = medicalPrescriptions;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_row_layout_medical_prescription, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        holder.tv_date.setText(medicalPrescriptions.get(position).date);
+        holder.tv_physicianName.setText(medicalPrescriptions.get(position).physicianName);
+        if (medicalPrescriptions.get(position).clinic_name.isEmpty())
+            holder.tv_clinicName.setVisibility(View.GONE);
+        else
+            holder.tv_clinicName.setText(medicalPrescriptions.get(position).clinic_name);
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BusStation.getBus().post(new Bus_MedicalPrescription_Item(medicalPrescriptions.get(position).medicalPrescription_id, medicalPrescriptions.get(position).patient_id,
+                        medicalPrescriptions.get(position).physicianName, medicalPrescriptions.get(position).clinic_name, medicalPrescriptions.get(position).date));
+            }
+        });
+
+        holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                BusStation.getBus().post(new Bus_Medical_Prescription_LongClick(medicalPrescriptions.get(position).medicalPrescription_id,
+                        medicalPrescriptions.get(position).patient_id, medicalPrescriptions.get(position).physicianName,
+                        medicalPrescriptions.get(position).clinic_name, medicalPrescriptions.get(position).date,
+                        medicalPrescriptions.get(position).calendarStr, position));
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return medicalPrescriptions.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -31,34 +74,5 @@ public class RecyclerViewAdapter_MedicalPrescription extends RecyclerView.Adapte
             tv_clinicName = (TextView) view.findViewById(R.id.tv_clinicName);
             cardView = (CardView) view.findViewById(R.id.cardView);
         }
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_row_layout_medical_prescription, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.tv_date.setText(medicalPrescriptions[position].date);
-        holder.tv_physicianName.setText(medicalPrescriptions[position].physicianName);
-        if (medicalPrescriptions[position].clinic_name.isEmpty())
-            holder.tv_clinicName.setVisibility(View.GONE);
-        else
-            holder.tv_clinicName.setText(medicalPrescriptions[position].clinic_name);
-
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BusStation.getBus().post(new Bus_MedicalPrescription_Item(medicalPrescriptions[position].medicalPrescription_id, medicalPrescriptions[position].patient_id,
-                        medicalPrescriptions[position].physicianName, medicalPrescriptions[position].clinic_name, medicalPrescriptions[position].date));
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return medicalPrescriptions.length;
     }
 }

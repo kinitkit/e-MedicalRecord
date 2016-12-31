@@ -102,11 +102,11 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         btn_add = (FloatingActionButton) rootView.findViewById(R.id.btn_add);
+        btn_add.setOnClickListener(this);
     }
 
     void btn_initializer(boolean isButtonViewable) {
         if (isButtonViewable) {
-            btn_add.setOnClickListener(this);
             btn_add.setVisibility(View.VISIBLE);
         } else {
             btn_add.setVisibility(View.GONE);
@@ -116,6 +116,7 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
 
     void fetchData() {
         progressDialog.show("Loading...");
+        surgical_history = null;
         surgical_history = new Surgical_History();
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
@@ -125,27 +126,31 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
                             try {
                                 Log.d("error", response);
                                 boolean isButtonViewable = true;
-                                int counter = 1;
-                                JSONArray rootJsonArray = new JSONArray(response);
-                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if (jsonObject.getString("code").equals("successful")) {
-                                    JSONArray jsonArray = rootJsonArray.getJSONArray(counter);
+                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
+                                JSONObject jsonObject;
+                                if (rootJsonArray.get(0) instanceof JSONArray) {
+                                    jsonArray = rootJsonArray.getJSONArray(0);
                                     jsonObject = jsonArray.getJSONObject(0);
                                     if (jsonObject.has("isMyPhysician")) {
-                                        isButtonViewable = jsonObject.getString("isMyPhysician").equals("1");
-                                        ++counter;
+                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
                                     }
-                                    jsonArray = rootJsonArray.getJSONArray(counter);
-                                    int jsonArrayLength = rootJsonArray.getJSONArray(counter).length();
-                                    for (int x = 0; x < jsonArrayLength; x++) {
-                                        jsonObject = jsonArray.getJSONObject(x);
-                                        surgical_history.setSurgicalIdItem(jsonObject.getInt("id"));
-                                        surgical_history.setSurgicalTitleItem(jsonObject.getString("surgery_title"));
-                                        surgical_history.setSurgicalDateItem(jsonObject.getString("date_performed"));
-                                        surgical_history.setSurgicalAttachName(jsonObject.getString("first_name"), jsonObject.getString("middle_name"), jsonObject.getString("last_name"));
+                                    jsonObject = rootJsonArray.getJSONObject(1);
+                                    if (jsonObject.getString("code").equals("successful")) {
+                                        jsonArray = rootJsonArray.getJSONArray(2);
+                                        int jsonArrayLength = jsonArray.length();
+                                        for (int x = 0; x < jsonArrayLength; x++) {
+                                            jsonObject = jsonArray.getJSONObject(x);
+                                            surgical_history.setSurgicalIdItem(jsonObject.getInt("id"));
+                                            surgical_history.setSurgicalTitleItem(jsonObject.getString("surgery_title"));
+                                            surgical_history.setSurgicalDateItem(jsonObject.getString("date_performed"));
+                                            surgical_history.setSurgicalAttachName(jsonObject.getString("first_name"), jsonObject.getString("middle_name"), jsonObject.getString("last_name"));
+                                        }
+                                        loadToRecyclerView();
+                                        btn_initializer(isButtonViewable);
+                                    } else if(jsonObject.getString("code").equals("empty")){
+                                        loadToRecyclerView();
+                                        btn_initializer(isButtonViewable);
                                     }
-                                    btn_initializer(isButtonViewable);
-                                    loadToRecyclerView();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -252,6 +257,7 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
                                 } else if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
                                         progressDialog.dismiss();
+                                        surgical_history.removeItem(position);
                                         adapter_surgery.remove(position, true);
                                     } else {
                                         progressDialog.dismiss();
@@ -321,7 +327,7 @@ public class Fragment_Surgical_History extends Fragment implements View.OnClickL
     @Override
     public void onRefresh() {
         fetchData();
-        if(swipeRefreshLayout.isRefreshing()){
+        if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
     }

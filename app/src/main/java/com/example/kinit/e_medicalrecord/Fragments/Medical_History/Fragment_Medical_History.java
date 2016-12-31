@@ -6,10 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.kinit.e_medicalrecord.Activities.My_Physician;
+import com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription;
+import com.example.kinit.e_medicalrecord.Activities.My_Physician.My_Physician;
 import com.example.kinit.e_medicalrecord.Classes.User.User;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Medical_Transaction;
@@ -61,12 +62,15 @@ public class Fragment_Medical_History extends Fragment {
                 newActivityInitializer(Medical_Transaction.LAB_RESULT.ordinal());
             }
         });
+
         tv_medPresc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newActivityInitializer(Medical_Transaction.MEDICAL_PRESCRIPTION.ordinal());
+                myIntent = new Intent(getActivity(), Medical_Prescription.class);
+                putExtra();
             }
         });
+
         tv_admissionHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,16 +107,22 @@ public class Fragment_Medical_History extends Fragment {
 
             }
         });
-        tv_myPhysicians.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), My_Physician.class);
-                intent.putExtra("patient_id", user.getPatient_id());
-                intent.putExtra("patient_name", user.getFullName());
-                intent.putExtra("user_id", user.getUser_data_id());
-                startActivity(intent);
-            }
-        });
+        if(viewer == null) {
+            tv_myPhysicians.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), My_Physician.class);
+                    intent.putExtra("patient_id", user.getPatient_id());
+                    intent.putExtra("patient_name", user.getFullName());
+                    intent.putExtra("user_id", user.getUser_data_id());
+                    startActivity(intent);
+                }
+            });
+        } else {
+            RelativeLayout item_divider = (RelativeLayout) view.findViewById(R.id.item_divider);
+            item_divider.setVisibility(View.GONE);
+            tv_myPhysicians.setVisibility(View.GONE);
+        }
     }
 
     void newActivityInitializer(int ordinal){
@@ -121,6 +131,14 @@ public class Fragment_Medical_History extends Fragment {
         myIntent.putExtra("patient_name", user.getFullName());
         myIntent.putExtra("user_id", user.getUser_data_id());
         myIntent.putExtra("ordinal", ordinal);
+        viewer_putExtra();
+        startActivity(myIntent);
+    }
+
+    void putExtra(){
+        myIntent.putExtra("patient_id", user.getPatient_id());
+        myIntent.putExtra("patient_name", user.getFullName());
+        myIntent.putExtra("user_id", user.getUser_data_id());
         viewer_putExtra();
         startActivity(myIntent);
     }

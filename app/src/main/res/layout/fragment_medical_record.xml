@@ -235,7 +235,8 @@
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
 
-                    <include layout="@layout/layout_item_divider" />
+                    <include android:id="@+id/item_divider"
+                        layout="@layout/layout_item_divider"/>
 
                     <TextView
                         android:id="@+id/tv_myPhysicians"

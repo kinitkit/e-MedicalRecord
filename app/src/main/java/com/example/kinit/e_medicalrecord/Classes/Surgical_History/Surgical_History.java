@@ -11,11 +11,11 @@ import java.util.List;
 public class Surgical_History {
     String[] month = { "", "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "August", "September", "October", "November", "December"};
 
-    static List<String> surgicalAttachName;
-    static List<String> surgicalTitle;
-    static List<String> surgicalDate;
-    static List<Integer> surgicalId;
-    static List<Calendar> calendars;
+    List<String> surgicalAttachName;
+    List<String> surgicalTitle;
+    List<String> surgicalDate;
+    List<Integer> surgicalId;
+    List<Calendar> calendars;
 
     public Surgical_History() {
         surgicalTitle = new ArrayList<>();
@@ -26,7 +26,7 @@ public class Surgical_History {
     }
 
     public void setSurgicalTitleItem(String surgicalTitle) {
-        Surgical_History.surgicalTitle.add(surgicalTitle);
+        this.surgicalTitle.add(surgicalTitle);
     }
 
     public String getSurgicalTitleItem(int position) {
@@ -44,7 +44,7 @@ public class Surgical_History {
         simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
         calendars.add(calendar);
         Log.d("error", calendar.getTime().toString());
-        Surgical_History.surgicalDate.add(simpleDateFormat.format(calendar.getTime()));
+        this.surgicalDate.add(simpleDateFormat.format(calendar.getTime()));
     }
 
     public String getSurgicalDateItem(int position) {
@@ -52,7 +52,7 @@ public class Surgical_History {
     }
 
     public void setSurgicalIdItem(int surgicalId) {
-        Surgical_History.surgicalId.add(surgicalId);
+        this.surgicalId.add(surgicalId);
     }
 
     public int getSurgicalIdItem(int position) {

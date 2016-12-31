@@ -51,6 +51,7 @@
     <string name="date_of_prescription">Date of Prescription</string>
     <string name="dosage">Dosage</string>
     <string name="indication">Indication</string>
+    <string name="unauthorized_to_insert">You have no authority to add data to patient.</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>
