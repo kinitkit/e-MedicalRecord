@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.kinit.e_medicalrecord.Activities.Allergy.Allergy;
 import com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Activities.My_Physician.My_Physician;
+import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.User;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Medical_Transaction;
@@ -26,6 +28,7 @@ public class Fragment_Medical_History extends Fragment {
     //User Class
     User user;
     Viewer viewer;
+    Patient patient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,7 +107,8 @@ public class Fragment_Medical_History extends Fragment {
         tv_allergy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                myIntent = new Intent(getActivity(), Allergy.class);
+                putExtra();
             }
         });
         if(viewer == null) {
@@ -136,6 +140,8 @@ public class Fragment_Medical_History extends Fragment {
     }
 
     void putExtra(){
+        myIntent.putExtra("patient", patient);
+        myIntent.putExtra("viewer", viewer);
         myIntent.putExtra("patient_id", user.getPatient_id());
         myIntent.putExtra("patient_name", user.getFullName());
         myIntent.putExtra("user_id", user.getUser_data_id());
@@ -156,5 +162,9 @@ public class Fragment_Medical_History extends Fragment {
     public void setUser(User user, Viewer viewer){
         this.user = user;
         this.viewer = viewer;
+        patient = new Patient();
+        patient.user_data_id = user.getUser_data_id();
+        patient.name = user.getFullName();
+        patient.id = user.getPatient_id();
     }
 }
