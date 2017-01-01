@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Add_Physician;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Remove_Physician;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.R;
@@ -66,8 +69,10 @@ public class RecyclerViewAdapter_Tagged_MedPrescription extends RecyclerView.Ada
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_add:
+                    BusStation.getBus().post(new Bus_Add_Physician(getAdapterPosition(), taggedPhysicianLists.get(getAdapterPosition())));
                     break;
                 case R.id.btn_remove:
+                    BusStation.getBus().post(new Bus_Remove_Physician(getAdapterPosition(), taggedPhysicianLists.get(getAdapterPosition())));
                     break;
             }
         }

@@ -95,6 +95,8 @@ public class Fragment_Search_Physician extends Fragment {
                                             physicianLists.add(new Physician_List(jsonArray.getJSONObject(x)));
                                         }
                                         loadToRecyclerView();
+                                    } else if (jsonObject.getString("code").equals("empty")) {
+                                        loadToRecyclerView();
                                     }
                                 }
                             } catch (Exception e) {
@@ -117,6 +119,7 @@ public class Fragment_Search_Physician extends Fragment {
                     params.put("device", "mobile");
                     params.put("user_id", String.valueOf(user_id));
                     params.put("name", name);
+                    params.put("patient_id", String.valueOf(patient_id));
                     return params;
                 }
             };

@@ -298,7 +298,6 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
                         }
                         break;
                     case 1:
-                        mode = Mode.MEDICAL_STAFF;
                         Toast.makeText(getApplicationContext(), "You are now in medical staff mode", Toast.LENGTH_SHORT).show();
                         if (mode != Mode.MEDICAL_STAFF) {
                             mode = Mode.MEDICAL_STAFF;

@@ -15,11 +15,10 @@ public class Bus_Medical_Prescription_LongClick implements Parcelable {
             return new Bus_Medical_Prescription_LongClick[size];
         }
     };
-    public int medicalPrescription_id, patient_id, position;
+    public int medicalPrescription_id, patient_id, position, user_data_id;
     public String physicianName, clinicName, date, calendarStr;
 
-
-    public Bus_Medical_Prescription_LongClick(int medicalPrescription_id, int patient_id, String physicianName, String clinicName, String date, String calendarStr, int position) {
+    public Bus_Medical_Prescription_LongClick(int medicalPrescription_id, int patient_id, String physicianName, String clinicName, String date, String calendarStr, int position, int user_data_id) {
         this.medicalPrescription_id = medicalPrescription_id;
         this.patient_id = patient_id;
         this.position = position;
@@ -27,12 +26,14 @@ public class Bus_Medical_Prescription_LongClick implements Parcelable {
         this.clinicName = clinicName;
         this.date = date;
         this.calendarStr = calendarStr;
+        this.user_data_id = user_data_id;
     }
 
     protected Bus_Medical_Prescription_LongClick(Parcel in) {
         this.medicalPrescription_id = in.readInt();
         this.patient_id = in.readInt();
         this.position = in.readInt();
+        this.user_data_id = in.readInt();
         this.physicianName = in.readString();
         this.clinicName = in.readString();
         this.date = in.readString();
@@ -49,6 +50,7 @@ public class Bus_Medical_Prescription_LongClick implements Parcelable {
         dest.writeInt(this.medicalPrescription_id);
         dest.writeInt(this.patient_id);
         dest.writeInt(this.position);
+        dest.writeInt(this.user_data_id);
         dest.writeString(this.physicianName);
         dest.writeString(this.clinicName);
         dest.writeString(this.date);

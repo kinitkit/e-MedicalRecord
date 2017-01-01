@@ -156,6 +156,7 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
                     params.put("device", "mobile");
                     params.put("patient_id", String.valueOf(patient.id));
                     params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
+                    params.put("user_data_id", String.valueOf((viewer != null) ? viewer.user_id : patient.user_data_id));
                     return params;
                 }
             };
@@ -232,7 +233,13 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
 
     @Subscribe
     public void onLongClickItem(Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick) {
-        action_AlertDialog(busMedicalPrescriptionLongClick);
+        if(viewer != null){
+            if(viewer.user_id == busMedicalPrescriptionLongClick.user_data_id) {
+                action_AlertDialog(busMedicalPrescriptionLongClick);
+            }
+        } else {
+            action_AlertDialog(busMedicalPrescriptionLongClick);
+        }
     }
 
     void action_AlertDialog(final Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick) {

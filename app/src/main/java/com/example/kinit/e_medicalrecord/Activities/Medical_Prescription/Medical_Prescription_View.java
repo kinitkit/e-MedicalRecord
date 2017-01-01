@@ -193,6 +193,7 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
             case R.id.btn_tagged:
                 intent = new Intent(this, Tagged_Medical_Prescription.class);
                 intent.putExtra("medical_prescription_id", medicalPrescription.medicalPrescription_id);
+                intent.putExtra("patient", patient);
                 startActivity(intent);
                 break;
         }

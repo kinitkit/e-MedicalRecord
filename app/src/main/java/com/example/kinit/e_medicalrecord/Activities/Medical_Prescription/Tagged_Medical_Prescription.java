@@ -11,8 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Search_Tagged_MedicalPrescription;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
+import com.example.kinit.e_medicalrecord.Fragments.Medical_Prescription.Fragment_Search_Physician;
 import com.example.kinit.e_medicalrecord.Fragments.Medical_Prescription.Fragment_Tagged_Medical_Prescription;
 import com.example.kinit.e_medicalrecord.R;
 
@@ -25,6 +27,7 @@ public class Tagged_Medical_Prescription extends AppCompatActivity {
 
     //Classes
     ArrayList<Tagged_Physician_List> taggedPhysicianList;
+    Patient patient;
 
     //App
     FragmentManager fragmentManager;
@@ -39,6 +42,7 @@ public class Tagged_Medical_Prescription extends AppCompatActivity {
 
     void init() {
         medical_prescription_id = getIntent().getIntExtra("medical_prescription_id", 0);
+        patient = getIntent().getExtras().getParcelable("patient");
 
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -47,6 +51,7 @@ public class Tagged_Medical_Prescription extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Fragment_Tagged_Medical_Prescription fragmentTaggedMedicalPrescription = new Fragment_Tagged_Medical_Prescription();
+        fragmentTaggedMedicalPrescription.setMedical_prescription_id(medical_prescription_id);
         //FragmentManager
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -74,7 +79,7 @@ public class Tagged_Medical_Prescription extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //BusStation.getBus().post(new Bus_Search_Physician(query, user_id, patient_id));
+                BusStation.getBus().post(new Bus_Search_Tagged_MedicalPrescription(query, patient.user_data_id, medical_prescription_id));
                 searchView.clearFocus();
                 return false;
             }
@@ -92,6 +97,11 @@ public class Tagged_Medical_Prescription extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
+                Fragment_Search_Physician fragmentSearchPhysician = new Fragment_Search_Physician();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.frameLayout, fragmentSearchPhysician);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
                 break;
             case android.R.id.home:
                 this.finish();

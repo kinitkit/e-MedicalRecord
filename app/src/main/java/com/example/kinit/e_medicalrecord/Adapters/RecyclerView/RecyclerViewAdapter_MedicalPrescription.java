@@ -52,7 +52,7 @@ public class RecyclerViewAdapter_MedicalPrescription extends RecyclerView.Adapte
                 BusStation.getBus().post(new Bus_Medical_Prescription_LongClick(medicalPrescriptions.get(position).medicalPrescription_id,
                         medicalPrescriptions.get(position).patient_id, medicalPrescriptions.get(position).physicianName,
                         medicalPrescriptions.get(position).clinic_name, medicalPrescriptions.get(position).date,
-                        medicalPrescriptions.get(position).calendarStr, position));
+                        medicalPrescriptions.get(position).calendarStr, position, medicalPrescriptions.get(position).user_data_id));
                 return true;
             }
         });
