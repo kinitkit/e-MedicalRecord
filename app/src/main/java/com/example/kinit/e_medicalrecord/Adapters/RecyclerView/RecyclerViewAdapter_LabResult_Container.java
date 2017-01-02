@@ -13,6 +13,7 @@ import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Chemistry;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Fecalysis;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Hematology;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Urinalysis;
+import com.example.kinit.e_medicalrecord.Classes.Laboratory.Laboratory;
 import com.example.kinit.e_medicalrecord.Enum.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.R;
 
@@ -24,6 +25,12 @@ public class RecyclerViewAdapter_LabResult_Container extends RecyclerView.Adapte
     ArrayList<Lab_Fecalysis> labFecalysis;
     ArrayList<Lab_Hematology> labHematologies;
     ArrayList<Lab_Urinalysis> labUrinalysises;
+
+    ArrayList<Laboratory> laboratories;
+
+    public RecyclerViewAdapter_LabResult_Container(ArrayList<Laboratory> laboratories) {
+        this.laboratories = laboratories;
+    }
 
     public void setLabChemistries(ArrayList<Lab_Chemistry> labChemistries) {
         this.labChemistries = labChemistries;
@@ -41,19 +48,6 @@ public class RecyclerViewAdapter_LabResult_Container extends RecyclerView.Adapte
         this.labUrinalysises = labUrinalysises;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_date, tv_physicianName, tv_labName;
-        CardView cardView;
-
-        ViewHolder(View view) {
-            super(view);
-            tv_date = (TextView) view.findViewById(R.id.tv_date);
-            tv_physicianName = (TextView) view.findViewById(R.id.tv_physicianName);
-            tv_labName = (TextView) view.findViewById(R.id.tv_labName);
-            cardView = (CardView) view.findViewById(R.id.cardView);
-        }
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_row_layout_laboratory, parent, false);
@@ -62,7 +56,10 @@ public class RecyclerViewAdapter_LabResult_Container extends RecyclerView.Adapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (labChemistries != null) {
+        holder.tv_date.setText(laboratories.get(position).strDatePerformed);
+        holder.tv_physicianName.setText(laboratories.get(position).physician_name);
+        holder.tv_labName.setText(laboratories.get(position).lab_name);
+        /*if (labChemistries != null) {
             labChemistry_BindViewHolder(holder, position);
         } else if (labFecalysis != null) {
             labFecalysis_BindViewHolder(holder, position);
@@ -70,12 +67,12 @@ public class RecyclerViewAdapter_LabResult_Container extends RecyclerView.Adapte
             labHematology_BindViewHolder(holder, position);
         } else if (labUrinalysises != null) {
             labUrinalysis_BindViewHolder(holder, position);
-        }
+        }*/
     }
 
     @Override
     public int getItemCount() {
-        if (labChemistries != null) {
+        /*if (labChemistries != null) {
             return labChemistries.size();
         } else if (labFecalysis != null) {
             return labFecalysis.size();
@@ -83,14 +80,14 @@ public class RecyclerViewAdapter_LabResult_Container extends RecyclerView.Adapte
             return labHematologies.size();
         } else if (labUrinalysises != null) {
             return labUrinalysises.size();
-        }
-        return 0;
+        }*/
+        return laboratories.size();
     }
 
     void labChemistry_BindViewHolder(ViewHolder holder, final int position) {
-        holder.tv_date.setText(labChemistries.get(position).datePerformed);
-        holder.tv_physicianName.setText(labChemistries.get(position).physicianName);
-        holder.tv_labName.setText(labChemistries.get(position).labName);
+        //holder.tv_date.setText(labChemistries.get(position).datePerformed);
+        //holder.tv_physicianName.setText(labChemistries.get(position).physicianName);
+        //holder.tv_labName.setText(labChemistries.get(position).labName);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +130,19 @@ public class RecyclerViewAdapter_LabResult_Container extends RecyclerView.Adapte
                 BusStation.getBus().post(new Bus_View_Lab_Test(Laboratory_Tests.URINALYSIS, labUrinalysises.get(position)));
             }
         });
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tv_date, tv_physicianName, tv_labName;
+        CardView cardView;
+
+        ViewHolder(View view) {
+            super(view);
+            tv_date = (TextView) view.findViewById(R.id.tv_date);
+            tv_physicianName = (TextView) view.findViewById(R.id.tv_physicianName);
+            tv_labName = (TextView) view.findViewById(R.id.tv_labName);
+            cardView = (CardView) view.findViewById(R.id.cardView);
+        }
     }
 
 }

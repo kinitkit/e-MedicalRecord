@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.kinit.e_medicalrecord.Activities.Allergy.Allergy;
+import com.example.kinit.e_medicalrecord.Activities.Laboratory.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Activities.My_Physician.My_Physician;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
@@ -62,7 +63,9 @@ public class Fragment_Medical_History extends Fragment {
         tv_labResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newActivityInitializer(Medical_Transaction.LAB_RESULT.ordinal());
+                myIntent = new Intent(getActivity(), Laboratory_Tests.class);
+                putExtra();
+                //newActivityInitializer(Medical_Transaction.LAB_RESULT.ordinal());
             }
         });
 

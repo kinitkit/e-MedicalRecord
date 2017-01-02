@@ -34,7 +34,10 @@
         <activity android:name=".Activities.Medical_Prescription.Tagged_Medical_Prescription" />
         <activity android:name=".Activities.Medical_Prescription.Medical_Prescription_View" />
         <activity android:name=".Activities.Allergy.Allergy" />
-        <activity android:name=".Activities.Allergy.Allergy_Form"></activity>
+        <activity android:name=".Activities.Allergy.Allergy_Form" />
+        <activity android:name=".Activities.Laboratory.Laboratory_Tests" />
+        <activity android:name=".Activities.Laboratory.Laboratory_Results" />
+        <activity android:name=".Activities.Laboratory.Chemistry_Form"></activity>
     </application>
 
 </manifest>

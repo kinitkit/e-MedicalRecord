@@ -52,6 +52,7 @@
     <string name="dosage">Dosage</string>
     <string name="indication">Indication</string>
     <string name="unauthorized_to_insert">You have no authority to add data to patient.</string>
+    <string name="record_added">Record added.</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>
@@ -118,7 +119,9 @@
     </string-array>
 
     <string-array name="spinner_lab_chem">
+        <item name="physician">Physician</item>
         <item name="laboratory">Laboratory</item>
+        <item name="datePerformed">Date Performed</item>
         <item name="fbs">FBS (Glucose)</item>
         <item name="creatine">Creatine</item>
         <item name="cholesterol">Cholesterol</item>

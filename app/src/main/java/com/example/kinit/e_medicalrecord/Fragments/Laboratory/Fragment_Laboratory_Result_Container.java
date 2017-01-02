@@ -53,22 +53,22 @@ public class Fragment_Laboratory_Result_Container extends Fragment {
 
     public void setLabChemistries(ArrayList<Lab_Chemistry> labChemistries){
         this.labChemistries = labChemistries;
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_LabResult_Container();
+        //recyclerViewAdapter_Content = new RecyclerViewAdapter_LabResult_Container();
         recyclerViewAdapter_Content.setLabChemistries(labChemistries);
     }
     public void setLabFecalysises(ArrayList<Lab_Fecalysis> labFecalysises){
         this.labFecalysises = labFecalysises;
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_LabResult_Container();
+        //recyclerViewAdapter_Content = new RecyclerViewAdapter_LabResult_Container();
         recyclerViewAdapter_Content.setLabFecalysis(labFecalysises);
     }
     public void setLabHematologies(ArrayList<Lab_Hematology> labHematologies){
         this.labHematologies = labHematologies;
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_LabResult_Container();
+        //recyclerViewAdapter_Content = new RecyclerViewAdapter_LabResult_Container();
         recyclerViewAdapter_Content.setLabHematologies(labHematologies);
     }
     public void setLabUrinalysises(ArrayList<Lab_Urinalysis> labUrinalysises){
         this.labUrinalysises = labUrinalysises;
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_LabResult_Container();
+        //recyclerViewAdapter_Content = new RecyclerViewAdapter_LabResult_Container();
         recyclerViewAdapter_Content.setLabUrinalysises(labUrinalysises);
     }
 

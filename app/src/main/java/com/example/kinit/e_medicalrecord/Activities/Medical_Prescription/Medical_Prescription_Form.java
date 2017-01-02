@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -241,6 +242,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
                                         progressDialog.dismiss();
+                                        Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_LONG).show();
                                         Intent intent = new Intent();
                                         intent.putExtra("result", true);
                                         setResult(RESULT_OK, intent);

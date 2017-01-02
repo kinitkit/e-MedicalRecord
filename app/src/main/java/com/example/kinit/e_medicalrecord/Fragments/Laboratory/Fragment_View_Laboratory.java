@@ -119,7 +119,7 @@ public class Fragment_View_Laboratory extends Fragment {
                                         jsonObject = rootJsonArray.getJSONObject(0);
                                         switch (enum_laboratoryTests) {
                                             case BLOOD_CHEMISTRY:
-                                                labChemistry.setValues(jsonObject);
+                                                //labChemistry.setValues(jsonObject);
                                                 init_labChemistry();
                                                 break;
                                             case FECALYSIS:
@@ -189,7 +189,7 @@ public class Fragment_View_Laboratory extends Fragment {
     }
 
     void init_labChemistry() {
-        loadDetails(labChemistry.physicianName, labChemistry.labName, labChemistry.datePerformed);
+        //loadDetails(labChemistry.physicianName, labChemistry.labName, labChemistry.datePerformed);
 
         RecyclerView recyclerView_LabTest = (RecyclerView) rootView.findViewById(R.id.recyclerView_labTest);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_labTest = new RecyclerViewAdapter_LaboratoryFields();
@@ -205,7 +205,7 @@ public class Fragment_View_Laboratory extends Fragment {
         rvAdapter_labTest.addItem("Calcium:", labChemistry.calcium);
         loadToRecyclerView(recyclerView_LabTest, rvAdapter_labTest);
 
-        loadRemarks(labChemistry.remark);
+        //loadRemarks(labChemistry.remark);
     }
 
     void init_labFecalysis() {
