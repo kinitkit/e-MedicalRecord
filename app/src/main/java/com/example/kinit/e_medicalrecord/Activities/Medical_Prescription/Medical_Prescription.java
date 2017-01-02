@@ -182,65 +182,7 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
         progressDialog.dismiss();
     }
 
-    @Override
-    public void onRefresh() {
-        if (swipeRefreshLayout.isRefreshing()) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-        fetchData();
-    }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_add:
-                intent = new Intent(this, Medical_Prescription_Form.class);
-                intent.putExtra("patient", patient);
-                intent.putExtra("viewer", viewer);
-                startActivityForResult(intent, 1);
-                break;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                fetchData();
-            }
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Subscribe
-    public void onClickItem(Bus_Medical_Prescription_Click busMedicalPrescriptionClick){
-        intent = new Intent(this, Medical_Prescription_View.class);
-        intent.putExtra("patient", patient);
-        intent.putExtra("viewer", viewer);
-        intent.putExtra("busMedicalPrescriptionClick", busMedicalPrescriptionClick);
-        startActivity(intent);
-    }
-
-    @Subscribe
-    public void onLongClickItem(Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick) {
-        if(viewer != null){
-            if(viewer.user_id == busMedicalPrescriptionLongClick.user_data_id) {
-                action_AlertDialog(busMedicalPrescriptionLongClick);
-            }
-        } else {
-            action_AlertDialog(busMedicalPrescriptionLongClick);
-        }
-    }
 
     void action_AlertDialog(final Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick) {
         final CharSequence actions[] = {"Edit", "Delete"};
@@ -321,202 +263,75 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        BusStation.getBus().register(this);
+    @Subscribe
+    public void onClickItem(Bus_Medical_Prescription_Click busMedicalPrescriptionClick){
+        intent = new Intent(this, Medical_Prescription_View.class);
+        intent.putExtra("patient", patient);
+        intent.putExtra("viewer", viewer);
+        intent.putExtra("busMedicalPrescriptionClick", busMedicalPrescriptionClick);
+        startActivity(intent);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        BusStation.getBus().unregister(this);
-    }
-
-    /*//Classes
-    Viewer viewer;
-    Patient patient;
-
-    //App
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-
-    //Fragment
-    Fragment_New_MedicalPrescription fragmentNewMedicalPrescription;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_medical_prescription);
-        init();
-    }
-
-    void init() {
-        Intent intent = getIntent();
-        patient = new Patient();
-        patient.id = intent.getIntExtra("patient_id", 0);
-        patient.name = intent.getStringExtra("patient_name");
-        patient.user_data_id = intent.getIntExtra("user_id", 0);
-        if (intent.hasExtra("viewer_user_id")) {
-            viewer = new Viewer();
-            viewer.name = intent.getStringExtra("viewer_name");
-            viewer.user_id = intent.getIntExtra("viewer_user_id", 0);
-            viewer.patient_id = intent.getIntExtra("viewer_patient_id", 0);
-            viewer.medicalStaff_id = intent.getIntExtra("viewer_medicalStaff_id", 0);
-            viewer.mode = Mode.values()[intent.getIntExtra("viewer_ordinal", 0)];
-        }
-
-        //Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Medical Prescription");
-        getSupportActionBar().setSubtitle(patient.name);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Fragment_Medical_Prescription fragmentMedicalPrescription = new Fragment_Medical_Prescription();
-        fragmentMedicalPrescription.setPatient(patient);
-        fragmentMedicalPrescription.setViewer(viewer);
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, fragmentMedicalPrescription).commit();
-    }
-
-    void popFragmentBackStack() {
-        fragmentManager.popBackStack();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        BusStation.getBus().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        BusStation.getBus().unregister(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        int count = fragmentManager.getBackStackEntryCount();
-        if (count == 0) {
-            super.onBackPressed();
+    @Subscribe
+    public void onLongClickItem(Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick) {
+        if(viewer != null){
+            if(viewer.user_id == busMedicalPrescriptionLongClick.user_data_id) {
+                action_AlertDialog(busMedicalPrescriptionLongClick);
+            }
         } else {
-            pop(new Pop_BackStack());
+            action_AlertDialog(busMedicalPrescriptionLongClick);
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        fetchData();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_add:
+                intent = new Intent(this, Medical_Prescription_Form.class);
+                intent.putExtra("patient", patient);
+                intent.putExtra("viewer", viewer);
+                startActivityForResult(intent, 1);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                fetchData();
+            }
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                int count = fragmentManager.getBackStackEntryCount();
-                if (count == 0) {
-                    this.finish();
-                } else {
-                    pop(new Pop_BackStack());
-                }
+                this.finish();
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    @Subscribe
-    public void setTitle(Bus_ToolbarTitle busToolbarTitle) {
-        getSupportActionBar().setTitle(busToolbarTitle.title);
-        getSupportActionBar().setSubtitle(busToolbarTitle.subtitle);
+    @Override
+    public void onResume() {
+        super.onResume();
+        BusStation.getBus().register(this);
     }
 
-    @Subscribe
-    public void pop(Pop_BackStack popBackStack) {
-        popFragmentBackStack();
-        int count = fragmentManager.getBackStackEntryCount();
-        if (count > 1) {
-            BusStation.getBus().post(new Bus_Resume_Fragment());
-        } else {
-            getSupportActionBar().setTitle("Medical Prescription");
-            getSupportActionBar().setSubtitle(patient.name);
-        }
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusStation.getBus().unregister(this);
     }
-
-    @Subscribe
-    public void isBackPressed(Bus_Finish_Activity busFinishActivity) {
-        this.finish();
-    }
-
-    //Medical Prescription
-    @Subscribe
-    public void onClickMedicalPrescription(Bus_MedicalPrescription_Item busMedicalPrescriptionItem) {
-        Bundle args = new Bundle();
-        args.putInt("medicalPrescription_id", busMedicalPrescriptionItem.medicalPrescription_id);
-        args.putInt("patient_id", busMedicalPrescriptionItem.patient_id);
-        args.putString("physician_name", busMedicalPrescriptionItem.physicianName);
-        args.putString("clinic_name", busMedicalPrescriptionItem.clinicName);
-        args.putString("date", busMedicalPrescriptionItem.date);
-        Fragment_Drug_List fragmentDrugList = new Fragment_Drug_List();
-        fragmentDrugList.setArguments(args);
-        fragmentDrugList.setPatient(patient);
-        fragmentDrugList.setViewer(viewer);
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, fragmentDrugList);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    @Subscribe
-    public void onClickOpenEditMedicalPrescription(Bus_Open_Edit_MedicalPrescription busOpenEditMedicalPrescription) {
-        Bundle args = new Bundle();
-        args.putInt("patient_id", patient.id);
-        args.putInt("user_id", patient.user_data_id);
-        fragmentNewMedicalPrescription = new Fragment_New_MedicalPrescription();
-        fragmentNewMedicalPrescription.setArguments(args);
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, fragmentNewMedicalPrescription);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-        fragmentNewMedicalPrescription.setViewer(viewer);
-    }
-
-    @Subscribe
-    public void onClickOpenAddDrug(Bus_Open_Add_Drug busOpenAddDrug) {
-        Bundle args = new Bundle();
-        Fragment_Drug fragmentDrug = new Fragment_Drug();
-        if (busOpenAddDrug.queryType != null) {
-            if (busOpenAddDrug.queryType == Query_Type.UPDATE) {
-                args.putInt("ordinal", busOpenAddDrug.queryType.ordinal());
-                fragmentDrug.setArguments(args);
-                fragmentDrug.set_drug(busOpenAddDrug);
-            }
-        }
-
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, fragmentDrug);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    @Subscribe
-    public void onClickAddDrug(Bus_Drug busDrug) {
-        if (busDrug.queryType == null) {
-            fragmentNewMedicalPrescription.insertDrug(busDrug);
-            popFragmentBackStack();
-        } else if (busDrug.queryType == Query_Type.UPDATE) {
-            fragmentNewMedicalPrescription.updateDrug(busDrug);
-            popFragmentBackStack();
-        }
-    }
-
-    @Subscribe
-    public void onClickOpenTagged(Bus_Open_MedicalPrescription_Tagged busOpenMedicalPrescriptionTagged){
-        Fragment_Tagged_Medical_Prescription fragmentTaggedMedicalPrescription = new Fragment_Tagged_Medical_Prescription();
-        fragmentTaggedMedicalPrescription.setViewer(viewer);
-        fragmentTaggedMedicalPrescription.setBusOpenMedicalPrescriptionTagged(busOpenMedicalPrescriptionTagged);
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, fragmentTaggedMedicalPrescription);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-    //End Medical Prescription*/
 }
