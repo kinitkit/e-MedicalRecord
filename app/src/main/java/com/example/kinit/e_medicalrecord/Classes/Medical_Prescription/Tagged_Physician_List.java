@@ -10,11 +10,11 @@ public class Tagged_Physician_List {
 
     public Tagged_Physician_List(JSONObject jsonObject) {
         try {
-            if(jsonObject.has("id")) {
+            if (jsonObject.has("id")) {
                 id = jsonObject.getInt("id");
             }
             medical_staff_id = jsonObject.getInt("medical_staff_id");
-            name = jsonObject.getString("first_name") +" "+ jsonObject.getString("middle_name") +" "+ jsonObject.getString("last_name");
+            name = jsonObject.getString("first_name") + " " + jsonObject.getString("middle_name") + " " + jsonObject.getString("last_name");
         } catch (Exception e) {
             e.printStackTrace();
         }

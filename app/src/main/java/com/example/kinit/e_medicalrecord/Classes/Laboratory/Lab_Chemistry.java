@@ -10,7 +10,6 @@ public class Lab_Chemistry extends Laboratory {
     public static final String TABLE_NAME = "lab_chemistry";
     public int id;
     public String fbs, creatine, cholesterol, triglycerides, hdl, ldl, uricAcid, sgpt_alat, sodium, potassium, calcium;
-    public Calendar calendar = Calendar.getInstance();
 
     public Lab_Chemistry(JSONObject jsonObject) {
         super(jsonObject);

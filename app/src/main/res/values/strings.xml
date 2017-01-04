@@ -53,6 +53,7 @@
     <string name="indication">Indication</string>
     <string name="unauthorized_to_insert">You have no authority to add data to patient.</string>
     <string name="record_added">Record added.</string>
+    <string name="record_updated">Record updated</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>
@@ -137,7 +138,9 @@
     </string-array>
 
     <string-array name="spinner_lab_fecalysis">
+        <item name="physician">Physician</item>
         <item name="laboratory">Laboratory</item>
+        <item name="datePerformed">Date Performed</item>
         <item name="color">Color</item>
         <item name="consistency">Consistency</item>
         <item name="ascaris_lumbricoides">Ascaris Lumbricoides</item>
@@ -159,7 +162,9 @@
     </string-array>
 
     <string-array name="spinner_lab_hematology">
-        <item name="lab_name">Laboratory</item>
+        <item name="physician">Physician</item>
+        <item name="laboratory">Laboratory</item>
+        <item name="datePerformed">Date Performed</item>
         <item name="hemoglobin">Hemoglobin</item>
         <item name="hematrocit">Hematocrit</item>
         <item name="RBC">RBC</item>
@@ -196,7 +201,9 @@
     </string-array>
 
     <string-array name="spinner_lab_urinalysis">
-        <item name="lab_name">Laboratory</item>
+        <item name="physician">Physician</item>
+        <item name="laboratory">Laboratory</item>
+        <item name="datePerformed">Date Performed</item>
         <item name="color">Color</item>
         <item name="transparency">Transparency</item>
         <item name="reaction">Reaction</item>

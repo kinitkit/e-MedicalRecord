@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="com.example.kinit.e_medicalrecord.Activities.Laboratory.Chemistry_Form">
+    tools:context="com.example.kinit.e_medicalrecord.Activities.Laboratory.Lab_Chemistry_Form">
 
     <include
         android:id="@+id/toolbar"

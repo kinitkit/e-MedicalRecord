@@ -28,7 +28,7 @@ public class Laboratory implements Parcelable {
 
     public Laboratory(JSONObject jsonObject) {
         try {
-            lab_id = jsonObject.getInt("id");
+            lab_id = jsonObject.getInt("lab_id");
             user_data_id = jsonObject.getInt("user_data_id");
             physician_name = jsonObject.getString("physician_name");
             lab_name = jsonObject.getString("lab_name");

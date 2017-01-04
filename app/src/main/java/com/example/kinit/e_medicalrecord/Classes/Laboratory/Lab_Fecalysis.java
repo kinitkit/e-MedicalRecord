@@ -6,40 +6,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Lab_Fecalysis {
+public class Lab_Fecalysis extends Laboratory{
     public static final String TABLE_NAME = "lab_fecalysis";
-    public int id, userDataId;
-    public String physicianName, labName, datePerformed, color, consistency, ascarisLumbricoides, trichurisTrichiura, enterobiusVermicularis,
+    public int id;
+    public String color, consistency, ascarisLumbricoides, trichurisTrichiura, enterobiusVermicularis,
             hookwormOva, giardiaLambia, blastocystisHominis, cyst, trophozoite, occultBlood, pusCells, rbc, fatGlobules, yeastCells,
-            undigestedFood, starchGranules, remark;
-    public Calendar calendar = Calendar.getInstance();
-
-    public void setDate(String date) {
-        try {
-            calendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date));
-            this.datePerformed = new SimpleDateFormat("MMM dd, yyyy").format(calendar.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Lab_Fecalysis() {
-    }
+            undigestedFood, starchGranules;
 
     public Lab_Fecalysis(JSONObject jsonObject) {
+        super(jsonObject);
         try {
-            id = jsonObject.getInt("id");
-            userDataId = jsonObject.getInt("user_data_id");
-            physicianName = jsonObject.getString("physician_name");
-            labName = jsonObject.getString("lab_name");
-            setDate(jsonObject.getString("date_performed"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setValues(JSONObject jsonObject) {
-        try {
+            this.id = jsonObject.getInt("id");
             color = jsonObject.getString("color");
             consistency = jsonObject.getString("consistency");
             ascarisLumbricoides = jsonObject.getString("ascaris_lumbricoides");
@@ -57,7 +34,6 @@ public class Lab_Fecalysis {
             yeastCells = jsonObject.getString("yeast_cells");
             undigestedFood = jsonObject.getString("undigested_food");
             starchGranules = jsonObject.getString("starch_granules");
-            remark = jsonObject.getString("remark");
         } catch (Exception e) {
             e.printStackTrace();
         }

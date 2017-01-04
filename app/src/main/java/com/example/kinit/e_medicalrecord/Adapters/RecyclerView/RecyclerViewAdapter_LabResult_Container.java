@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_Laboratory_OnClick;
+import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_Laboratory_OnLongClick;
 import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_View_Lab_Test;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Chemistry;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Fecalysis;
@@ -59,80 +61,14 @@ public class RecyclerViewAdapter_LabResult_Container extends RecyclerView.Adapte
         holder.tv_date.setText(laboratories.get(position).strDatePerformed);
         holder.tv_physicianName.setText(laboratories.get(position).physician_name);
         holder.tv_labName.setText(laboratories.get(position).lab_name);
-        /*if (labChemistries != null) {
-            labChemistry_BindViewHolder(holder, position);
-        } else if (labFecalysis != null) {
-            labFecalysis_BindViewHolder(holder, position);
-        } else if (labHematologies != null) {
-            labHematology_BindViewHolder(holder, position);
-        } else if (labUrinalysises != null) {
-            labUrinalysis_BindViewHolder(holder, position);
-        }*/
     }
 
     @Override
     public int getItemCount() {
-        /*if (labChemistries != null) {
-            return labChemistries.size();
-        } else if (labFecalysis != null) {
-            return labFecalysis.size();
-        } else if (labHematologies != null) {
-            return labHematologies.size();
-        } else if (labUrinalysises != null) {
-            return labUrinalysises.size();
-        }*/
         return laboratories.size();
     }
 
-    void labChemistry_BindViewHolder(ViewHolder holder, final int position) {
-        //holder.tv_date.setText(labChemistries.get(position).datePerformed);
-        //holder.tv_physicianName.setText(labChemistries.get(position).physicianName);
-        //holder.tv_labName.setText(labChemistries.get(position).labName);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BusStation.getBus().post(new Bus_View_Lab_Test(Laboratory_Tests.BLOOD_CHEMISTRY, labChemistries.get(position)));
-            }
-        });
-    }
-
-    void labFecalysis_BindViewHolder(ViewHolder holder, final int position) {
-        holder.tv_date.setText(labFecalysis.get(position).datePerformed);
-        holder.tv_physicianName.setText(labFecalysis.get(position).physicianName);
-        holder.tv_labName.setText(labFecalysis.get(position).labName);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BusStation.getBus().post(new Bus_View_Lab_Test(Laboratory_Tests.FECALYSIS, labFecalysis.get(position)));
-            }
-        });
-    }
-
-    void labHematology_BindViewHolder(ViewHolder holder, final int position) {
-        holder.tv_date.setText(labHematologies.get(position).datePerformed);
-        holder.tv_physicianName.setText(labHematologies.get(position).physicianName);
-        holder.tv_labName.setText(labHematologies.get(position).labName);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BusStation.getBus().post(new Bus_View_Lab_Test(Laboratory_Tests.HEMATOLOGY, labHematologies.get(position)));
-            }
-        });
-    }
-
-    void labUrinalysis_BindViewHolder(ViewHolder holder, final int position) {
-        holder.tv_date.setText(labUrinalysises.get(position).datePerformed);
-        holder.tv_physicianName.setText(labUrinalysises.get(position).physicianName);
-        holder.tv_labName.setText(labUrinalysises.get(position).labName);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BusStation.getBus().post(new Bus_View_Lab_Test(Laboratory_Tests.URINALYSIS, labUrinalysises.get(position)));
-            }
-        });
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView tv_date, tv_physicianName, tv_labName;
         CardView cardView;
 
@@ -142,6 +78,19 @@ public class RecyclerViewAdapter_LabResult_Container extends RecyclerView.Adapte
             tv_physicianName = (TextView) view.findViewById(R.id.tv_physicianName);
             tv_labName = (TextView) view.findViewById(R.id.tv_labName);
             cardView = (CardView) view.findViewById(R.id.cardView);
+            cardView.setOnClickListener(this);
+            cardView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            BusStation.getBus().post(new Bus_Laboratory_OnClick(getAdapterPosition(), laboratories.get(getAdapterPosition())));
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            BusStation.getBus().post(new Bus_Laboratory_OnLongClick(getAdapterPosition(), laboratories.get(getAdapterPosition())));
+            return true;
         }
     }
 

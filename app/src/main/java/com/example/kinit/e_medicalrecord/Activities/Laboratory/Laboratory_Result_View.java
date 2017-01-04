@@ -1,14 +1,15 @@
-package com.example.kinit.e_medicalrecord.Fragments.Laboratory;
+package com.example.kinit.e_medicalrecord.Activities.Laboratory;
 
-
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -17,10 +18,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_LaboratoryFields;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Chemistry;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Fecalysis;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Hematology;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Urinalysis;
+import com.example.kinit.e_medicalrecord.Classes.Laboratory.Laboratory;
+import com.example.kinit.e_medicalrecord.Classes.User.Patient;
+import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
@@ -32,79 +38,75 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Fragment_View_Laboratory extends Fragment {
-    //View
-    View rootView;
+public class Laboratory_Result_View extends AppCompatActivity implements View.OnClickListener {
 
     String table_name;
-    int lab_id;
-
+    Intent intent;
     //Enum
     Laboratory_Tests enum_laboratoryTests;
     //Classes
+    Patient patient;
+    Viewer viewer;
+    Laboratory laboratory;
     Lab_Chemistry labChemistry;
     Lab_Fecalysis labFecalysis;
     Lab_Hematology labHematology;
     Lab_Urinalysis labUrinalysis;
+    Custom_ProgressDialog progressDialog;
+    Custom_AlertDialog alertDialog;
+    FloatingActionButton btn_tagged;
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        intent = getIntent();
+        enum_laboratoryTests = Laboratory_Tests.values()[intent.getIntExtra("ordinal", 0)];
+        //Log.d("error", enum_laboratoryTests.name());
         switch (enum_laboratoryTests) {
             case BLOOD_CHEMISTRY:
-                rootView = inflater.inflate(R.layout.layout_view_chemistry, container, false);
+                setContentView(R.layout.layout_view_chemistry);
+                table_name = Lab_Chemistry.TABLE_NAME;
                 break;
             case FECALYSIS:
-                rootView = inflater.inflate(R.layout.layout_view_fecalysis, container, false);
+                setContentView(R.layout.layout_view_fecalysis);
+                table_name = Lab_Fecalysis.TABLE_NAME;
                 break;
             case HEMATOLOGY:
-                rootView = inflater.inflate(R.layout.layout_view_hematology, container, false);
+                setContentView(R.layout.layout_view_hematology);
+                table_name = Lab_Hematology.TABLE_NAME;
                 break;
             case URINALYSIS:
-                rootView = inflater.inflate(R.layout.layout_view_urinalysis, container, false);
+                setContentView(R.layout.layout_view_urinalysis);
+                table_name = Lab_Urinalysis.TABLE_NAME;
                 break;
         }
-        return rootView;
-    }
-
-    /*@Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         init();
     }
 
     void init() {
-        fetchData(table_name, lab_id);
-    }
+        patient = intent.getExtras().getParcelable("patient");
+        viewer = intent.getExtras().getParcelable("viewer");
+        laboratory = intent.getExtras().getParcelable("laboratory");
 
-    public void setLab(Laboratory_Tests enum_laboratoryTests, Object object) {
-        this.enum_laboratoryTests = enum_laboratoryTests;
-        switch (enum_laboratoryTests) {
-            case BLOOD_CHEMISTRY:
-                this.labChemistry = (Lab_Chemistry) object;
-                table_name = Lab_Chemistry.TABLE_NAME;
-                lab_id = labChemistry.id;
-                break;
-            case FECALYSIS:
-                this.labFecalysis = (Lab_Fecalysis) object;
-                table_name = Lab_Fecalysis.TABLE_NAME;
-                lab_id = labFecalysis.id;
-                break;
-            case HEMATOLOGY:
-                this.labHematology = (Lab_Hematology) object;
-                table_name = Lab_Hematology.TABLE_NAME;
-                lab_id = labHematology.id;
-                break;
-            case URINALYSIS:
-                this.labUrinalysis = (Lab_Urinalysis) object;
-                table_name = Lab_Urinalysis.TABLE_NAME;
-                lab_id = labUrinalysis.id;
-                break;
-        }
+        alertDialog = new Custom_AlertDialog(this);
+        progressDialog = new Custom_ProgressDialog(this);
+
+        //Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(patient.name);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        btn_tagged = (FloatingActionButton) findViewById(R.id.btn_tagged);
+        btn_tagged.setOnClickListener(this);
+
+        fetchData(table_name, laboratory.lab_id);
     }
 
     void fetchData(final String tableName, final int id) {
         try {
+            progressDialog.show("Loading...");
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
                     new Response.Listener<String>() {
                         @Override
@@ -119,19 +121,19 @@ public class Fragment_View_Laboratory extends Fragment {
                                         jsonObject = rootJsonArray.getJSONObject(0);
                                         switch (enum_laboratoryTests) {
                                             case BLOOD_CHEMISTRY:
-                                                //labChemistry.setValues(jsonObject);
+                                                labChemistry = new Lab_Chemistry(jsonObject);
                                                 init_labChemistry();
                                                 break;
                                             case FECALYSIS:
-                                                labFecalysis.setValues(jsonObject);
+                                                labFecalysis = new Lab_Fecalysis(jsonObject);
                                                 init_labFecalysis();
                                                 break;
                                             case HEMATOLOGY:
-                                                labHematology.setValues(jsonObject);
+                                                labHematology = new Lab_Hematology(jsonObject);
                                                 init_labHematology();
                                                 break;
                                             case URINALYSIS:
-                                                labUrinalysis.setValues(jsonObject);
+                                                labUrinalysis = new Lab_Urinalysis(jsonObject);
                                                 init_labUrinalysis();
                                                 break;
                                         }
@@ -139,54 +141,58 @@ public class Fragment_View_Laboratory extends Fragment {
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            progressDialog.dismiss();
                             error.printStackTrace();
                         }
                     }) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "getLabTest");
+                    params.put("action", "getTestResult");
                     params.put("device", "mobile");
                     params.put("id", String.valueOf(id));
                     params.put("table_name", tableName);
                     return params;
                 }
             };
-            Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
+            progressDialog.dismiss();
             e.printStackTrace();
         }
     }
 
+    void loadToRecyclerView(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+    }
+
     void loadDetails(String physicianName, String labName, String datePerformed) {
-        TextView tv_physicianName = (TextView) rootView.findViewById(R.id.tv_physicianName), tv_labName = (TextView) rootView.findViewById(R.id.tv_labName),
-                tv_datePerformed = (TextView) rootView.findViewById(R.id.tv_date);
+        TextView tv_physicianName = (TextView) findViewById(R.id.tv_physicianName), tv_labName = (TextView) findViewById(R.id.tv_labName),
+                tv_datePerformed = (TextView) findViewById(R.id.tv_date);
 
         tv_physicianName.setText(physicianName);
         tv_labName.setText(labName);
         tv_datePerformed.setText(datePerformed);
     }
 
-    void loadToRecyclerView(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
-    }
-
     void loadRemarks(String remarks) {
-        TextView tv_remarks = (TextView) rootView.findViewById(R.id.tv_remarks);
+        TextView tv_remarks = (TextView) findViewById(R.id.tv_remarks);
         tv_remarks.setText(remarks);
     }
 
     void init_labChemistry() {
-        //loadDetails(labChemistry.physicianName, labChemistry.labName, labChemistry.datePerformed);
+        loadDetails(labChemistry.physician_name, labChemistry.lab_name, labChemistry.strDatePerformed);
 
-        RecyclerView recyclerView_LabTest = (RecyclerView) rootView.findViewById(R.id.recyclerView_labTest);
+        RecyclerView recyclerView_LabTest = (RecyclerView) findViewById(R.id.recyclerView_labTest);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_labTest = new RecyclerViewAdapter_LaboratoryFields();
         rvAdapter_labTest.addItem("FBS:", labChemistry.fbs);
         rvAdapter_labTest.addItem("Creatine:", labChemistry.creatine);
@@ -200,18 +206,18 @@ public class Fragment_View_Laboratory extends Fragment {
         rvAdapter_labTest.addItem("Calcium:", labChemistry.calcium);
         loadToRecyclerView(recyclerView_LabTest, rvAdapter_labTest);
 
-        //loadRemarks(labChemistry.remark);
+        loadRemarks(labChemistry.remarks);
     }
 
     void init_labFecalysis() {
-        loadDetails(labFecalysis.physicianName, labFecalysis.labName, labFecalysis.datePerformed);
+        loadDetails(labFecalysis.physician_name, labFecalysis.lab_name, labFecalysis.strDatePerformed);
 
-        RecyclerView recyclerView_physicalCharacteristics = (RecyclerView) rootView.findViewById(R.id.recyclerView_physicalCharacteristics);
+        RecyclerView recyclerView_physicalCharacteristics = (RecyclerView) findViewById(R.id.recyclerView_physicalCharacteristics);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_physicalCharacteristics = new RecyclerViewAdapter_LaboratoryFields();
         rvAdapter_physicalCharacteristics.addItem("Color:", labFecalysis.color);
         rvAdapter_physicalCharacteristics.addItem("Consistency:", labFecalysis.consistency);
 
-        RecyclerView recyclerView_microscopicExamination = (RecyclerView) rootView.findViewById(R.id.recyclerView_microscopicExamination);
+        RecyclerView recyclerView_microscopicExamination = (RecyclerView) findViewById(R.id.recyclerView_microscopicExamination);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_microscopicExamination = new RecyclerViewAdapter_LaboratoryFields();
         rvAdapter_microscopicExamination.addItem("Ascaris Lumbricoides:", labFecalysis.ascarisLumbricoides);
         rvAdapter_microscopicExamination.addItem("Trichuris trichiura:", labFecalysis.trichurisTrichiura);
@@ -232,13 +238,13 @@ public class Fragment_View_Laboratory extends Fragment {
         loadToRecyclerView(recyclerView_physicalCharacteristics, rvAdapter_physicalCharacteristics);
         loadToRecyclerView(recyclerView_microscopicExamination, rvAdapter_microscopicExamination);
 
-        loadRemarks(labFecalysis.remark);
+        loadRemarks(labFecalysis.remarks);
     }
 
     void init_labHematology() {
-        loadDetails(labHematology.physicianName, labHematology.labName, labHematology.datePerformed);
+        loadDetails(labHematology.physician_name, labHematology.lab_name, labHematology.strDatePerformed);
 
-        RecyclerView recyclerView_LabTest = (RecyclerView) rootView.findViewById(R.id.recyclerView_labTest);
+        RecyclerView recyclerView_LabTest = (RecyclerView) findViewById(R.id.recyclerView_labTest);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_labTest = new RecyclerViewAdapter_LaboratoryFields();
         rvAdapter_labTest.addItem("Hemoglobin:", labHematology.hemoglobin);
         rvAdapter_labTest.addItem("Hematocrit:", labHematology.hematrocit);
@@ -263,20 +269,20 @@ public class Fragment_View_Laboratory extends Fragment {
         rvAdapter_labTest.addItem("Rh:", labHematology.rh);
         loadToRecyclerView(recyclerView_LabTest, rvAdapter_labTest);
 
-        loadRemarks(labHematology.remark);
+        loadRemarks(labHematology.remarks);
     }
 
     void init_labUrinalysis() {
-        loadDetails(labUrinalysis.physicianName, labUrinalysis.labName, labUrinalysis.datePerformed);
+        loadDetails(labUrinalysis.physician_name, labUrinalysis.lab_name, labUrinalysis.strDatePerformed);
 
-        RecyclerView recyclerView_physical = (RecyclerView) rootView.findViewById(R.id.recyclerView_physical);
+        RecyclerView recyclerView_physical = (RecyclerView) findViewById(R.id.recyclerView_physical);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_physical = new RecyclerViewAdapter_LaboratoryFields();
         rvAdapter_physical.addItem("Color:", labUrinalysis.color);
         rvAdapter_physical.addItem("Transparency:", labUrinalysis.transparency);
         rvAdapter_physical.addItem("Reaction:", labUrinalysis.reaction);
         rvAdapter_physical.addItem("Specific Gravity:", labUrinalysis.specificGravity);
 
-        RecyclerView recyclerView_microscopic = (RecyclerView) rootView.findViewById(R.id.recyclerView_microscopic);
+        RecyclerView recyclerView_microscopic = (RecyclerView) findViewById(R.id.recyclerView_microscopic);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_microscopic = new RecyclerViewAdapter_LaboratoryFields();
         rvAdapter_microscopic.addItem("Pus Cells:", labUrinalysis.pusCells);
         rvAdapter_microscopic.addItem("RBC:", labUrinalysis.rbc);
@@ -286,7 +292,7 @@ public class Fragment_View_Laboratory extends Fragment {
         rvAdapter_microscopic.addItem("Bacteria:", labUrinalysis.bacteria);
         rvAdapter_microscopic.addItem("Yeast Cells:", labUrinalysis.yeastCells);
 
-        RecyclerView recyclerView_chemical = (RecyclerView) rootView.findViewById(R.id.recyclerView_chemical);
+        RecyclerView recyclerView_chemical = (RecyclerView) findViewById(R.id.recyclerView_chemical);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_chemical = new RecyclerViewAdapter_LaboratoryFields();
         rvAdapter_chemical.addItem("Sugar:", labUrinalysis.sugar);
         rvAdapter_chemical.addItem("Albumin:", labUrinalysis.albumin);
@@ -297,14 +303,14 @@ public class Fragment_View_Laboratory extends Fragment {
         rvAdapter_chemical.addItem("BacteriaNit:", labUrinalysis.bacteriaNit);
         rvAdapter_chemical.addItem("Leukocyte:", labUrinalysis.leukocyte);
 
-        RecyclerView recyclerView_crystals = (RecyclerView) rootView.findViewById(R.id.recyclerView_crystals);
+        RecyclerView recyclerView_crystals = (RecyclerView) findViewById(R.id.recyclerView_crystals);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_crystals = new RecyclerViewAdapter_LaboratoryFields();
         rvAdapter_crystals.addItem("Amorphous Subs:", labUrinalysis.amorphousSubs);
         rvAdapter_crystals.addItem("Uric Acid:", labUrinalysis.uricAcid);
         rvAdapter_crystals.addItem("Calcium Oxalate:", labUrinalysis.calciumOxalate);
         rvAdapter_crystals.addItem("Triple Phosphate:", labUrinalysis.triplePhosphate);
 
-        RecyclerView recyclerView_casts = (RecyclerView) rootView.findViewById(R.id.recyclerView_casts);
+        RecyclerView recyclerView_casts = (RecyclerView) findViewById(R.id.recyclerView_casts);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_casts = new RecyclerViewAdapter_LaboratoryFields();
         rvAdapter_casts.addItem("Pus Cast:", labUrinalysis.pusCast);
         rvAdapter_casts.addItem("Hyaline:", labUrinalysis.hyaline);
@@ -317,8 +323,29 @@ public class Fragment_View_Laboratory extends Fragment {
         loadToRecyclerView(recyclerView_crystals, rvAdapter_crystals);
         loadToRecyclerView(recyclerView_casts, rvAdapter_casts);
 
-        loadRemarks(labUrinalysis.remark);
-    }*/
+        loadRemarks(labUrinalysis.remarks);
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_tagged:
+                intent = new Intent(this, Tagged_Laboratory.class);
+                intent.putExtra("patient", patient);
+                intent.putExtra("lab_id", laboratory.lab_id);
+                startActivity(intent);
+                break;
+        }
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

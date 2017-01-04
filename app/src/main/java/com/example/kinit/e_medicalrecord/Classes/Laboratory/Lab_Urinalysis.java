@@ -6,40 +6,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Lab_Urinalysis {
+public class Lab_Urinalysis extends Laboratory {
     public static final String TABLE_NAME = "lab_urinalysis";
-    public int id, userDataId;
-    public String physicianName, labName, datePerformed, color, transparency, pusCells, rbc, epithCells,
+    public int id;
+    public String color, transparency, pusCells, rbc, epithCells,
             renalCells, mucusThreads, bacteria, yeastCells, amorphousSubs, uricAcid,
-            calciumOxalate, triplePhosphate, pusCast, hyaline, fineGranular, coarseGranular, remark, reaction, specificGravity, urobilinogen;
-    public boolean sugar, albumin, ketone, bilirubin, blood, bacteriaNit, leukocyte;
-    public Calendar calendar = Calendar.getInstance();
-
-    public void setDate(String date) {
-        try {
-            calendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date));
-            this.datePerformed = new SimpleDateFormat("MMM dd, yyyy").format(calendar.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Lab_Urinalysis() {
-    }
+            calciumOxalate, triplePhosphate, pusCast, hyaline, fineGranular, coarseGranular, reaction, specificGravity, urobilinogen, sugar, albumin, ketone, bilirubin, blood, bacteriaNit, leukocyte;
 
     public Lab_Urinalysis(JSONObject jsonObject) {
-        try {
-            id = jsonObject.getInt("id");
-            userDataId = jsonObject.getInt("user_data_id");
-            physicianName = jsonObject.getString("physician_name");
-            labName = jsonObject.getString("lab_name");
-            setDate(jsonObject.getString("date_performed"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setValues(JSONObject jsonObject) {
+        super(jsonObject);
         try {
             color = jsonObject.getString("color");
             transparency = jsonObject.getString("transparency");
@@ -52,14 +27,14 @@ public class Lab_Urinalysis {
             mucusThreads = jsonObject.getString("mucus_threads");
             bacteria = jsonObject.getString("bacteria");
             yeastCells = jsonObject.getString("yeast_cells");
-            sugar = jsonObject.getString("sugar").equals("1");
-            albumin = jsonObject.getString("albumin").equals("1");
-            ketone = jsonObject.getString("ketone").equals("1");
-            bilirubin = jsonObject.getString("bilirubin").equals("1");
-            blood = jsonObject.getString("blood").equals("1");
+            sugar = jsonObject.getString("sugar");
+            albumin = jsonObject.getString("albumin");
+            ketone = jsonObject.getString("ketone");
+            bilirubin = jsonObject.getString("bilirubin");
+            blood = jsonObject.getString("blood");
             urobilinogen = jsonObject.getString("urobilinogen");
-            bacteriaNit = jsonObject.getString("bacteriaNit").equals("1");
-            leukocyte = jsonObject.getString("leukocyte").equals("1");
+            bacteriaNit = jsonObject.getString("bacteriaNit");
+            leukocyte = jsonObject.getString("leukocyte");
             amorphousSubs = jsonObject.getString("amorphous_subs");
             uricAcid = jsonObject.getString("uric_acid");
             triplePhosphate = jsonObject.getString("triple_phosphate");
@@ -68,7 +43,6 @@ public class Lab_Urinalysis {
             fineGranular = jsonObject.getString("fine_granular");
             coarseGranular = jsonObject.getString("coarse_granular");
             calciumOxalate = jsonObject.getString("calcium_oxalate");
-            remark = jsonObject.getString("remark");
         } catch (Exception e) {
             e.printStackTrace();
         }

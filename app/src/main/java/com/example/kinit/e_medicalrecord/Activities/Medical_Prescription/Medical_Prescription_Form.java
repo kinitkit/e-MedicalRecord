@@ -242,7 +242,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
                                         progressDialog.dismiss();
-                                        Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent();
                                         intent.putExtra("result", true);
                                         setResult(RESULT_OK, intent);

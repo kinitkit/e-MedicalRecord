@@ -39,7 +39,7 @@ public class Fragment_View_Lab_Result extends Fragment {
         return rootView;
     }
 
-    @Override
+    /*@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
@@ -119,6 +119,6 @@ public class Fragment_View_Lab_Result extends Fragment {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
+    }*/
 
 }

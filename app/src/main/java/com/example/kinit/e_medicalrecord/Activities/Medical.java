@@ -388,7 +388,7 @@ public class Medical extends AppCompatActivity {
         fragmentTransaction = fragmentManager.beginTransaction();
         Fragment_View_Lab_Result fragmentViewLabResult = new Fragment_View_Lab_Result();
         fragmentViewLabResult.setArguments(args);
-        fragmentViewLabResult.setLabResultAndViewer(busViewLabTest.enum_laboratoryTests, busViewLabTest.object, viewer);
+        //fragmentViewLabResult.setLabResultAndViewer(busViewLabTest.enum_laboratoryTests, busViewLabTest.object, viewer);
         fragmentTransaction.add(R.id.frameLayout, fragmentViewLabResult);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

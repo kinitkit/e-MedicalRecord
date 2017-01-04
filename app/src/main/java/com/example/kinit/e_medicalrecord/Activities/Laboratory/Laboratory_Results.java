@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.android.volley.AuthFailureError;
@@ -19,9 +20,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_LabResult_Container;
 import com.example.kinit.e_medicalrecord.BusStation.Allergy.Bus_Allergy;
+import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_Laboratory_OnClick;
+import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_Laboratory_OnLongClick;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Chemistry;
+import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Fecalysis;
+import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Hematology;
+import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Urinalysis;
 import com.example.kinit.e_medicalrecord.Enum.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Laboratory;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
@@ -29,6 +36,7 @@ import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.Request.UrlString;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -158,6 +166,49 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
         }
     }
 
+    void deleteData(final Bus_Laboratory_OnLongClick busLaboratoryOnLongClick) {
+        progressDialog.show("Deleting...");
+        try {
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try{
+                                JSONArray rootJsonArray = new JSONArray(response);
+                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                if(jsonObject.getString("code").equals("successful")){
+                                    laboratories.remove(busLaboratoryOnLongClick.position);
+                                    recyclerViewAdapter_Content.notifyItemRemoved(busLaboratoryOnLongClick.position);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            progressDialog.dismiss();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressDialog.dismiss();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "deleteLabTest");
+                    params.put("device", "mobile");
+                    params.put("id", String.valueOf(busLaboratoryOnLongClick.laboratory.lab_id));
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+
     void btn_initializer(boolean isButtonViewable) {
         if (isButtonViewable) {
             btn_add.setVisibility(View.VISIBLE);
@@ -173,25 +224,28 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
         progressDialog.dismiss();
     }
 
-    void setToolbarTitle(){
-        switch (laboratoryTests){
+    void setToolbarTitle() {
+        switch (laboratoryTests) {
             case BLOOD_CHEMISTRY:
                 getSupportActionBar().setTitle("Blood Chemistry List");
                 table_name = Lab_Chemistry.TABLE_NAME;
                 break;
             case FECALYSIS:
                 getSupportActionBar().setTitle("Fecalysis List");
+                table_name = Lab_Fecalysis.TABLE_NAME;
                 break;
             case HEMATOLOGY:
                 getSupportActionBar().setTitle("Hematology List");
+                table_name = Lab_Hematology.TABLE_NAME;
                 break;
             case URINALYSIS:
                 getSupportActionBar().setTitle("Urinalysis List");
+                table_name = Lab_Urinalysis.TABLE_NAME;
                 break;
         }
     }
 
-    void action_AlertDialog(final Bus_Allergy busAllergy) {
+    void action_AlertDialog(final Bus_Laboratory_OnLongClick busLaboratoryOnLongClick) {
         final CharSequence actions[] = {"Edit", "Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
@@ -201,14 +255,14 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        //updateItem(busAllergy);
+                        updateItem(busLaboratoryOnLongClick);
                         break;
                     case 1:
                         alertDialog.builder.setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        //deleteData(busAllergy);
+                                        deleteData(busLaboratoryOnLongClick);
                                     }
                                 });
                         alertDialog.show("Delete", "This item will be permanently deleted.");
@@ -219,31 +273,80 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
         builder.show();
     }
 
-    void openForm(){
-        switch (laboratoryTests){
+    void openForm() {
+        switch (laboratoryTests) {
             case BLOOD_CHEMISTRY:
-                intent = new Intent(this, Chemistry_Form.class);
+                intent = new Intent(this, Lab_Chemistry_Form.class);
                 setActivity();
                 break;
             case FECALYSIS:
-                intent = new Intent(this, Chemistry_Form.class);
+                intent = new Intent(this, Lab_Fecalysis_Form.class);
                 setActivity();
                 break;
             case HEMATOLOGY:
-                intent = new Intent(this, Chemistry_Form.class);
+                intent = new Intent(this, Lab_Hematology_Form.class);
                 setActivity();
                 break;
             case URINALYSIS:
-                intent = new Intent(this, Chemistry_Form.class);
+                intent = new Intent(this, Lab_Urinalysis_Form.class);
                 setActivity();
                 break;
         }
     }
 
-    void setActivity(){
+    void setActivity() {
         intent.putExtra("patient", patient);
         intent.putExtra("viewer", viewer);
         startActivityForResult(intent, 1);
+    }
+
+    void setActivityUpdate(Bus_Laboratory_OnLongClick busLaboratoryOnLongClick){
+        intent.putExtra("patient", patient);
+        intent.putExtra("viewer", viewer);
+        intent.putExtra("laboratory", busLaboratoryOnLongClick.laboratory);
+        startActivityForResult(intent, 1);
+    }
+
+    void updateItem(Bus_Laboratory_OnLongClick busLaboratoryOnLongClick){
+        switch (laboratoryTests) {
+            case BLOOD_CHEMISTRY:
+                intent = new Intent(this, Lab_Chemistry_Form.class);
+                setActivityUpdate(busLaboratoryOnLongClick);
+                break;
+            case FECALYSIS:
+                intent = new Intent(this, Lab_Fecalysis_Form.class);
+                setActivityUpdate(busLaboratoryOnLongClick);
+                break;
+            case HEMATOLOGY:
+                intent = new Intent(this, Lab_Hematology_Form.class);
+                setActivityUpdate(busLaboratoryOnLongClick);
+                break;
+            case URINALYSIS:
+                intent = new Intent(this, Lab_Urinalysis_Form.class);
+                setActivityUpdate(busLaboratoryOnLongClick);
+                break;
+        }
+    }
+
+    @Subscribe
+    public void onClickItem(Bus_Laboratory_OnClick busLaboratoryOnClick) {
+        intent = new Intent(this, Laboratory_Result_View.class);
+        intent.putExtra("patient", patient);
+        intent.putExtra("viewer", viewer);
+        intent.putExtra("laboratory", busLaboratoryOnClick.laboratory);
+        intent.putExtra("ordinal", laboratoryTests.ordinal());
+        startActivity(intent);
+    }
+
+    @Subscribe
+    public void onLongClickItem(Bus_Laboratory_OnLongClick busLaboratoryOnLongClick) {
+        if(viewer != null) {
+            if(busLaboratoryOnLongClick.laboratory.user_data_id == viewer.user_id) {
+                action_AlertDialog(busLaboratoryOnLongClick);
+            }
+        } else {
+            action_AlertDialog(busLaboratoryOnLongClick);
+        }
     }
 
     @Override
@@ -270,5 +373,28 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
             swipeRefreshLayout.setRefreshing(false);
         }
         fetchData();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        BusStation.getBus().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusStation.getBus().unregister(this);
     }
 }

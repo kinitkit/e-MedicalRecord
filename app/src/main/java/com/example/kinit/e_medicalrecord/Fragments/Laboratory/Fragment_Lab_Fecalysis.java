@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSpinner;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,7 +157,12 @@ public class Fragment_Lab_Fecalysis extends Fragment implements AdapterView.OnIt
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        editTexts.get(position).requestFocus();
+        Log.d("error", String.valueOf(position));
+        if (position == 2) {
+            editTexts.get(position).performClick();
+        } else {
+            editTexts.get(position).requestFocus();
+        }
     }
 
     @Override
