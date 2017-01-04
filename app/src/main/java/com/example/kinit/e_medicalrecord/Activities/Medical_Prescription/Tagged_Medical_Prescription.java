@@ -79,7 +79,7 @@ public class Tagged_Medical_Prescription extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                BusStation.getBus().post(new Bus_Search_Tagged_MedicalPrescription(query, patient.user_data_id, medical_prescription_id));
+                BusStation.getBus().post(new Bus_Search_Tagged_MedicalPrescription(query.trim(), patient.user_data_id, medical_prescription_id));
                 searchView.clearFocus();
                 return false;
             }

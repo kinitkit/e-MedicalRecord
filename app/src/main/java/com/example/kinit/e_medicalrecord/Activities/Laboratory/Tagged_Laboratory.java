@@ -11,8 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Search_Tagged_MedicalPrescription;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
+import com.example.kinit.e_medicalrecord.Fragments.Laboratory.Fragment_Search_Physician;
 import com.example.kinit.e_medicalrecord.Fragments.Laboratory.Fragment_Tagged_Laboratory;
 import com.example.kinit.e_medicalrecord.R;
 
@@ -39,7 +41,7 @@ public class Tagged_Laboratory extends AppCompatActivity {
     }
 
     void init() {
-        lab_id = getIntent().getIntExtra("medical_prescription_id", 0);
+        lab_id = getIntent().getIntExtra("lab_id", 0);
         patient = getIntent().getExtras().getParcelable("patient");
 
         //Toolbar
@@ -77,7 +79,7 @@ public class Tagged_Laboratory extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //BusStation.getBus().post(new Bus_Search_Tagged_MedicalPrescription(query, patient.user_data_id, medical_prescription_id));
+                BusStation.getBus().post(new Bus_Search_Tagged_MedicalPrescription(query.trim(), patient.user_data_id, lab_id));
                 searchView.clearFocus();
                 return false;
             }
@@ -95,9 +97,9 @@ public class Tagged_Laboratory extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
-                //Fragment_Search_Physician fragmentSearchPhysician = new Fragment_Search_Physician();
+                Fragment_Search_Physician fragmentSearchPhysician = new Fragment_Search_Physician();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                //fragmentTransaction.add(R.id.frameLayout, fragmentSearchPhysician);
+                fragmentTransaction.add(R.id.frameLayout, fragmentSearchPhysician);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;

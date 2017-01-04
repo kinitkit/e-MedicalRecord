@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Tagged_MedPrescription;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Remove_Physician;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
@@ -25,6 +26,7 @@ import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.Request.UrlString;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -88,50 +90,56 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
     }
 
     void fetchData() {
-        taggedPhysicianLists = new ArrayList<>();
-        progressDialog.show("Loading...");
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("error", response);
-                        try {
-                            JSONArray rootJsonArray = new JSONArray(response);
-                            JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                            if (jsonObject.has("code")) {
-                                if (jsonObject.getString("code").equals("success")) {
-                                    JSONArray jsonArray = rootJsonArray.getJSONArray(1);
-                                    int jsonArrayLength = jsonArray.length();
-                                    for (int x = 0; x < jsonArrayLength; x++) {
-                                        taggedPhysicianLists.add(new Tagged_Physician_List(jsonArray.getJSONObject(x)));
+        try {
+            taggedPhysicianLists = new ArrayList<>();
+            progressDialog.show("Loading...");
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                JSONArray rootJsonArray = new JSONArray(response);
+                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                if (jsonObject.has("code")) {
+                                    if (jsonObject.getString("code").equals("success")) {
+                                        JSONArray jsonArray = rootJsonArray.getJSONArray(1);
+                                        int jsonArrayLength = jsonArray.length();
+                                        for (int x = 0; x < jsonArrayLength; x++) {
+                                            taggedPhysicianLists.add(new Tagged_Physician_List(jsonArray.getJSONObject(x)));
+                                        }
+                                        loadToRecyclerView();
                                     }
-                                    loadToRecyclerView();
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        } finally {
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
                             progressDialog.dismiss();
                         }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
+            ) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "laboratoryTaggedPhysician");
+                    params.put("device", "mobile");
+                    params.put("lab_id", String.valueOf(lab_id));
+                    return params;
                 }
-        ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("action", "laboratoryTaggedPhysician");
-                params.put("device", "mobile");
-                params.put("lab_id", String.valueOf(lab_id));
-                return params;
-            }
-        };
-        Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
+            };
+            Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            progressDialog.dismiss();
+        }
     }
 
     void removePhysician(final int id) {
@@ -161,7 +169,7 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "removeMedicalPrescriptionPhysician");
+                    params.put("action", "removeLaboratoryPhysician");
                     params.put("device", "mobile");
                     params.put("id", String.valueOf(id));
                     return params;
@@ -171,6 +179,12 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Subscribe
+    public void onClickRemove(Bus_Remove_Physician busRemovePhysician) {
+        this.position = busRemovePhysician.position;
+        removePhysician(busRemovePhysician.taggedPhysicianList.id);
     }
 
     @Override

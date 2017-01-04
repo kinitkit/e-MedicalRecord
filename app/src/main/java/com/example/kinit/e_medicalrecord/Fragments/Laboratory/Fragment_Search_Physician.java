@@ -1,4 +1,4 @@
-package com.example.kinit.e_medicalrecord.Fragments.Medical_Prescription;
+package com.example.kinit.e_medicalrecord.Fragments.Laboratory;
 
 
 import android.os.Bundle;
@@ -37,12 +37,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Fragment_Search_Physician extends Fragment {
+
     //View
     View rootView;
 
     String name;
     int user_id, position;
-    int medical_prescription_id;
+    int lab_id;
 
     ArrayList<Tagged_Physician_List> taggedPhysicianLists;
 
@@ -57,7 +58,7 @@ public class Fragment_Search_Physician extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_search_physician_medicalprescription, container, false);
+        rootView =  inflater.inflate(R.layout.fragment_search_physician_laboratory, container, false);
         recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         return rootView;
     }
@@ -115,11 +116,11 @@ public class Fragment_Search_Physician extends Fragment {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "searchMedicalPrescriptionPhysicians");
+                    params.put("action", "searchLaboratoryPhysicians");
                     params.put("device", "mobile");
                     params.put("user_id", String.valueOf(user_id));
                     params.put("name", name);
-                    params.put("medical_prescription_id", String.valueOf(medical_prescription_id));
+                    params.put("lab_id", String.valueOf(lab_id));
                     return params;
                 }
             };
@@ -168,10 +169,10 @@ public class Fragment_Search_Physician extends Fragment {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "addMedicalPrescriptionPhysician");
+                    params.put("action", "addLaboratoryPhysician");
                     params.put("device", "mobile");
                     params.put("medical_staff_id", String.valueOf(medical_staff_id));
-                    params.put("medical_prescription_id", String.valueOf(medical_prescription_id));
+                    params.put("lab_id", String.valueOf(lab_id));
                     return params;
                 }
             };
@@ -204,7 +205,7 @@ public class Fragment_Search_Physician extends Fragment {
     public void isSearchClicked(Bus_Search_Tagged_MedicalPrescription busSearchTaggedMedicalPrescription) {
         this.name = busSearchTaggedMedicalPrescription.name;
         this.user_id = busSearchTaggedMedicalPrescription.user_id;
-        this.medical_prescription_id = busSearchTaggedMedicalPrescription.id;
+        this.lab_id = busSearchTaggedMedicalPrescription.id;
         fetchData();
     }
 
@@ -213,4 +214,5 @@ public class Fragment_Search_Physician extends Fragment {
         this.position = busAddPhysician.position;
         addPhysician(busAddPhysician.taggedPhysicianList.medical_staff_id);
     }
+
 }
