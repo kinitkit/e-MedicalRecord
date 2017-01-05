@@ -42,7 +42,8 @@
         <activity android:name=".Activities.Laboratory.Lab_Fecalysis_Form" />
         <activity android:name=".Activities.Laboratory.Lab_Hematology_Form" />
         <activity android:name=".Activities.Laboratory.Lab_Urinalysis_Form" />
-        <activity android:name=".Activities.Laboratory.Tagged_Laboratory"></activity>
+        <activity android:name=".Activities.Laboratory.Tagged_Laboratory" />
+        <activity android:name=".Activities.Admission.Admission"></activity>
     </application>
 
 </manifest>

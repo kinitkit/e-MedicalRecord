@@ -62,7 +62,6 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         intent = getIntent();
         enum_laboratoryTests = Laboratory_Tests.values()[intent.getIntExtra("ordinal", 0)];
-        //Log.d("error", enum_laboratoryTests.name());
         switch (enum_laboratoryTests) {
             case BLOOD_CHEMISTRY:
                 setContentView(R.layout.layout_view_chemistry);
@@ -100,6 +99,10 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
 
         btn_tagged = (FloatingActionButton) findViewById(R.id.btn_tagged);
         btn_tagged.setOnClickListener(this);
+
+        if (viewer != null) {
+            btn_tagged.setVisibility(View.GONE);
+        }
 
         fetchData(table_name, laboratory.lab_id);
     }

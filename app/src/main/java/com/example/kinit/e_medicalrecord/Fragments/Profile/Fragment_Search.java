@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Search;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Search.Search_Item;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
 import com.example.kinit.e_medicalrecord.R;
@@ -41,6 +42,7 @@ public class Fragment_Search extends Fragment {
     //Classes
     Search_Item search_item;
     Mode mode;
+    Custom_ProgressDialog progressDialog;
 
     //Widgets
     RecyclerView recyclerView_Content;
@@ -62,6 +64,7 @@ public class Fragment_Search extends Fragment {
     }
 
     void init() {
+        progressDialog = new Custom_ProgressDialog(getActivity());
         search_item = new Search_Item();
     }
 
@@ -73,6 +76,7 @@ public class Fragment_Search extends Fragment {
     }
 
     void fetchData() {
+        progressDialog.show("Loading...");
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
                     new Response.Listener<String>() {
@@ -106,13 +110,15 @@ public class Fragment_Search extends Fragment {
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            progressDialog.dismiss();
                         }
                     }) {
                 @Override
@@ -129,6 +135,7 @@ public class Fragment_Search extends Fragment {
 
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
+            progressDialog.dismiss();
             e.printStackTrace();
         }
     }
