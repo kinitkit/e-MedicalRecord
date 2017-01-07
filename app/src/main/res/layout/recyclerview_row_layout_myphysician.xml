@@ -35,7 +35,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@color/colorRemove"
-        android:text="remove"
+        android:text="untag"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:textColor="#ffffff" />
 
@@ -46,7 +46,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@color/colorAccent"
-        android:text="@string/add"
+        android:text="@string/tag"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:textColor="#ffffff" />
 

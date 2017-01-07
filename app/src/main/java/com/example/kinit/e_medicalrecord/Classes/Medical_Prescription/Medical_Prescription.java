@@ -12,7 +12,9 @@ public class Medical_Prescription {
 
     public Medical_Prescription(JSONObject jsonObject) {
         try {
-            medicalPrescription_id = Integer.parseInt(jsonObject.getString("id"));
+            if(jsonObject.has("id")) {
+                medicalPrescription_id = Integer.parseInt(jsonObject.getString("id"));
+            }
             patient_id = Integer.parseInt(jsonObject.getString("patient_id"));
             user_data_id = Integer.parseInt(jsonObject.getString("user_data_id"));
             clinic_name = jsonObject.getString("clinic_name");

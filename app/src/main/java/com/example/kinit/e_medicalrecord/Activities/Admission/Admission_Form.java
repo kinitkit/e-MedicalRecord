@@ -14,9 +14,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.kinit.e_medicalrecord.Classes.Admission.Admission;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
@@ -31,18 +33,18 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Admission_Form extends AppCompatActivity implements View.OnClickListener {
 
-    //Primitive Data Types
-    int selectedEditText;
+    static DatePickerFragment datePickerFragmentAdmitted, datePickerFragmentDischarged;
     //Classes
+    Intent intent;
     Patient patient;
     Viewer viewer;
-    DatePickerFragment datePickerFragment;
-
+    Admission admission;
     SimpleDateFormat simpleDateFormat;
     Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
@@ -60,8 +62,12 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
     }
 
     void init() {
-        patient = getIntent().getExtras().getParcelable("patient");
-        viewer = getIntent().getExtras().getParcelable("viewer");
+        intent = getIntent();
+        patient = intent.getExtras().getParcelable("patient");
+        viewer = intent.getExtras().getParcelable("viewer");
+        if (intent.hasExtra("admission")) {
+            admission = intent.getExtras().getParcelable("admission");
+        }
 
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
@@ -88,23 +94,43 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
 
         calendarAdmitted = Calendar.getInstance();
         calendarDischarged = Calendar.getInstance();
-        datePickerFragment = new DatePickerFragment();
-        datePickerFragment.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+        datePickerFragmentAdmitted = new DatePickerFragment();
+        datePickerFragmentDischarged = new DatePickerFragment();
+        datePickerFragmentAdmitted.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                setCalendar(year, monthOfYear, dayOfMonth);
+                if (view.isShown()) {
+                    calendarAdmitted.set(year, monthOfYear, dayOfMonth);
+                    setCalendar(calendarAdmitted, 0);
+                }
             }
         });
+        datePickerFragmentDischarged.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                if (view.isShown()) {
+                    calendarDischarged.set(year, monthOfYear, dayOfMonth);
+                    setCalendar(calendarDischarged, 1);
+                }
+            }
+        });
+
+        if (admission != null) {
+            fetchData();
+        } else {
+            setCalendar(calendarAdmitted, 0);
+            setCalendar(calendarDischarged, 1);
+        }
     }
 
     void onClick() {
         String strPhysicianName = et_physicianName.getText().toString().trim(), strHospital = et_hospital.getText().toString().trim(),
-                strAdmittingIpmression = et_admittingIpmression.getText().toString().trim(), strProcedures = et_procedures.getText().toString().trim(),
+                strAdmittingImpression = et_admittingIpmression.getText().toString().trim(), strProcedures = et_procedures.getText().toString().trim(),
                 strFuturePlan = et_futurePlan.getText().toString().trim(), strFinalDiagnosis = et_finalDiagnosis.getText().toString().trim();
 
-        if (validateInput(et_physicianName, strPhysicianName) && validateInput(et_hospital, strHospital) && validateInput(et_admittingIpmression, strAdmittingIpmression)
+        if (validateInput(et_physicianName, strPhysicianName) && validateInput(et_hospital, strHospital) && validateInput(et_admittingIpmression, strAdmittingImpression)
                 && validateInput(et_procedures, strProcedures) && validateInput(et_futurePlan, strFuturePlan) && validateInput(et_finalDiagnosis, strFinalDiagnosis)) {
-            sendData(strPhysicianName, strHospital, strAdmittingIpmression, strProcedures, strFuturePlan, strFinalDiagnosis);
+            sendData(strPhysicianName, strHospital, strAdmittingImpression, strProcedures, strFuturePlan, strFinalDiagnosis);
         }
     }
 
@@ -119,6 +145,8 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
 
     void sendData(final String strPhysicianName, final String strHospital, final String strAdmittingIpmression, final String strProcedures, final String strFuturePlan, final String strFinalDiagnosis) {
         try {
+            //Log.d("error", new SimpleDateFormat("yyyy-MM-dd").format(calendarAdmitted.getTime()) +" "+ new SimpleDateFormat("yyyy-MM-dd").format(calendarDischarged.getTime()));
+            progressDialog.show("Saving...");
             StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
                     new Response.Listener<String>() {
                         @Override
@@ -130,7 +158,11 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("success")) {
                                         progressDialog.dismiss();
-                                        Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
+                                        if (admission != null) {
+                                            Toast.makeText(getApplicationContext(), getString(R.string.record_updated), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
+                                        }
                                         Intent intent = new Intent();
                                         intent.putExtra("result", true);
                                         setResult(RESULT_OK, intent);
@@ -139,11 +171,11 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
                                         progressDialog.dismiss();
                                         alertDialog.show("Error", getString(R.string.unauthorized_to_insert));
                                     } else if (jsonObject.getString("code").equals("empty")) {
-                                        //if(laboratory != null) {
-                                        //    alertDialog_Close("This result has been deleted.");
-                                        // else {
+                                        if (admission != null) {
+                                            alertDialog.show("Error", getString(R.string.not_available));
+                                        } else {
                                             alertDialog.show("Error", getString(R.string.error_occured));
-                                        //}
+                                        }
                                     } else {
                                         progressDialog.dismiss();
                                         alertDialog.show("Error", getString(R.string.error_occured));
@@ -154,19 +186,27 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            error.printStackTrace();
                         }
-                    }) {
+                    }
+            ) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "insertAdmission");
+                    if (admission != null) {
+                        params.put("action", "updateAdmission");
+                        params.put("id", String.valueOf(admission.id));
+                    } else {
+                        params.put("action", "insertAdmission");
+                    }
                     params.put("device", "mobile");
                     params.put("patient_id", String.valueOf(patient.id));
                     if (viewer != null) {
@@ -189,20 +229,84 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
-
+            progressDialog.dismiss();
             e.printStackTrace();
         }
     }
 
-    void setCalendar(int year, int monthOfYear, int dayOfMonth) {
+    void setCalendar(Calendar calendar, int selectedEditText) {
         simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
         if (selectedEditText == 0) {
-            calendarAdmitted.set(year, monthOfYear, dayOfMonth);
-            et_dateAdmitted.setText(simpleDateFormat.format(calendarAdmitted.getTime()));
+            et_dateAdmitted.setText(simpleDateFormat.format(calendar.getTime()));
         } else if (selectedEditText == 1) {
-            calendarDischarged.set(year, monthOfYear, dayOfMonth);
-            et_dateDischarged.setText(simpleDateFormat.format(calendarDischarged.getTime()));
+            et_dateDischarged.setText(simpleDateFormat.format(calendar.getTime()));
         }
+    }
+
+    void fetchData() {
+        try {
+            progressDialog.show("Loading...");
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
+                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                if (jsonObject.has("code")) {
+                                    String code = jsonObject.getString("code");
+                                    if (code.equals("success")) {
+                                        jsonArray = rootJsonArray.getJSONArray(1);
+                                        admission = new Admission(jsonArray.getJSONObject(0));
+                                        setFields();
+                                    } else {
+                                        alertDialog.show("Error", getString(R.string.error_occured));
+                                    }
+                                } else if (jsonObject.has("exception")) {
+                                    alertDialog.show("Error", jsonObject.getString("exception"));
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressDialog.dismiss();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "getAdmission");
+                    params.put("device", "mobile");
+                    params.put("id", String.valueOf(admission.id));
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+
+    void setFields() {
+        et_physicianName.setText(admission.physicianName);
+        et_hospital.setText(admission.hospital);
+        this.calendarAdmitted.setTime(new Date(admission.calendarDateAdmitted.getTimeInMillis()));
+        et_dateAdmitted.setText(admission.strDateAdmitted);
+        this.calendarDischarged.setTime(new Date(admission.calendarDateDischarged.getTimeInMillis()));
+        //this.calendarDischarged = admission.calendarDateDischarged;
+        et_dateDischarged.setText(admission.strDateDischarged);
+        et_admittingIpmression.setText(admission.admittingImpression);
+        et_procedures.setText(admission.procedures);
+        et_futurePlan.setText(admission.futurePlan);
+        et_finalDiagnosis.setText(admission.finalDiagnosis);
     }
 
     @Override
@@ -212,14 +316,14 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
                 onClick();
                 break;
             case R.id.et_dateAdmitted:
-                selectedEditText = 0;
-                datePickerFragment.show(getSupportFragmentManager(), "DatePicker");
-                datePickerFragment.setCurrentDate(calendarAdmitted);
+                datePickerFragmentAdmitted.show(getSupportFragmentManager(), "DatePicker");
+                datePickerFragmentAdmitted.setCurrentDate(calendarAdmitted);
+                datePickerFragmentAdmitted.setMaxCalendar(calendarDischarged);
                 break;
             case R.id.et_dateDischarged:
-                selectedEditText = 1;
-                datePickerFragment.show(getSupportFragmentManager(), "DatePicker");
-                datePickerFragment.setCurrentDate(calendarDischarged);
+                datePickerFragmentDischarged.show(getSupportFragmentManager(), "DatePicker");
+                datePickerFragmentDischarged.setCurrentDate(calendarDischarged);
+                datePickerFragmentDischarged.setMinCalendar(calendarAdmitted);
                 break;
         }
     }

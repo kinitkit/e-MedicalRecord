@@ -203,7 +203,7 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
         if (code.equals("medicalPrescriptionNotAvailable")) {
             alertDialog.show("Notice", "Medical Prescription is not available!");
         } else {
-            alertDialog.show("Error", "An error occured while we were trying to get the data. Please try again");
+            alertDialog.show("Error", getString(R.string.error_occured));
         }
     }
 
