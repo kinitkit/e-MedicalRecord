@@ -43,7 +43,8 @@
         <activity android:name=".Activities.Laboratory.Lab_Hematology_Form" />
         <activity android:name=".Activities.Laboratory.Lab_Urinalysis_Form" />
         <activity android:name=".Activities.Laboratory.Tagged_Laboratory" />
-        <activity android:name=".Activities.Admission.Admission"></activity>
+        <activity android:name=".Activities.Admission.Admission_Form" />
+        <activity android:name=".Activities.Admission.Admission_List"></activity>
     </application>
 
 </manifest>

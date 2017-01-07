@@ -54,6 +54,8 @@
     <string name="unauthorized_to_insert">You have no authority to add data to patient.</string>
     <string name="record_added">Record added.</string>
     <string name="record_updated">Record updated</string>
+    <string name="error_occured">An error occurred, please try again later.</string>
+    <string name="not_available">This item might not exist or is no longer available.</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>

@@ -11,7 +11,9 @@ import java.util.Date;
 
 public class DatePickerFragment extends DialogFragment {
     DatePickerDialog datePickerDialog;
+
     Calendar calendar;
+    private DatePickerDialog.OnDateSetListener onDateSetListener;
 
     @NonNull
     @Override
@@ -31,7 +33,5 @@ public class DatePickerFragment extends DialogFragment {
     public void setCurrentDate(Calendar calendar) {
         this.calendar = calendar;
     }
-
-    private DatePickerDialog.OnDateSetListener onDateSetListener;
 
 }

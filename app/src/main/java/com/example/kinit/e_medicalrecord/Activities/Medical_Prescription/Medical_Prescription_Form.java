@@ -157,7 +157,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                     if (!physicianName.isEmpty()) {
                         sendData(physicianName, clinic);
                     } else {
-                        et_physicianName.setError("Required Field");
+                        et_physicianName.setError("This field is required.");
                     }
                 } else {
                     alertDialog.show("Ooops!", "Please add a drug/medication");
@@ -252,10 +252,10 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                                         alertDialog.show("Error", getString(R.string.unauthorized_to_insert));
                                     } else if (jsonObject.getString("code").equals("empty")) {
                                         progressDialog.dismiss();
-                                        alertDialog.show("Error", "This medical prescription has been deleted.");
+                                        alertDialog.show("Error", getString(R.string.not_available));
                                     } else {
                                         progressDialog.dismiss();
-                                        alertDialog.show("Error", "Something happened. Please try again.");
+                                        alertDialog.show("Error", getString(R.string.error_occured));
                                     }
                                 } else if (jsonObject.has("exception")) {
                                     progressDialog.dismiss();

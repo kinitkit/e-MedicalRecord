@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.kinit.e_medicalrecord.Activities.Admission.Admission_List;
 import com.example.kinit.e_medicalrecord.Activities.Allergy.Allergy;
 import com.example.kinit.e_medicalrecord.Activities.Laboratory.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription;
@@ -80,7 +81,8 @@ public class Fragment_Medical_History extends Fragment {
         tv_admissionHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                myIntent = new Intent(getActivity(), Admission_List.class);
+                putExtra();
             }
         });
         tv_familyHistory.setOnClickListener(new View.OnClickListener() {
