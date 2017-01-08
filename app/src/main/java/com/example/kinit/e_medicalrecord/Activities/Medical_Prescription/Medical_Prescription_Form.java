@@ -31,7 +31,8 @@ import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Ope
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
-import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Drug_List;
+import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.*;
+import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Query_Type;
@@ -65,6 +66,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
     Patient patient;
     Viewer viewer;
     DatePickerFragment datePickerFragment;
+    com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription medicalPrescription;
     Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick;
     Custom_ProgressDialog progressDialog;
 
@@ -133,7 +135,6 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
         }
 
         if (busMedicalPrescriptionLongClick != null) {
-            progressDialog.show("Loading...");
             fetchDrugList();
         } else {
             loadToRecyclerView();
@@ -242,7 +243,11 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
                                         progressDialog.dismiss();
-                                        Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
+                                        if (busMedicalPrescriptionLongClick != null) {
+                                            Toast.makeText(getApplicationContext(), R.string.record_updated, Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
+                                        }
                                         Intent intent = new Intent();
                                         intent.putExtra("result", true);
                                         setResult(RESULT_OK, intent);
@@ -320,11 +325,11 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
     }
 
     void setUpdate() {
-        et_physicianName.setText(busMedicalPrescriptionLongClick.physicianName);
-        et_clinic.setText(busMedicalPrescriptionLongClick.clinicName);
+        et_physicianName.setText(medicalPrescription.physicianName);
+        et_clinic.setText(medicalPrescription.clinic_name);
         Date date = null;
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(busMedicalPrescriptionLongClick.calendarStr);
+            date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(medicalPrescription.calendarStr);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -335,13 +340,14 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
 
     void fetchDrugList() {
         try {
+            progressDialog.show("Loading...");
             StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("error", response);
                             try {
-                                JSONArray rootJsonArray = new JSONArray(response);
+                                /*JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
@@ -355,16 +361,48 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                                         loadToRecyclerView();
                                         setUpdate();
                                     }
+                                }*/
+                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
+                                JSONObject jsonObject;
+                                if (rootJsonArray.get(0) instanceof JSONObject) {
+                                    jsonObject = rootJsonArray.getJSONObject(0);
+                                    if (jsonObject.has("code")) {
+                                        alertDialog_showError(jsonObject.getString("code"));
+                                    } else if (jsonObject.has("exception")) {
+                                        alertDialog_showError(jsonObject.getString("exception"));
+                                    }
+                                } else {
+                                    jsonArray = rootJsonArray.getJSONArray(0);
+                                    medicalPrescription = new Medical_Prescription(jsonArray.getJSONObject(0));
+                                    jsonObject = rootJsonArray.getJSONObject(1);
+                                    if (jsonObject.has("code")) {
+                                        if (jsonObject.getString("code").equals("successful")) {
+                                            jsonArray = rootJsonArray.getJSONArray(2);
+                                            int jsonArrayLength = jsonArray.length();
+                                            for (int x = 0; x < jsonArrayLength; x++) {
+                                                jsonObject = jsonArray.getJSONObject(x);
+                                                busDrugs.add(new Bus_Drug(jsonObject));
+                                            }
+                                            loadToRecyclerView();
+                                        } else {
+                                            alertDialog_showError(jsonObject.getString("code"));
+                                        }
+                                        setUpdate();
+                                    } else {
+                                        alertDialog_showError(jsonObject.getString("exception"));
+                                    }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            progressDialog.dismiss();
                         }
                     }) {
                 @Override
@@ -378,7 +416,16 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
+            progressDialog.dismiss();
             e.printStackTrace();
+        }
+    }
+
+    void alertDialog_showError(String code) {
+        if (code.equals("medicalPrescriptionNotAvailable")) {
+            alertDialog.show("Notice", "Medical Prescription is not available!");
+        } else {
+            alertDialog.show("Error", getString(R.string.error_occured));
         }
     }
 

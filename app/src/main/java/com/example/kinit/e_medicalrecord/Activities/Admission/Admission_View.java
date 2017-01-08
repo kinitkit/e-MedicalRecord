@@ -103,14 +103,14 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     String code = jsonObject.getString("code");
-                                    if (code.equals("success")){
+                                    if (code.equals("success")) {
                                         jsonArray = rootJsonArray.getJSONArray(1);
                                         admission = new Admission(jsonArray.getJSONObject(0));
                                         setText();
                                     } else {
                                         alertDialog.show("Error", getString(R.string.error_occured));
                                     }
-                                } else if(jsonObject.has("exception")){
+                                } else if (jsonObject.has("exception")) {
                                     alertDialog.show("Error", jsonObject.getString("exception"));
                                 }
                             } catch (Exception e) {
@@ -139,7 +139,7 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    void setText(){
+    void setText() {
         tv_physicianName.setText(admission.physicianName);
         tv_hospital.setText(admission.hospital);
         tv_dateAdmission.setText(admission.strDateAdmitted);
@@ -152,7 +152,14 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.btn_tagged:
+                intent = new Intent(this, Tagged_Admission.class);
+                intent.putExtra("admission_id", admission.id);
+                intent.putExtra("patient", patient);
+                startActivity(intent);
+                break;
+        }
     }
 
     @Override

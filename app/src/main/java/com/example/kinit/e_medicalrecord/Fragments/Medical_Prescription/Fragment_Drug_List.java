@@ -161,7 +161,7 @@ public class Fragment_Drug_List extends Fragment implements View.OnClickListener
     }
 
     void loadToRecyclerView() {
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_Drug_List(drugLists);
+        //recyclerViewAdapter_Content = new RecyclerViewAdapter_Drug_List(drugLists);
         recyclerViewLayoutM_Content = new LinearLayoutManager(getActivity());
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);

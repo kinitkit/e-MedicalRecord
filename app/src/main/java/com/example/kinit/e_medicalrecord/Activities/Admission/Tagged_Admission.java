@@ -1,4 +1,4 @@
-package com.example.kinit.e_medicalrecord.Activities.Laboratory;
+package com.example.kinit.e_medicalrecord.Activities.Admission;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,16 +14,17 @@ import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Search_Tagged_MedicalPrescription;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
-import com.example.kinit.e_medicalrecord.Fragments.Laboratory.Fragment_Search_Physician;
+import com.example.kinit.e_medicalrecord.Fragments.Admission.Fragment_Search_Physician;
+import com.example.kinit.e_medicalrecord.Fragments.Admission.Fragment_Tagged_Admission;
 import com.example.kinit.e_medicalrecord.Fragments.Laboratory.Fragment_Tagged_Laboratory;
 import com.example.kinit.e_medicalrecord.R;
 
 import java.util.ArrayList;
 
-public class Tagged_Laboratory extends AppCompatActivity {
+public class Tagged_Admission extends AppCompatActivity {
 
     //Primitive Data Types
-    int lab_id;
+    int admission_id;
 
     //Classes
     Patient patient;
@@ -35,12 +36,12 @@ public class Tagged_Laboratory extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tagged_laboratory);
+        setContentView(R.layout.activity_tagged_admission);
         init();
     }
 
     void init() {
-        lab_id = getIntent().getIntExtra("lab_id", 0);
+        admission_id = getIntent().getIntExtra("admission_id", 0);
         patient = getIntent().getExtras().getParcelable("patient");
 
         //Toolbar
@@ -49,12 +50,12 @@ public class Tagged_Laboratory extends AppCompatActivity {
         getSupportActionBar().setTitle("Tagged Physicians");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Fragment_Tagged_Laboratory fragmentTaggedLaboratory = new Fragment_Tagged_Laboratory();
-        fragmentTaggedLaboratory.setLab_id(lab_id);
+        Fragment_Tagged_Admission fragmentTaggedAdmission = new Fragment_Tagged_Admission();
+        fragmentTaggedAdmission.setAdmission_id(admission_id);
         //FragmentManager
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, fragmentTaggedLaboratory).commit();
+        fragmentTransaction.add(R.id.frameLayout, fragmentTaggedAdmission).commit();
     }
 
     @Override
@@ -78,7 +79,7 @@ public class Tagged_Laboratory extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                BusStation.getBus().post(new Bus_Search_Tagged_MedicalPrescription(query.trim(), patient.user_data_id, lab_id));
+                BusStation.getBus().post(new Bus_Search_Tagged_MedicalPrescription(query.trim(), patient.user_data_id, admission_id));
                 searchView.clearFocus();
                 return false;
             }

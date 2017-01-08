@@ -45,7 +45,11 @@
         <activity android:name=".Activities.Laboratory.Tagged_Laboratory" />
         <activity android:name=".Activities.Admission.Admission_Form" />
         <activity android:name=".Activities.Admission.Admission_List" />
-        <activity android:name=".Activities.Admission.Admission_View"></activity>
+        <activity android:name=".Activities.Admission.Admission_View" />
+        <activity android:name=".Activities.Admission.Tagged_Admission" />
+        <activity android:name=".Activities.Profile.Settings" />
+        <activity android:name=".Activities.Profile.Settings_Container" />
+        <activity android:name=".Activities.Profile.Settings_Personal_Information"></activity>
     </application>
 
 </manifest>

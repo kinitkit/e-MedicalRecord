@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:clickable="true"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
+    <include
+        android:id="@+id/toolbar_register"
+        layout="@layout/toolbar_with_backbtn" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/toolbar_register"
-            layout="@layout/toolbar_with_backbtn" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBackground"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
@@ -30,12 +31,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
                     android:orientation="vertical"
-                    android:padding="5dp">
+                    android:paddingBottom="@dimen/dp_5"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5">
 
                     <TextView
+                        android:id="@+id/textView3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
@@ -45,7 +48,9 @@
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_fName"
@@ -61,7 +66,9 @@
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_mName"
@@ -78,7 +85,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorTextSecondary">
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_lName"
@@ -95,6 +103,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
                         android:text="Gender"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/colorTextPrimary"
@@ -106,90 +115,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
+                        android:padding="0dp"
                         android:spinnerMode="dropdown" />
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_bday"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:focusable="false"
-                            android:hint="Date of Birth"
-                            android:paddingTop="3dp"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textColorHint="@color/colorTextPrimary"
-                            android:textSize="@dimen/sp_17" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <!--<TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Birthday"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="13sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatSpinner
-                            android:id="@+id/spinner_month"
-                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="2dp"
-                            android:spinnerMode="dialog"
-                            android:textSize="@dimen/sp_17"
-                            android:padding="0dp"/>
-
-                        <android.support.v7.widget.AppCompatSpinner
-                            android:id="@+id/spinner_day"
-                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="2dp"
-                            android:spinnerMode="dialog"
-                            android:textSize="@dimen/sp_17"
-                            android:padding="0dp"/>
-
-                        <android.support.v7.widget.AppCompatSpinner
-                            android:id="@+id/spinner_year"
-                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:spinnerMode="dialog"
-                            android:textSize="@dimen/sp_17"
-                            android:padding="0dp"/>
-                    </LinearLayout>-->
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorTextSecondary">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_address"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Address"
-                            android:inputType="textMultiLine"
-                            android:maxLines="4"
-                            android:paddingTop="@dimen/dp_3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp" />
-                    </android.support.design.widget.TextInputLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
                         android:text="User Type"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/colorTextPrimary"
@@ -230,7 +163,8 @@
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColorHint="@color/colorTextSecondary">
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/et_license"
@@ -251,6 +185,44 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_bday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:hint="Date of Birth"
+                                android:paddingTop="3dp"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/sp_17" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Address"
+                                android:inputType="textMultiLine"
+                                android:maxLines="4"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -270,7 +242,9 @@
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/et_occupation"
@@ -286,7 +260,9 @@
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/et_nationality"
@@ -302,7 +278,9 @@
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/et_religion"
@@ -341,12 +319,13 @@
                         android:layout_marginBottom="10dp"
                         android:text="Contact"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorPrimaryDark"/>
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorTextSecondary">
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_contactNo"
@@ -364,7 +343,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorTextSecondary">
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_eAddress"
@@ -389,12 +369,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
                     android:orientation="vertical"
-                    android:padding="5dp">
+                    android:paddingBottom="@dimen/dp_5"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5">
 
                     <TextView
+                        android:id="@+id/textView4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
@@ -405,7 +387,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorTextSecondary">
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_username"
@@ -422,7 +405,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorTextSecondary">
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_password"
@@ -439,7 +423,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorTextSecondary">
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_cPassword"
@@ -466,7 +451,6 @@
                 android:text="Register"
                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
                 android:textColor="#ffffff" />
-
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</RelativeLayout>

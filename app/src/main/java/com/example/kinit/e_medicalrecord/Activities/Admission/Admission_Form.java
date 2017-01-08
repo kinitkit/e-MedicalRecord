@@ -145,7 +145,7 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
 
     void sendData(final String strPhysicianName, final String strHospital, final String strAdmittingIpmression, final String strProcedures, final String strFuturePlan, final String strFinalDiagnosis) {
         try {
-            //Log.d("error", new SimpleDateFormat("yyyy-MM-dd").format(calendarAdmitted.getTime()) +" "+ new SimpleDateFormat("yyyy-MM-dd").format(calendarDischarged.getTime()));
+            Log.d("error", new SimpleDateFormat("yyyy-MM-dd").format(calendarAdmitted.getTime()) +" "+ new SimpleDateFormat("yyyy-MM-dd").format(calendarDischarged.getTime()));
             progressDialog.show("Saving...");
             StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
                     new Response.Listener<String>() {
@@ -301,7 +301,6 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
         this.calendarAdmitted.setTime(new Date(admission.calendarDateAdmitted.getTimeInMillis()));
         et_dateAdmitted.setText(admission.strDateAdmitted);
         this.calendarDischarged.setTime(new Date(admission.calendarDateDischarged.getTimeInMillis()));
-        //this.calendarDischarged = admission.calendarDateDischarged;
         et_dateDischarged.setText(admission.strDateDischarged);
         et_admittingIpmression.setText(admission.admittingImpression);
         et_procedures.setText(admission.procedures);
@@ -321,7 +320,7 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
                 datePickerFragmentAdmitted.setMaxCalendar(calendarDischarged);
                 break;
             case R.id.et_dateDischarged:
-                datePickerFragmentDischarged.show(getSupportFragmentManager(), "DatePicker");
+                datePickerFragmentDischarged.show(getSupportFragmentManager(), "DatePicker1");
                 datePickerFragmentDischarged.setCurrentDate(calendarDischarged);
                 datePickerFragmentDischarged.setMinCalendar(calendarAdmitted);
                 break;

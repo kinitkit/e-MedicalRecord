@@ -188,7 +188,7 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        //deleteData(busLaboratoryOnLongClick);
+                                        deleteData(busAdmissionOnLongClick);
                                     }
                                 });
                         alertDialog.show("Delete", "This item will be permanently deleted.");
@@ -205,6 +205,51 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
         intent.putExtra("viewer", viewer);
         intent.putExtra("admission", busAdmissionOnLongClick.admission);
         startActivityForResult(intent, 1);
+    }
+
+    void deleteData(final Bus_Admission_OnLongClick busAdmissionOnLongClick) {
+        progressDialog.show("Deleting...");
+        try {
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                JSONArray rootJsonArray = new JSONArray(response);
+                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                if (jsonObject.has("code")) {
+                                    if (jsonObject.getString("code").equals("successful")) {
+                                        admissions.remove(busAdmissionOnLongClick.position);
+                                        recyclerViewAdapter_Content.notifyItemRemoved(busAdmissionOnLongClick.position);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            progressDialog.dismiss();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressDialog.dismiss();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "deleteAdmission");
+                    params.put("device", "mobile");
+                    params.put("id", String.valueOf(busAdmissionOnLongClick.admission.id));
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            e.printStackTrace();
+        }
     }
 
     @Subscribe

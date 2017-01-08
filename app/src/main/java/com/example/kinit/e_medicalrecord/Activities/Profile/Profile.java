@@ -45,7 +45,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Profile extends AppCompatActivity implements Profile_Communicator {
+public class Profile extends AppCompatActivity {
     //Data Holder
     Intent intent;
     SharedPreferences sharedPreferences;
@@ -148,14 +148,14 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
                                                 user.setMiddleName(jsonObject.getString("middle_name"));
                                                 user.setLastName(jsonObject.getString("last_name"));
                                                 user.setGender(jsonObject.getString("gender"));
-                                                user.setBirthday(jsonObject.getString("birthday"));
                                                 user.setContactNumber(jsonObject.getString("contact_number"));
-                                                user.setAddress(jsonObject.getString("address"));
                                                 user.setEmailAddress(jsonObject.getString("email_address"));
                                                 user.setImage(jsonObject.getString("image"));
                                                 user.setActive(Boolean.valueOf(jsonObject.getString("active")));
                                                 break;
                                             case "patient_data":
+                                                user.setAddress(jsonObject.getString("address"));
+                                                user.setBirthday(jsonObject.getString("birthday"));
                                                 user.setOccupation(jsonObject.getString("occupation"));
                                                 user.civilStatus = jsonObject.getString("civil_status");
                                                 user.nationality = jsonObject.getString("nationality");
@@ -259,6 +259,9 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
                 break;
 
             case R.id.menu_edit:
+                intent = new Intent(this, Settings.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
                 break;
 
             case R.id.menu_logout:
@@ -292,7 +295,7 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
                 switch (which) {
                     case 0:
                         Toast.makeText(getApplicationContext(), "You are now in patient mode", Toast.LENGTH_SHORT).show();
-                        if(mode != Mode.PATIENT) {
+                        if (mode != Mode.PATIENT) {
                             mode = Mode.PATIENT;
                             BusStation.getBus().post(new Bus_Mode(mode));
                         }
@@ -309,11 +312,6 @@ public class Profile extends AppCompatActivity implements Profile_Communicator {
             }
         });
         builder.show();
-    }
-
-    @Override
-    public void pass_userInfo(User user) {
-
     }
 
     @Override

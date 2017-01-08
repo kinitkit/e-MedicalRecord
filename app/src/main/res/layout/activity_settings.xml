@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_profile_edit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.kinit.e_medicalrecord.Activities.Profile.Settings">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_with_backbtn" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:background="@color/colorBackground">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp_5"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_5">
+
+                <TextView
+                    android:id="@+id/tv_personalInformation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@mipmap/ic_next"
+                    android:gravity="center_vertical"
+                    android:text="Personal Information"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv_patient"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@mipmap/ic_next"
+                    android:gravity="center_vertical"
+                    android:text="Patient Information"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv_medicalStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@mipmap/ic_next"
+                    android:gravity="center_vertical"
+                    android:text="Medical Staff Information"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@mipmap/ic_next"
+                    android:gravity="center_vertical"
+                    android:text="Password"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="17sp" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>

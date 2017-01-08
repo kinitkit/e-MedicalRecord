@@ -69,7 +69,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/Amount"
+                    android:text="Dosage:"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColor="@color/colorTextPrimary"
                     android:textSize="@dimen/sp_17" />
@@ -146,9 +146,10 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/Why"
+                    android:text="Indication:"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColor="@color/colorTextPrimary"
                     android:textSize="@dimen/sp_17" />

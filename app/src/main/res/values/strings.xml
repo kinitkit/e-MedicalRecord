@@ -57,6 +57,7 @@
     <string name="error_occured">An error occurred, please try again later.</string>
     <string name="not_available">This item might not exist or is no longer available.</string>
     <string name="tag">Tag</string>
+    <string name="settings">Settings</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>

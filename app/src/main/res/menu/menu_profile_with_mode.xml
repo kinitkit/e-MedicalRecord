@@ -9,7 +9,7 @@
         android:title="@string/Mode" />
     <item
         android:id="@+id/menu_edit"
-        android:title="@string/edit" />
+        android:title="@string/settings" />
 
     <item
         android:id="@+id/menu_logout"

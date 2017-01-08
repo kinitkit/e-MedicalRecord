@@ -24,6 +24,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Request.Connection;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
@@ -43,7 +44,7 @@ import java.util.Map;
 public class Register extends AppCompatActivity implements View.OnClickListener {
     Calendar calendar;
     Connection connection;
-    ProgressDialog progressDialog;
+    Custom_ProgressDialog progressDialog;
     Custom_AlertDialog custom_alertDialog;
     AlertDialog.Builder builder;
     String jsonResponse;
@@ -108,7 +109,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         connection = new Connection(this);
 
         //ProgressDialog
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new Custom_ProgressDialog(this);
         //AlertDialog
         builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         builder.setPositiveButton("OK", null);
@@ -199,10 +200,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 //Database manipulation
                 final String gender = spinner_gender.getSelectedItem().toString(), medicalStaffType = spinner_type.getSelectedItem().toString();
 
-
-                progressDialog.setMessage("Processing...");
-                progressDialog.show();
-
+                progressDialog.show("Processing...");
                 //Start of JSON
                 try {
 
@@ -240,7 +238,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                                             et_username.setError("Username is already taken");
                                         if (isDuplicateEmail)
                                             et_eAddress.setError("Email is already taken");
-                                        progressDialog.cancel();
+                                        progressDialog.dismiss();
                                     }
                                 }
                             },
@@ -248,7 +246,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
                                     custom_alertDialog.show("Internal Error", error.getMessage());
-                                    progressDialog.cancel();
+                                    progressDialog.dismiss();
                                 }
                             }) { //Get Parameters
                         @Override
@@ -280,7 +278,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                     };
                     Custom_Singleton.getInstance(Register.this).addToRequestQueue(stringRequest);
                 } catch (Exception e) {
-                    progressDialog.cancel();
+                    progressDialog.dismiss();
                     e.printStackTrace();
                     custom_alertDialog.show("Internal Error", e.getMessage());
                 }

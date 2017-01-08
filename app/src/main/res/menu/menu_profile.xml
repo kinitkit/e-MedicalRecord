@@ -4,7 +4,7 @@
     tools:context=".Activities.Profile.Profile">
 
     <item android:id="@+id/menu_edit"
-        android:title="@string/edit" />
+        android:title="@string/settings" />
 
     <item android:id="@+id/menu_logout"
         android:title="@string/logout" />
