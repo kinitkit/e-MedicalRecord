@@ -1,16 +1,23 @@
 package com.example.kinit.e_medicalrecord.Activities.Profile;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -33,21 +40,31 @@ import com.example.kinit.e_medicalrecord.Request.UrlString;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Settings_Personal_Information extends AppCompatActivity implements View.OnClickListener {
 
+    static final int SELECT_PICTURE = 1;
     Intent intent;
     User user;
     Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
+    String selectedImagePath, imageName, encodedString;
+    Bitmap bitmap;
+    File file;
+    Uri fileUri, imageUri;
+
 
     //Widgets
     EditText et_fName, et_mName, et_lName, et_contactNo;
     ArrayAdapter arrayAdapter_gender;
     Spinner spinner_gender;
-    Button btn_save;
+    Button btn_save, btn_upload;
+    ImageView iv_profilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +88,10 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
         arrayAdapter_gender = ArrayAdapter.createFromResource(this, R.array.spinner_gender_options, R.layout.support_simple_spinner_dropdown_item);
         spinner_gender = (Spinner) findViewById(R.id.spinner_gender);
         spinner_gender.setAdapter(arrayAdapter_gender);
+        iv_profilePic = (ImageView) findViewById(R.id.iv_profilePic);
+        btn_upload = (Button) findViewById(R.id.btn_upload);
         btn_save = (Button) findViewById(R.id.btn_save);
+        btn_upload.setOnClickListener(this);
         btn_save.setOnClickListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -105,7 +125,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                 }
             }
         } else {
-            editText.setError("This field is required.");
+            editText.setError(getString(R.string.required_field));
             isThereNoError = false;
         }
 
@@ -134,9 +154,9 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                                 Log.d("error", response);
                                 JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if(jsonObject.has("code")){
+                                if (jsonObject.has("code")) {
                                     String code = jsonObject.getString("code");
-                                    if(code.equals("success")){
+                                    if (code.equals("success")) {
                                         Toast.makeText(getApplicationContext(), getString(R.string.record_updated), Toast.LENGTH_SHORT).show();
                                         user.setFirstName(strFname);
                                         user.setMiddleName(strMname);
@@ -151,7 +171,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                                     } else {
                                         alertDialog.show("Error", getString(R.string.error_occured));
                                     }
-                                } else if(jsonObject.has("exception")){
+                                } else if (jsonObject.has("exception")) {
                                     alertDialog.show("Error", jsonObject.getString("exception"));
                                 }
                             } catch (Exception e) {
@@ -181,7 +201,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
-                    }){
+                    }) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
@@ -204,11 +224,38 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
         }
     }
 
+    void onClickUpload() {
+        openGallery();
+    }
+
+    void openGallery(){
+        intent = new Intent(Intent.ACTION_PICK);
+
+        file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        selectedImagePath = file.getPath();
+        fileUri = Uri.parse(selectedImagePath);
+
+        intent.setDataAndType(fileUri, "image/*");
+        startActivityForResult(intent, SELECT_PICTURE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                imageUri = data.getData();
+                new Encode_Image().execute();
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_save:
                 onClickSave();
+                break;
+            case R.id.btn_upload:
+                onClickUpload();
                 break;
         }
     }
@@ -221,5 +268,77 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class Encode_Image extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] biteArray = stream.toByteArray();
+                encodedString = Base64.encodeToString(biteArray, 0);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "File not found", Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            makeRequest();
+        }
+
+        void makeRequest() {
+            Toast.makeText(getApplicationContext(), "Uploading image...", Toast.LENGTH_SHORT).show();
+            try {
+                StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    Log.d("error", response);
+                                    JSONArray rootJsonArray = new JSONArray(response);
+                                    JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                    if (jsonObject.has("code")) {
+                                        String code = jsonObject.getString("code");
+                                        if (code.equals("success")) {
+                                            Toast.makeText(getApplicationContext(), "Image uploaded successfully.", Toast.LENGTH_SHORT).show();
+                                            iv_profilePic.setImageBitmap(bitmap);
+                                        }
+                                    } else if (jsonObject.has("exception")) {
+                                        alertDialog.show("Error", jsonObject.getString("exception"));
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("action", "uploadProfPic");
+                        params.put("device", "mobile");
+                        params.put("user_id", String.valueOf(user.getUser_data_id()));
+                        params.put("encoded_string", encodedString);
+                        params.put("image_name", user.getUser_data_id() +".jpg");
+
+                        return params;
+                    }
+                };
+                Custom_Singleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 }

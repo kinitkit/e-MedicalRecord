@@ -1,6 +1,12 @@
 package com.example.kinit.e_medicalrecord.Fragments.Profile;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,9 +16,13 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Bus_Mode;
+import com.example.kinit.e_medicalrecord.BusStation.Profile.Bus_Image_Click;
 import com.example.kinit.e_medicalrecord.Classes.User.User;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
@@ -23,7 +33,7 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fragment_Profile extends Fragment {
+public class Fragment_Profile extends Fragment implements View.OnClickListener {
     //View
     View rootView;
     ViewPager viewPager;
@@ -36,6 +46,10 @@ public class Fragment_Profile extends Fragment {
     User user;
     Mode mode;
     Viewer viewer;
+
+    Animator mCurrentAnimator;
+    int mShortAnimationDuration;
+    ImageButton ib_profPic;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +73,9 @@ public class Fragment_Profile extends Fragment {
         fragment_profile.setUser(user);
         fragment_medicalInfo.setUser(user, viewer);
 
+        ib_profPic = (ImageButton) rootView.findViewById(R.id.ib_profPic);
+        ib_profPic.setOnClickListener(this);
+        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         initializeViewPager();
     }
 
@@ -121,6 +138,15 @@ public class Fragment_Profile extends Fragment {
     public void changeMode(Bus_Mode busMode) {
         mode = busMode.mode;
         initializeViewPager();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ib_profPic:
+                BusStation.getBus().post(new Bus_Image_Click(ib_profPic, R.mipmap.kinit));
+                break;
+        }
     }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -59,7 +59,7 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_fragment_tagged_laboratory, container, false);
+        rootView = inflater.inflate(R.layout.fragment_tagged_laboratory, container, false);
         return rootView;
     }
 

@@ -58,6 +58,7 @@
     <string name="not_available">This item might not exist or is no longer available.</string>
     <string name="tag">Tag</string>
     <string name="settings">Settings</string>
+    <string name="required_field">This field is required.</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>

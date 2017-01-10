@@ -61,13 +61,15 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                 setUpIntent();
                 break;
             case R.id.tv_patient:
-                //setUpIntent(1);
+                intent = new Intent(this, Settings_Patient_Information.class);
+                setUpIntent();
                 break;
             case R.id.tv_medicalStaff:
                 //setUpIntent(2);
                 break;
             case R.id.tv_password:
-                //setUpIntent(3);
+                intent = new Intent(this, Settings_Password.class);
+                setUpIntent();
                 break;
 
         }

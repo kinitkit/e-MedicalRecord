@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true">
@@ -27,8 +28,8 @@
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <ImageView
-                    android:id="@+id/profile_id"
+                <ImageButton
+                    android:id="@+id/ib_profPic"
                     android:layout_width="match_parent"
                     android:layout_height="256dp"
                     android:adjustViewBounds="true"
@@ -47,7 +48,7 @@
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
                 app:tabIndicatorColor="@color/colorBackground"
-                app:tabMode="fixed"/>
+                app:tabMode="fixed" />
 
         </android.support.design.widget.AppBarLayout>
 

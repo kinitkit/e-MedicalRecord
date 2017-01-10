@@ -172,7 +172,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 eAddress = et_eAddress.getText().toString().trim(), contactNo = et_contactNo.getText().toString().trim(),
                 user_type = spinner_user.getSelectedItem().toString(), civilStatus = spinner_civilStatus.getSelectedItem().toString(),
                 occupation = et_occupation.getText().toString().trim(), nationality = et_nationality.getText().toString().trim(),
-                religion = et_religion.getText().toString().trim(), bday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());;
+                religion = et_religion.getText().toString().trim(), bday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
 
         //Validate if texts have error
         if (validate_editText(et_fName, fName, "name") || validate_editText(et_mName, mName, "name") || validate_editText(et_lName, lName, "name") ||

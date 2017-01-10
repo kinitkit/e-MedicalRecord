@@ -3,16 +3,11 @@ package com.example.kinit.e_medicalrecord.Fragments.Medical_Prescription;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,16 +16,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_SearchMyPhysician;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Tagged_MedPrescription;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Open_MedicalPrescription_Tagged;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Remove_Physician;
-import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Search_Physician;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Tagged_Physician_List;
-import com.example.kinit.e_medicalrecord.Classes.My_Physician.Physician_List;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.R;
@@ -74,7 +65,7 @@ public class Fragment_Tagged_Medical_Prescription extends Fragment implements Sw
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (viewer == null) {
-            rootView = inflater.inflate(R.layout.fragment_fragment_tagged_medical_prescription, container, false);
+            rootView = inflater.inflate(R.layout.fragment_tagged_medical_prescription, container, false);
         }
         return rootView;
     }
