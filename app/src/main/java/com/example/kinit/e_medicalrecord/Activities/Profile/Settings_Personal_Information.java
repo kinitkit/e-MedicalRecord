@@ -229,14 +229,18 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
     }
 
     void openGallery(){
-        intent = new Intent(Intent.ACTION_PICK);
+        try {
+            intent = new Intent(Intent.ACTION_PICK);
 
-        file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        selectedImagePath = file.getPath();
-        fileUri = Uri.parse(selectedImagePath);
+            file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            selectedImagePath = file.getPath();
+            fileUri = Uri.parse(selectedImagePath);
 
-        intent.setDataAndType(fileUri, "image/*");
-        startActivityForResult(intent, SELECT_PICTURE);
+            intent.setDataAndType(fileUri, "image/*");
+            startActivityForResult(intent, SELECT_PICTURE);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -277,12 +281,14 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
             try {
                 bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
                 byte[] biteArray = stream.toByteArray();
                 encodedString = Base64.encodeToString(biteArray, 0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), "File not found", Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                e.printStackTrace();
             }
             return null;
         }
@@ -305,7 +311,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                                     JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                     if (jsonObject.has("code")) {
                                         String code = jsonObject.getString("code");
-                                        if (code.equals("success")) {
+                                        if (code.equals("success") || code.equals("empty")) {
                                             Toast.makeText(getApplicationContext(), "Image uploaded successfully.", Toast.LENGTH_SHORT).show();
                                             iv_profilePic.setImageBitmap(bitmap);
                                         }

@@ -14,6 +14,7 @@ import com.example.kinit.e_medicalrecord.Activities.Allergy.Allergy;
 import com.example.kinit.e_medicalrecord.Activities.Laboratory.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Activities.My_Physician.My_Physician;
+import com.example.kinit.e_medicalrecord.Activities.Vaccination.Vaccination;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.User;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
@@ -24,7 +25,7 @@ import com.example.kinit.e_medicalrecord.R;
 
 public class Fragment_Medical_History extends Fragment {
     TextView tv_consultationResult, tv_labResult, tv_medPresc, tv_admissionHistory, tv_familyHistory, tv_pastMedicalHistory,
-            tv_socialHistory, tv_surgicalHistory, tv_allergy, tv_myPhysicians;
+            tv_socialHistory, tv_surgicalHistory, tv_allergy, tv_myPhysicians, tv_vaccination;
     Intent myIntent;
 
     //User Class
@@ -54,6 +55,7 @@ public class Fragment_Medical_History extends Fragment {
         tv_surgicalHistory = (TextView) view.findViewById(R.id.tv_surgicalHistory);
         tv_allergy = (TextView) view.findViewById(R.id.tv_allergy);
         tv_myPhysicians = (TextView) view.findViewById(R.id.tv_myPhysicians);
+        tv_vaccination = (TextView) view.findViewById(R.id.tv_vaccination);
 
         tv_consultationResult.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +115,14 @@ public class Fragment_Medical_History extends Fragment {
             @Override
             public void onClick(View v) {
                 myIntent = new Intent(getActivity(), Allergy.class);
+                putExtra();
+            }
+        });
+
+        tv_vaccination.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myIntent = new Intent(getActivity(), Vaccination.class);
                 putExtra();
             }
         });

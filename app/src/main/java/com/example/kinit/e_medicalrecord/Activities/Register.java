@@ -176,7 +176,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
         //Validate if texts have error
         if (validate_editText(et_fName, fName, "name") || validate_editText(et_mName, mName, "name") || validate_editText(et_lName, lName, "name") ||
-                validate_editText(et_address, address, "none") ||
                 validate_editText(et_contactNo, contactNo, "none") || validate_editText(et_eAddress, eAddress, "email") ||
                 validate_editText(et_username, username, "username") || validate_editText(et_password, password, "password") ||
                 validate_editText(et_cPassword, cPassword, "password")) {
@@ -186,7 +185,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 }
             } else {
                 if (validate_editText(et_occupation, occupation, "none") || validate_editText(et_nationality, nationality, "none") ||
-                        validate_editText(et_religion, religion, "none")) {
+                        validate_editText(et_religion, religion, "none") || validate_editText(et_address, address, "none")) {
                     isThereErrorInEditText = true;
                 }
             }

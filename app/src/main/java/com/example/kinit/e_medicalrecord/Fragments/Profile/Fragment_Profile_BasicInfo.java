@@ -24,7 +24,7 @@ public class Fragment_Profile_BasicInfo extends Fragment {
     //CardView
     CardView cardView_medicalProfession;
     //Linearlayout
-    LinearLayout layout_occupation;
+    LinearLayout layout_occupation, layout_address;
 
     //User Class
     User user;
@@ -58,6 +58,7 @@ public class Fragment_Profile_BasicInfo extends Fragment {
         tv_religion = (TextView) rootView.findViewById(R.id.tv_religion);
         //LinearLayout
         layout_occupation = (LinearLayout) rootView.findViewById(R.id.layout_occupation);
+        layout_address = (LinearLayout) rootView.findViewById(R.id.layout_address);
 
         if(user.getPatient_id() != 0){
             cardView_medicalProfession.setVisibility(View.GONE);
@@ -72,6 +73,7 @@ public class Fragment_Profile_BasicInfo extends Fragment {
             tv_profession = (TextView)rootView.findViewById(R.id.tv_profession);
             tv_license = (TextView)rootView.findViewById(R.id.tv_license);
             layout_occupation.setVisibility(View.GONE);
+            layout_address.setVisibility(View.GONE);
         }
         setTextViewText();
     }
@@ -84,16 +86,18 @@ public class Fragment_Profile_BasicInfo extends Fragment {
         if(user.getMedical_staff_id() != 0){
             tv_profession.setText(user.getMedical_staff_type());
             tv_license.setText(user.getLicenseNumber());
+        } else {
+            tv_birthday.setText(user.getBirthday());
+            tv_address.setText(user.getAddress());
+            tv_civilStatus.setText(user.civilStatus);
+            tv_nationality.setText(user.nationality);
+            tv_religion.setText(user.religion);
         }
         tv_name.setText(user.getFullName());
         tv_gender.setText(user.getGender());
-        tv_birthday.setText(user.getBirthday());
         tv_occupation.setText(user.getOccupation());
-        tv_address.setText(user.getAddress());
         tv_contactNumber.setText(user.getContactNumber());
         tv_email.setText(user.getEmailAddress());
-        tv_civilStatus.setText(user.civilStatus);
-        tv_nationality.setText(user.nationality);
-        tv_religion.setText(user.religion);
+
     }
 }

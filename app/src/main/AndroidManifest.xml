@@ -9,8 +9,10 @@
     <application
         android:name=".Request.Custom_Singleton"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.Login" />
@@ -51,7 +53,9 @@
         <activity android:name=".Activities.Profile.Settings" />
         <activity android:name=".Activities.Profile.Settings_Personal_Information" />
         <activity android:name=".Activities.Profile.Settings_Patient_Information" />
-        <activity android:name=".Activities.Profile.Settings_Password"></activity>
+        <activity android:name=".Activities.Profile.Settings_Password" />
+        <activity android:name=".Activities.Vaccination.Vaccination_Form" />
+        <activity android:name=".Activities.Vaccination.Vaccination"></activity>
     </application>
 
 </manifest>

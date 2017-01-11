@@ -197,6 +197,19 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/tv_vaccination"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_family1"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Vaccination"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
