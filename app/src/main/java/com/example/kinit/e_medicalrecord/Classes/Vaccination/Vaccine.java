@@ -2,11 +2,13 @@ package com.example.kinit.e_medicalrecord.Classes.Vaccination;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONObject;
 
 public class Vaccine implements Parcelable {
-    public static final Parcelable.Creator<Vaccine> CREATOR = new Parcelable.Creator<Vaccine>() {
+
+    public static final Creator<Vaccine> CREATOR = new Creator<Vaccine>() {
         @Override
         public Vaccine createFromParcel(Parcel source) {
             return new Vaccine(source);
@@ -17,18 +19,21 @@ public class Vaccine implements Parcelable {
             return new Vaccine[size];
         }
     };
-    public int vaccine_id, vaccine_schedule_id, age_start, age_end;
+    public int vaccineId, vaccineScheduleId, ageStart, ageEnd;
     public String item, frequency;
 
     public Vaccine(JSONObject jsonObject) {
         try {
-            vaccine_id = jsonObject.getInt("vaccine_id");
+            //Log.d("error", jsonObject.getString("item"));
+            vaccineId = jsonObject.getInt("vaccine_id");
             item = jsonObject.getString("item");
             if (jsonObject.has("vaccine_schedule_id")) {
-                vaccine_schedule_id = jsonObject.getInt("vaccine_schedule_id");
-                age_start = jsonObject.getInt("age_start");
-                age_end = jsonObject.getInt("age_end");
-                frequency = jsonObject.getString("frequency");
+                if(!jsonObject.getString("vaccine_schedule_id").equals("null")) {
+                    vaccineScheduleId = jsonObject.getInt("vaccine_schedule_id");
+                    ageStart = jsonObject.getInt("age_start");
+                    ageEnd = jsonObject.getInt("age_end");
+                    frequency = jsonObject.getString("frequency");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,10 +41,10 @@ public class Vaccine implements Parcelable {
     }
 
     protected Vaccine(Parcel in) {
-        this.vaccine_id = in.readInt();
-        this.vaccine_schedule_id = in.readInt();
-        this.age_start = in.readInt();
-        this.age_end = in.readInt();
+        this.vaccineId = in.readInt();
+        this.vaccineScheduleId = in.readInt();
+        this.ageStart = in.readInt();
+        this.ageEnd = in.readInt();
         this.item = in.readString();
         this.frequency = in.readString();
     }
@@ -51,10 +56,10 @@ public class Vaccine implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.vaccine_id);
-        dest.writeInt(this.vaccine_schedule_id);
-        dest.writeInt(this.age_start);
-        dest.writeInt(this.age_end);
+        dest.writeInt(this.vaccineId);
+        dest.writeInt(this.vaccineScheduleId);
+        dest.writeInt(this.ageStart);
+        dest.writeInt(this.ageEnd);
         dest.writeString(this.item);
         dest.writeString(this.frequency);
     }
