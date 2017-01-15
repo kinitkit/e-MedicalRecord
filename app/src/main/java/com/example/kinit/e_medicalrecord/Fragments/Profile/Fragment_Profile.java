@@ -1,12 +1,7 @@
 package com.example.kinit.e_medicalrecord.Fragments.Profile;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.graphics.Point;
-import android.graphics.Rect;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,9 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Bus_Mode;
@@ -47,9 +40,10 @@ public class Fragment_Profile extends Fragment implements View.OnClickListener {
     Mode mode;
     Viewer viewer;
 
-    Animator mCurrentAnimator;
+    //Animator mCurrentAnimator;
     int mShortAnimationDuration;
     ImageButton ib_profPic;
+    Bitmap profPic;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +68,11 @@ public class Fragment_Profile extends Fragment implements View.OnClickListener {
         fragment_medicalInfo.setUser(user, viewer);
 
         ib_profPic = (ImageButton) rootView.findViewById(R.id.ib_profPic);
+        if (profPic != null) {
+            ib_profPic.setImageBitmap(profPic);
+        } else {
+            ib_profPic.setImageResource(R.mipmap.icon_user_default);
+        }
         ib_profPic.setOnClickListener(this);
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         initializeViewPager();
@@ -116,10 +115,11 @@ public class Fragment_Profile extends Fragment implements View.OnClickListener {
         this.viewPager.setAdapter(viewPagerAdapter);
     }
 
-    public void setUser(User user, Mode mode, Viewer viewer) {
+    public void setUser(User user, Mode mode, Viewer viewer, Bitmap profPic) {
         this.user = user;
         this.mode = mode;
         this.viewer = viewer;
+        this.profPic = profPic;
     }
 
     @Override

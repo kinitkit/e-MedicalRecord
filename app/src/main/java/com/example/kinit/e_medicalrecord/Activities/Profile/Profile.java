@@ -8,8 +8,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -30,6 +33,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Activities.Login;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
@@ -52,6 +56,7 @@ import com.squareup.otto.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,6 +68,7 @@ public class Profile extends AppCompatActivity {
     //Primitive Data Types
     boolean isPatient = false, isMedicalStaff = false;
     String recentCode = "";
+    Bitmap profPic;
 
     //Fragment
     Fragment_Profile fragment_profile;
@@ -95,14 +101,14 @@ public class Profile extends AppCompatActivity {
 
         //Intent
         Intent intent = getIntent();
-        user.setUser_data_id(intent.getIntExtra("user_id", 0));
-        user.setPatient_id(intent.getIntExtra("patient_id", 0));
-        user.setMedical_staff_id(intent.getIntExtra("medicalStaff_id", 0));
-        if (user.getPatient_id() != 0) {
+        user.user_data_id = intent.getIntExtra("user_id", 0);
+        user.patient_id = intent.getIntExtra("patient_id", 0);
+        user.medical_staff_id = intent.getIntExtra("medicalStaff_id", 0);
+        if (user.patient_id != 0) {
             mode = Mode.PATIENT;
             isPatient = true;
         }
-        if (user.getMedical_staff_id() != 0) {
+        if (user.medical_staff_id != 0) {
             mode = Mode.MEDICAL_STAFF;
             isMedicalStaff = true;
         }
@@ -130,7 +136,7 @@ public class Profile extends AppCompatActivity {
 
         //Fragment
         fragment_profile = new Fragment_Profile();
-        fragment_profile.setUser(user, mode, viewer);
+        fragment_profile.setUser(user, mode, viewer, profPic);
 
         //FragmentManager
         fragmentManager = getSupportFragmentManager();
@@ -156,34 +162,38 @@ public class Profile extends AppCompatActivity {
                                     } else {
                                         switch (recentCode) {
                                             case "user_data":
-                                                user.setUsername(jsonObject.getString("username"));
-                                                user.setPassword(jsonObject.getString("password"));
-                                                user.setFirstName(jsonObject.getString("first_name"));
-                                                user.setMiddleName(jsonObject.getString("middle_name"));
-                                                user.setLastName(jsonObject.getString("last_name"));
-                                                user.setGender(jsonObject.getString("gender"));
-                                                user.setContactNumber(jsonObject.getString("contact_number"));
-                                                user.setEmailAddress(jsonObject.getString("email_address"));
-                                                user.setImage(jsonObject.getString("image"));
-                                                user.setActive(Boolean.valueOf(jsonObject.getString("active")));
+                                                user.username = jsonObject.getString("username");
+                                                user.firstName = jsonObject.getString("first_name");
+                                                user.middleName = jsonObject.getString("middle_name");
+                                                user.lastName = jsonObject.getString("last_name");
+                                                user.gender = jsonObject.getString("gender");
+                                                user.contactNumber = jsonObject.getString("contact_number");
+                                                user.emailAddress = jsonObject.getString("email_address");
+                                                user.image = jsonObject.getString("image");
+                                                user.active = jsonObject.getString("active").equals("1");
                                                 break;
                                             case "patient_data":
-                                                user.setAddress(jsonObject.getString("address"));
+                                                user.address = jsonObject.getString("address");
                                                 user.setBirthday(jsonObject.getString("birthday"));
-                                                user.setOccupation(jsonObject.getString("occupation"));
+                                                user.occupation = jsonObject.getString("occupation");
                                                 user.civilStatus = jsonObject.getString("civil_status");
                                                 user.nationality = jsonObject.getString("nationality");
                                                 user.religion = jsonObject.getString("religion");
                                                 break;
                                             case "medicalStaff_data":
-                                                user.setLicenseNumber(jsonObject.getString("license_number"));
-                                                user.setMedical_staff_type(jsonObject.getString("user_type"));
+                                                user.licenseNumber = jsonObject.getString("license_number");
+                                                user.medical_staff_type = jsonObject.getString("user_type");
                                                 break;
                                         }
                                         recentCode = "";
                                     }
                                 }
-                                init();
+                                if (!user.image.equals("null")) {
+                                    Log.d("error", user.image);
+                                    imgRqst(UrlString.getImageUrl(user.image));
+                                } else {
+                                    init();
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
@@ -201,11 +211,11 @@ public class Profile extends AppCompatActivity {
                     Map<String, String> params = new HashMap<>();
                     params.put("action", "getUserData");
                     params.put("device", "mobile");
-                    params.put("user_id", Integer.toString(user.getUser_data_id()));
-                    if (user.getMedical_staff_id() != 0)
-                        params.put("medicalStaff_id", Integer.toString(user.getMedical_staff_id()));
-                    if (user.getPatient_id() != 0)
-                        params.put("patient_id", Integer.toString(user.getPatient_id()));
+                    params.put("user_id", Integer.toString(user.user_data_id));
+                    if (user.medical_staff_id != 0)
+                        params.put("medicalStaff_id", Integer.toString(user.medical_staff_id));
+                    if (user.patient_id != 0)
+                        params.put("patient_id", Integer.toString(user.patient_id));
                     return params;
                 }
             };
@@ -216,10 +226,33 @@ public class Profile extends AppCompatActivity {
         }
     }
 
+    void imgRqst(String url) {
+        try {
+            ImageRequest imageRequest = new ImageRequest(url,
+                    new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap response) {
+
+                            profPic = response;
+                            init();
+                        }
+                    }, 0, 0, ImageView.ScaleType.CENTER_CROP, null,
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    });
+            Custom_Singleton.getInstance(this).addToRequestQueue(imageRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (viewer == null) {
-            if (user.getMedical_staff_id() != 0 && user.getPatient_id() != 0) {
+            if (user.medical_staff_id != 0 && user.patient_id != 0) {
                 getMenuInflater().inflate(R.menu.menu_profile_with_mode, menu);
             } else {
                 getMenuInflater().inflate(R.menu.menu_profile, menu);
@@ -243,7 +276,7 @@ public class Profile extends AppCompatActivity {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    BusStation.getBus().post(new Bus_Search_Item(query, user.getUser_data_id(), mode));
+                    BusStation.getBus().post(new Bus_Search_Item(query, user.user_data_id, mode));
                     return false;
                 }
 
@@ -347,153 +380,35 @@ public class Profile extends AppCompatActivity {
         intent.putExtra("patient_id", busSearchItemOnClick.patient_id);
         intent.putExtra("medicalStaff_id", busSearchItemOnClick.medicalStaff_id);
         intent.putExtra("viewer_name", user.getFullName());
-        intent.putExtra("viewer_patient_id", user.getPatient_id());
-        intent.putExtra("viewer_user_id", user.getUser_data_id());
-        intent.putExtra("viewer_medicalStaff_id", user.getMedical_staff_id());
+        intent.putExtra("viewer_patient_id", user.patient_id);
+        intent.putExtra("viewer_user_id", user.user_data_id);
+        intent.putExtra("viewer_medicalStaff_id", user.medical_staff_id);
         intent.putExtra("viewer_ordinal", mode.ordinal());
         startActivity(intent);
     }
 
-    @Subscribe
-    public void imageClicked(Bus_Image_Click busImageClick){
-        zoomImageFromThumb(busImageClick.imageButton, busImageClick.imageResId);
-    }
+    /*private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
 
-    private void zoomImageFromThumb(final View thumbView, int imageResId) {
-        // If there's an animation in progress, cancel it
-        // immediately and proceed with this one.
-        if (mCurrentAnimator != null) {
-            mCurrentAnimator.cancel();
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
         }
 
-        // Load the high-resolution "zoomed-in" image.
-        final ImageView expandedImageView = (ImageView) findViewById(
-                R.id.expanded_image);
-        expandedImageView.setImageResource(imageResId);
-
-        // Calculate the starting and ending bounds for the zoomed-in image.
-        // This step involves lots of math. Yay, math.
-        final Rect startBounds = new Rect();
-        final Rect finalBounds = new Rect();
-        final Point globalOffset = new Point();
-
-        // The start bounds are the global visible rectangle of the thumbnail,
-        // and the final bounds are the global visible rectangle of the container
-        // view. Also set the container view's offset as the origin for the
-        // bounds, since that's the origin for the positioning animation
-        // properties (X, Y).
-        thumbView.getGlobalVisibleRect(startBounds);
-        findViewById(R.id.relativeLayout)
-                .getGlobalVisibleRect(finalBounds, globalOffset);
-        startBounds.offset(-globalOffset.x, -globalOffset.y);
-        finalBounds.offset(-globalOffset.x, -globalOffset.y);
-
-        // Adjust the start bounds to be the same aspect ratio as the final
-        // bounds using the "center crop" technique. This prevents undesirable
-        // stretching during the animation. Also calculate the start scaling
-        // factor (the end scaling factor is always 1.0).
-        float startScale;
-        if ((float) finalBounds.width() / finalBounds.height()
-                > (float) startBounds.width() / startBounds.height()) {
-            // Extend start bounds horizontally
-            startScale = (float) startBounds.height() / finalBounds.height();
-            float startWidth = startScale * finalBounds.width();
-            float deltaWidth = (startWidth - startBounds.width()) / 2;
-            startBounds.left -= deltaWidth;
-            startBounds.right += deltaWidth;
-        } else {
-            // Extend start bounds vertically
-            startScale = (float) startBounds.width() / finalBounds.width();
-            float startHeight = startScale * finalBounds.height();
-            float deltaHeight = (startHeight - startBounds.height()) / 2;
-            startBounds.top -= deltaHeight;
-            startBounds.bottom += deltaHeight;
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
         }
 
-        // Hide the thumbnail and show the zoomed-in view. When the animation
-        // begins, it will position the zoomed-in view in the place of the
-        // thumbnail.
-        thumbView.setAlpha(0f);
-        expandedImageView.setVisibility(View.VISIBLE);
-
-        // Set the pivot point for SCALE_X and SCALE_Y transformations
-        // to the top-left corner of the zoomed-in view (the default
-        // is the center of the view).
-        expandedImageView.setPivotX(0f);
-        expandedImageView.setPivotY(0f);
-
-        // Construct and run the parallel animation of the four translation and
-        // scale properties (X, Y, SCALE_X, and SCALE_Y).
-        AnimatorSet set = new AnimatorSet();
-        set
-                .play(ObjectAnimator.ofFloat(expandedImageView, View.X,
-                        startBounds.left, finalBounds.left))
-                .with(ObjectAnimator.ofFloat(expandedImageView, View.Y,
-                        startBounds.top, finalBounds.top))
-                .with(ObjectAnimator.ofFloat(expandedImageView, View.SCALE_X,
-                        startScale, 1f)).with(ObjectAnimator.ofFloat(expandedImageView,
-                View.SCALE_Y, startScale, 1f));
-        set.setDuration(mShortAnimationDuration);
-        set.setInterpolator(new DecelerateInterpolator());
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mCurrentAnimator = null;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                mCurrentAnimator = null;
-            }
-        });
-        set.start();
-        mCurrentAnimator = set;
-
-        // Upon clicking the zoomed-in image, it should zoom back down
-        // to the original bounds and show the thumbnail instead of
-        // the expanded image.
-        final float startScaleFinal = startScale;
-        expandedImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mCurrentAnimator != null) {
-                    mCurrentAnimator.cancel();
-                }
-
-                // Animate the four positioning/sizing properties in parallel,
-                // back to their original values.
-                AnimatorSet set = new AnimatorSet();
-                set.play(ObjectAnimator
-                        .ofFloat(expandedImageView, View.X, startBounds.left))
-                        .with(ObjectAnimator
-                                .ofFloat(expandedImageView,
-                                        View.Y, startBounds.top))
-                        .with(ObjectAnimator
-                                .ofFloat(expandedImageView,
-                                        View.SCALE_X, startScaleFinal))
-                        .with(ObjectAnimator
-                                .ofFloat(expandedImageView,
-                                        View.SCALE_Y, startScaleFinal));
-                set.setDuration(mShortAnimationDuration);
-                set.setInterpolator(new DecelerateInterpolator());
-                set.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        thumbView.setAlpha(1f);
-                        expandedImageView.setVisibility(View.GONE);
-                        mCurrentAnimator = null;
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        thumbView.setAlpha(1f);
-                        expandedImageView.setVisibility(View.GONE);
-                        mCurrentAnimator = null;
-                    }
-                });
-                set.start();
-                mCurrentAnimator = set;
-            }
-        });
-    }
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }*/
 }

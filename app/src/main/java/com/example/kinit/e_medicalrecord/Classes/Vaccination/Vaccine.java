@@ -6,6 +6,8 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class Vaccine implements Parcelable {
 
     public static final Creator<Vaccine> CREATOR = new Creator<Vaccine>() {
@@ -19,12 +21,11 @@ public class Vaccine implements Parcelable {
             return new Vaccine[size];
         }
     };
-    public int vaccineId, vaccineScheduleId, ageStart, ageEnd;
-    public String item, frequency;
+    public int vaccineId, vaccineScheduleId, ageStart, ageEnd, frequency;
+    public String item;
 
     public Vaccine(JSONObject jsonObject) {
         try {
-            //Log.d("error", jsonObject.getString("item"));
             vaccineId = jsonObject.getInt("vaccine_id");
             item = jsonObject.getString("item");
             if (jsonObject.has("vaccine_schedule_id")) {
@@ -32,7 +33,7 @@ public class Vaccine implements Parcelable {
                     vaccineScheduleId = jsonObject.getInt("vaccine_schedule_id");
                     ageStart = jsonObject.getInt("age_start");
                     ageEnd = jsonObject.getInt("age_end");
-                    frequency = jsonObject.getString("frequency");
+                    frequency = jsonObject.getInt("frequency");
                 }
             }
         } catch (Exception e) {
@@ -45,8 +46,8 @@ public class Vaccine implements Parcelable {
         this.vaccineScheduleId = in.readInt();
         this.ageStart = in.readInt();
         this.ageEnd = in.readInt();
+        this.frequency = in.readInt();
         this.item = in.readString();
-        this.frequency = in.readString();
     }
 
     @Override
@@ -60,7 +61,7 @@ public class Vaccine implements Parcelable {
         dest.writeInt(this.vaccineScheduleId);
         dest.writeInt(this.ageStart);
         dest.writeInt(this.ageEnd);
+        dest.writeInt(this.frequency);
         dest.writeString(this.item);
-        dest.writeString(this.frequency);
     }
 }

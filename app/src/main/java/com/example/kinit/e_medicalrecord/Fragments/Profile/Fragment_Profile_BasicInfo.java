@@ -60,7 +60,7 @@ public class Fragment_Profile_BasicInfo extends Fragment {
         layout_occupation = (LinearLayout) rootView.findViewById(R.id.layout_occupation);
         layout_address = (LinearLayout) rootView.findViewById(R.id.layout_address);
 
-        if(user.getPatient_id() != 0){
+        if(user.patient_id != 0){
             cardView_medicalProfession.setVisibility(View.GONE);
 
         } else {
@@ -68,7 +68,7 @@ public class Fragment_Profile_BasicInfo extends Fragment {
             tv_civilStatus.setVisibility(View.GONE);
             tv_religion.setVisibility(View.GONE);
         }
-        if(user.getMedical_staff_id() != 0){
+        if(user.medical_staff_id != 0){
             cardView_medicalProfession.setVisibility(View.VISIBLE);
             tv_profession = (TextView)rootView.findViewById(R.id.tv_profession);
             tv_license = (TextView)rootView.findViewById(R.id.tv_license);
@@ -83,21 +83,21 @@ public class Fragment_Profile_BasicInfo extends Fragment {
     }
 
     void setTextViewText(){
-        if(user.getMedical_staff_id() != 0){
-            tv_profession.setText(user.getMedical_staff_type());
-            tv_license.setText(user.getLicenseNumber());
+        if(user.medical_staff_id != 0){
+            tv_profession.setText(user.medical_staff_type);
+            tv_license.setText(user.licenseNumber);
         } else {
-            tv_birthday.setText(user.getBirthday());
-            tv_address.setText(user.getAddress());
+            tv_birthday.setText(user.birthday);
+            tv_address.setText(user.address);
             tv_civilStatus.setText(user.civilStatus);
             tv_nationality.setText(user.nationality);
             tv_religion.setText(user.religion);
         }
         tv_name.setText(user.getFullName());
-        tv_gender.setText(user.getGender());
-        tv_occupation.setText(user.getOccupation());
-        tv_contactNumber.setText(user.getContactNumber());
-        tv_email.setText(user.getEmailAddress());
+        tv_gender.setText(user.gender);
+        tv_occupation.setText(user.occupation);
+        tv_contactNumber.setText(user.contactNumber);
+        tv_email.setText(user.emailAddress);
 
     }
 }

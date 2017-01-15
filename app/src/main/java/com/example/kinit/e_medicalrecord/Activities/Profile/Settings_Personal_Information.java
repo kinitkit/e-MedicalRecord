@@ -103,11 +103,11 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
     }
 
     void setEditText() {
-        et_fName.setText(user.getFirstName());
-        et_mName.setText(user.getMiddleName());
-        et_lName.setText(user.getLastName());
-        et_contactNo.setText(user.getContactNumber());
-        spinner_gender.setSelection(arrayAdapter_gender.getPosition(user.getGender()));
+        et_fName.setText(user.firstName);
+        et_mName.setText(user.middleName);
+        et_lName.setText(user.lastName);
+        et_contactNo.setText(user.contactNumber);
+        spinner_gender.setSelection(arrayAdapter_gender.getPosition(user.gender));
     }
 
     boolean validateEditText(EditText editText, String text, String code) {
@@ -158,11 +158,11 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                                     String code = jsonObject.getString("code");
                                     if (code.equals("success")) {
                                         Toast.makeText(getApplicationContext(), getString(R.string.record_updated), Toast.LENGTH_SHORT).show();
-                                        user.setFirstName(strFname);
-                                        user.setMiddleName(strMname);
-                                        user.setLastName(strLname);
-                                        user.setContactNumber(strContactNo);
-                                        user.setGender(strGender);
+                                        user.firstName = strFname;
+                                        user.middleName = strMname;
+                                        user.lastName = strLname;
+                                        user.contactNumber = strContactNo;
+                                        user.gender = strGender;
                                         intent = new Intent();
                                         intent.putExtra("result", true);
                                         intent.putExtra("user", user);
@@ -207,7 +207,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                     Map<String, String> params = new HashMap<>();
                     params.put("action", "updatePersonalInformation");
                     params.put("device", "mobile");
-                    params.put("user_id", String.valueOf(user.getUser_data_id()));
+                    params.put("user_id", String.valueOf(user.user_data_id));
                     params.put("first_name", strFname);
                     params.put("middle_name", strMname);
                     params.put("last_name", strLname);
@@ -334,9 +334,9 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                         Map<String, String> params = new HashMap<>();
                         params.put("action", "uploadProfPic");
                         params.put("device", "mobile");
-                        params.put("user_id", String.valueOf(user.getUser_data_id()));
+                        params.put("user_id", String.valueOf(user.user_data_id));
                         params.put("encoded_string", encodedString);
-                        params.put("image_name", user.getUser_data_id() +".jpg");
+                        params.put("image_name", user.user_data_id +".jpg");
 
                         return params;
                     }

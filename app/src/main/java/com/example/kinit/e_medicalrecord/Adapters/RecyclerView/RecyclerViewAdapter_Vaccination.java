@@ -2,6 +2,7 @@ package com.example.kinit.e_medicalrecord.Adapters.RecyclerView;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +13,22 @@ import com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccination;
 import com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccine;
 import com.example.kinit.e_medicalrecord.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<RecyclerViewAdapter_Vaccination.ViewHolder> {
 
     ArrayList<Vaccine> vaccines;
     ArrayList<Vaccination> vaccinations;
+    int age;
 
-    public RecyclerViewAdapter_Vaccination(ArrayList<Vaccine> vaccines, ArrayList<Vaccination> vaccinations) {
+    public RecyclerViewAdapter_Vaccination(ArrayList<Vaccine> vaccines, ArrayList<Vaccination> vaccinations, int age) {
         this.vaccines = vaccines;
         this.vaccinations = vaccinations;
+        this.age = age;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,8 +38,17 @@ public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tv_date.setText(vaccinations.get(position).strDateTaken);
-        holder.tv_vaccine.setText(vaccinations.get(position).vaccine);
+        Vaccination vaccination = vaccinations.get(position);
+        holder.tv_date.setText(vaccination.strDateTaken);
+        holder.tv_vaccine.setText(vaccination.vaccine.item);
+        holder.tv_provider.setText(vaccination.providerName);
+        holder.tv_place.setText(vaccination.placeTaken);
+        if (vaccination.strNextSchedule != null) {
+            holder.linear_layoutNextSchedule.setVisibility(View.VISIBLE);
+            holder.tv_nextSchedule.setText(vaccination.strNextSchedule);
+        } else {
+            holder.linear_layoutNextSchedule.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -41,7 +56,7 @@ public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<Recycl
         return vaccinations.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         TextView tv_date, tv_vaccine, tv_provider, tv_place, tv_nextSchedule;
         LinearLayout linear_layoutNextSchedule;
         CardView cardView;

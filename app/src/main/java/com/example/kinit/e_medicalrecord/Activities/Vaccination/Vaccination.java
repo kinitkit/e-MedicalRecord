@@ -20,6 +20,7 @@ import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapt
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
+import com.example.kinit.e_medicalrecord.Classes.Notification.Custom_Notification;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccine;
@@ -30,20 +31,24 @@ import com.example.kinit.e_medicalrecord.Request.UrlString;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Vaccination extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
+    int age;
     Intent intent;
     //Classes
     Viewer viewer;
     Patient patient;
     ArrayList<Vaccine> vaccines;
     ArrayList<com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccination> vaccinations;
-    Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
+    Custom_ProgressDialog progressDialog;
+    Custom_Notification notification;
 
     //Widgets
     //RecyclerView
@@ -69,7 +74,7 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Admission List");
+        getSupportActionBar().setTitle("Vaccination List");
         getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -78,6 +83,7 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
 
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
+        notification = new Custom_Notification(this);
 
         btn_add = (FloatingActionButton) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
@@ -131,8 +137,13 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
                                                 jsonObject = jsonArray.getJSONObject(x);
                                                 vaccinations.add(new com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccination(jsonObject));
                                             }
-                                            btn_initializer(isButtonViewable);
-                                            loadToRecyclerView();
+                                            if (rootJsonArray.get(3) instanceof JSONObject) {
+                                                jsonObject = rootJsonArray.getJSONObject(3);
+                                                age = jsonObject.getInt("age");
+                                                setNotification();
+                                                btn_initializer(isButtonViewable);
+                                                loadToRecyclerView();
+                                            }
                                         }
                                     }
                                 }
@@ -167,10 +178,25 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
     }
 
     void loadToRecyclerView() {
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_Vaccination(vaccines, vaccinations);
+        recyclerViewAdapter_Content = new RecyclerViewAdapter_Vaccination(vaccines, vaccinations, age);
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
         progressDialog.dismiss();
+    }
+
+    void setNotification() {
+        int count = 0;
+        for (com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccination vaccination : vaccinations) {
+            if (vaccination.vaccine.vaccineScheduleId != 0) {
+                if (age >= vaccination.vaccine.ageStart && age <= vaccination.vaccine.ageEnd) {
+                    ++count;
+                }
+            }
+        }
+        if (count > 0) {
+            notification.showVaccination("Vaccination", count + ((count == 1) ? " vaccination is " : " vaccinations are ")
+                    + "about to due.");
+        }
     }
 
     @Override
@@ -187,16 +213,17 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onRefresh() {
-        if(swipeRefreshLayout.isRefreshing()){
+        if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
+        fetchData();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                //fetchData();
+                fetchData();
             }
         }
     }

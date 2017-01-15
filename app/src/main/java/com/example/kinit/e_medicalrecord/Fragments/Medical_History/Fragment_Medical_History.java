@@ -131,9 +131,9 @@ public class Fragment_Medical_History extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), My_Physician.class);
-                    intent.putExtra("patient_id", user.getPatient_id());
+                    intent.putExtra("patient_id", user.patient_id);
                     intent.putExtra("patient_name", user.getFullName());
-                    intent.putExtra("user_id", user.getUser_data_id());
+                    intent.putExtra("user_id", user.user_data_id);
                     startActivity(intent);
                 }
             });
@@ -146,9 +146,9 @@ public class Fragment_Medical_History extends Fragment {
 
     void newActivityInitializer(int ordinal){
         myIntent = new Intent(getActivity(), Medical.class);
-        myIntent.putExtra("patient_id", user.getPatient_id());
+        myIntent.putExtra("patient_id", user.patient_id);
         myIntent.putExtra("patient_name", user.getFullName());
-        myIntent.putExtra("user_id", user.getUser_data_id());
+        myIntent.putExtra("user_id", user.user_data_id);
         myIntent.putExtra("ordinal", ordinal);
         viewer_putExtra();
         startActivity(myIntent);
@@ -157,9 +157,9 @@ public class Fragment_Medical_History extends Fragment {
     void putExtra(){
         myIntent.putExtra("patient", patient);
         myIntent.putExtra("viewer", viewer);
-        myIntent.putExtra("patient_id", user.getPatient_id());
+        myIntent.putExtra("patient_id", user.patient_id);
         myIntent.putExtra("patient_name", user.getFullName());
-        myIntent.putExtra("user_id", user.getUser_data_id());
+        myIntent.putExtra("user_id", user.user_data_id);
         viewer_putExtra();
         startActivity(myIntent);
     }
@@ -178,8 +178,8 @@ public class Fragment_Medical_History extends Fragment {
         this.user = user;
         this.viewer = viewer;
         patient = new Patient();
-        patient.user_data_id = user.getUser_data_id();
+        patient.user_data_id = user.user_data_id;
         patient.name = user.getFullName();
-        patient.id = user.getPatient_id();
+        patient.id = user.patient_id;
     }
 }

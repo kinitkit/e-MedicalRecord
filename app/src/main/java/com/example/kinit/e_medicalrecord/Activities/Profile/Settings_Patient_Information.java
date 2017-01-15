@@ -98,11 +98,11 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
     }
 
     void setEditText() {
-        et_address.setText(user.getAddress());
+        et_address.setText(user.address);
         et_nationality.setText(user.nationality);
         et_religion.setText(user.religion);
-        et_occupation.setText(user.getOccupation());
-        et_bday.setText(user.getBirthday());
+        et_occupation.setText(user.occupation);
+        et_bday.setText(user.birthday);
         calendar = user.calendarBirthday;
         spinner_civilStatus.setSelection(arrayAdapter_civilStatus.getPosition(user.civilStatus));
     }
@@ -149,10 +149,10 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
                                     String code = jsonObject.getString("code");
                                     if(code.equals("success")){
                                         Toast.makeText(getApplicationContext(), getString(R.string.record_updated), Toast.LENGTH_SHORT).show();
-                                        user.setAddress(strAddress);
+                                        user.address = strAddress;
                                         user.nationality = strNationality;
                                         user.religion = strReligion;
-                                        user.setOccupation(strOccupation);
+                                        user.occupation = strOccupation;
                                         user.civilStatus = strCivilStatus;
                                         user.setBirthday(new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
                                         intent = new Intent();
@@ -184,7 +184,7 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
                     Map<String, String> params = new HashMap<>();
                     params.put("action", "updatePatientInformation");
                     params.put("device", "mobile");
-                    params.put("patient_id", String.valueOf(user.getPatient_id()));
+                    params.put("patient_id", String.valueOf(user.patient_id));
                     params.put("address", strAddress);
                     params.put("nationality", strNationality);
                     params.put("religion", strReligion);

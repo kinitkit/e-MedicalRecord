@@ -8,22 +8,27 @@ import java.util.Calendar;
 
 public class Vaccination {
 
-    public int id, patientId, userDataId, vaccinationId;
-    public String providerName, strDateTaken, placeTaken, vaccine;
+    public int id, patientId, userDataId;
+    public String providerName, strDateTaken, strNextSchedule, placeTaken;
     public boolean status;
-    public Calendar calendar;
+    public Calendar calendar, nxtSchedule;
+    public Vaccine vaccine;
 
     public Vaccination(JSONObject jsonObject) {
         try {
             id = jsonObject.getInt("id");
             patientId = jsonObject.getInt("patient_id");
             userDataId = jsonObject.getInt("user_data_id");
-            vaccinationId = jsonObject.getInt("vaccine_id");
-            vaccine = jsonObject.getString("item");
             providerName = jsonObject.getString("provider_name");
             setDate(jsonObject.getString("date_taken"));
             placeTaken = jsonObject.getString("place_taken");
             status = jsonObject.getString("status").equals("1");
+            vaccine = new Vaccine(jsonObject);
+            if (vaccine.vaccineScheduleId != 0) {
+                nxtSchedule = calendar;
+                nxtSchedule.add(Calendar.YEAR, vaccine.frequency);
+                strNextSchedule = new SimpleDateFormat("MMM dd, yyyy").format(nxtSchedule.getTime());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

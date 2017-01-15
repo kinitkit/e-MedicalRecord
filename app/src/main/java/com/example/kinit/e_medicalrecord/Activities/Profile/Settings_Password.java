@@ -146,7 +146,7 @@ public class Settings_Password extends AppCompatActivity implements View.OnClick
                     Map<String, String> params = new HashMap<>();
                     params.put("action", "updatePassword");
                     params.put("device", "mobile");
-                    params.put("user_id", String.valueOf(user.getUser_data_id()));
+                    params.put("user_id", String.valueOf(user.user_data_id));
                     params.put("current_password", strCurrentPassword);
                     params.put("password", strPassword);
 
