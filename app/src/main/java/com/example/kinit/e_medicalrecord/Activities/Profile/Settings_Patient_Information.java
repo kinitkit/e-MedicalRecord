@@ -137,7 +137,7 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
     void sendData(final String strAddress, final String strNationality, final String strReligion, final String strOccupation, final String strCivilStatus) {
         progressDialog.show("Saving...");
         try {
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_SETTINGS,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

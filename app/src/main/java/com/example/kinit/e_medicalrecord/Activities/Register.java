@@ -203,7 +203,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 //Start of JSON
                 try {
 
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_REGISTRATION,
                             new Response.Listener<String>() { //Response Listener
                                 @Override
                                 public void onResponse(String response) {

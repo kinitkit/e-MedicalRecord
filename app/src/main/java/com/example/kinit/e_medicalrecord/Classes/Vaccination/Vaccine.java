@@ -2,11 +2,8 @@ package com.example.kinit.e_medicalrecord.Classes.Vaccination;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import org.json.JSONObject;
-
-import java.util.Map;
 
 public class Vaccine implements Parcelable {
 
@@ -21,7 +18,7 @@ public class Vaccine implements Parcelable {
             return new Vaccine[size];
         }
     };
-    public int vaccineId, vaccineScheduleId, ageStart, ageEnd, frequency;
+    public int vaccineId, vaccineScheduleId, ageStart, ageEnd, frequency_year, frequency_month, frequency_day;
     public String item;
 
     public Vaccine(JSONObject jsonObject) {
@@ -29,11 +26,13 @@ public class Vaccine implements Parcelable {
             vaccineId = jsonObject.getInt("vaccine_id");
             item = jsonObject.getString("item");
             if (jsonObject.has("vaccine_schedule_id")) {
-                if(!jsonObject.getString("vaccine_schedule_id").equals("null")) {
+                if (!jsonObject.getString("vaccine_schedule_id").equals("null")) {
                     vaccineScheduleId = jsonObject.getInt("vaccine_schedule_id");
                     ageStart = jsonObject.getInt("age_start");
                     ageEnd = jsonObject.getInt("age_end");
-                    frequency = jsonObject.getInt("frequency");
+                    frequency_year = jsonObject.getInt("frequency_year");
+                    frequency_month = jsonObject.getInt("frequency_month");
+                    frequency_day = jsonObject.getInt("frequency_day");
                 }
             }
         } catch (Exception e) {
@@ -46,7 +45,9 @@ public class Vaccine implements Parcelable {
         this.vaccineScheduleId = in.readInt();
         this.ageStart = in.readInt();
         this.ageEnd = in.readInt();
-        this.frequency = in.readInt();
+        this.frequency_year = in.readInt();
+        this.frequency_month = in.readInt();
+        this.frequency_day = in.readInt();
         this.item = in.readString();
     }
 
@@ -61,7 +62,9 @@ public class Vaccine implements Parcelable {
         dest.writeInt(this.vaccineScheduleId);
         dest.writeInt(this.ageStart);
         dest.writeInt(this.ageEnd);
-        dest.writeInt(this.frequency);
+        dest.writeInt(this.frequency_year);
+        dest.writeInt(this.frequency_month);
+        dest.writeInt(this.frequency_day);
         dest.writeString(this.item);
     }
 }

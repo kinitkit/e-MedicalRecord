@@ -10,11 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -23,8 +25,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
+import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Chemistry;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Laboratory;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
@@ -52,6 +56,7 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
     Lab_Chemistry labChemistry;
     Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
+    Custom_ProgressBar progressBar;
     DatePickerFragment datePickerFragment;
 
     //Widgets
@@ -67,6 +72,7 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_lab_chemistry_form);
         init();
     }
@@ -87,6 +93,7 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
         }
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
+        progressBar = new Custom_ProgressBar(this);
 
         getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -175,7 +182,7 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
     void insertData(final String[] inps) {
         progressDialog.show("Saving...");
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_LABORATORY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -261,8 +268,8 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
 
     void fetchData() {
         try {
-            progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_LABORATORY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -281,14 +288,14 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                progressBar.hide();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            progressDialog.dismiss();
+                            progressBar.hide();
                             error.printStackTrace();
                         }
                     }) {
@@ -304,7 +311,7 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
-            progressDialog.dismiss();
+            progressBar.hide();
             e.printStackTrace();
         }
     }

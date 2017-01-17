@@ -79,7 +79,7 @@ public class Fragment_Search_Physician extends Fragment {
         taggedPhysicianLists = new ArrayList<>();
         progressDialog.show("Loading...");
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -133,7 +133,7 @@ public class Fragment_Search_Physician extends Fragment {
     void addPhysician(final int medical_staff_id) {
         progressDialog.show("Loading...");
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

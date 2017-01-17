@@ -9,6 +9,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Search_Tagged_MedicalPrescription;
@@ -26,7 +27,6 @@ public class Tagged_Medical_Prescription extends AppCompatActivity {
     int medical_prescription_id;
 
     //Classes
-    ArrayList<Tagged_Physician_List> taggedPhysicianList;
     Patient patient;
 
     //App
@@ -36,6 +36,7 @@ public class Tagged_Medical_Prescription extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_tagged_medical_prescription);
         init();
     }

@@ -96,7 +96,7 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
         admissions = new ArrayList<>();
         try {
             progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -210,7 +210,7 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
     void deleteData(final Bus_Admission_OnLongClick busAdmissionOnLongClick) {
         progressDialog.show("Deleting...");
         try {
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    tools:context="com.example.kinit.e_medicalrecord.Fragments.Laboratory.Fragment_Laboratory_Results">
-
+    tools:keep="@layout/fragment_laboratory_results">
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

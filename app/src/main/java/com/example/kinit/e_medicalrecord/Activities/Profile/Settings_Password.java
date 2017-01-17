@@ -103,7 +103,7 @@ public class Settings_Password extends AppCompatActivity implements View.OnClick
     void sendData(final String strCurrentPassword, final String strPassword, String strConfirmPassword) {
         try {
             progressDialog.show("Saving...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_SETTINGS,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

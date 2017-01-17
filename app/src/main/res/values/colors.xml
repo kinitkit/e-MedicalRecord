@@ -2,19 +2,13 @@
 <resources>
     <!--Login-->
     <color name="colorBackground">#f7fcfc</color>
-    <color name="colorButton">#3949AB</color>
-    <color name="colorInput">#3D5AFE</color>
 
     <color name="colorRemove">#F44336</color>
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#00BFA5</color>
-    <color name="colorLightPrimary">#B2DFDB</color>
-    <color name="colorTextIcon">#FFFFFF</color>
     <color name="colorTextPrimary">#2c2c2c</color>
     <color name="colorTextSecondary">#757575</color>
     <color name="colorDivider">#BDBDBD</color>
-    <color name="colorDelete">#ED5E68</color>
 
-    <color name="colorProfileText">#555555</color>
 </resources>

@@ -78,7 +78,7 @@ public class Fragment_Search extends Fragment {
     void fetchData() {
         progressDialog.show("Loading...");
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_SEARCH,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

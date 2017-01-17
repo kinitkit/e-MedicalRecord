@@ -93,7 +93,7 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
 
     void fetchData() {
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

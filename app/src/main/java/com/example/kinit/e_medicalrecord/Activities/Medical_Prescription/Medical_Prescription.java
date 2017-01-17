@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -23,7 +25,9 @@ import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_Click;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_LongClick;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
+import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
@@ -48,6 +52,7 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
     Patient patient;
     Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
+    Custom_ProgressBar progressBar;
 
     //Widgets
     //RecyclerView
@@ -57,9 +62,11 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
     //FAB
     FloatingActionButton btn_add;
     SwipeRefreshLayout swipeRefreshLayout;
+    LinearLayout nothingToShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medical_prescription);
         init();
@@ -90,9 +97,11 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
+        nothingToShow = (LinearLayout) findViewById(R.id.nothingToShow);
 
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
+        progressBar = new Custom_ProgressBar(this);
 
         btn_add = (FloatingActionButton) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
@@ -106,8 +115,8 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
     void fetchData() {
         medicalPrescriptions = new ArrayList<>();
         try {
-            progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_MEDICAL_PRESCRIPTION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -139,14 +148,17 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                progressDialog.dismiss();
+                            }
+                            finally {
+                                progressBar.hide();
+                                NothingToShow.showNothingToShow(medicalPrescriptions, recyclerView_Content, nothingToShow);
                             }
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    progressDialog.dismiss();
+                    progressBar.hide();
                 }
             }) {
                 @Override
@@ -163,7 +175,7 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            progressDialog.dismiss();
+            progressBar.hide();
         }
     }
 
@@ -179,7 +191,6 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
         recyclerViewAdapter_Content = new RecyclerViewAdapter_MedicalPrescription(medicalPrescriptions);
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
-        progressDialog.dismiss();
     }
 
 
@@ -223,7 +234,7 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
     void deleteData(final Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick) {
         progressDialog.show("Deleting...");
         try {
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_MEDICAL_PRESCRIPTION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -237,8 +248,10 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
+                                NothingToShow.showNothingToShow(medicalPrescriptions, recyclerView_Content, nothingToShow);
                             }
-                            progressDialog.dismiss();
                         }
                     },
                     new Response.ErrorListener() {

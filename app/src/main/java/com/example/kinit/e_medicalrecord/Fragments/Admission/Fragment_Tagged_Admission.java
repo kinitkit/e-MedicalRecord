@@ -89,7 +89,7 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
         try {
             taggedPhysicianLists = new ArrayList<>();
             progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

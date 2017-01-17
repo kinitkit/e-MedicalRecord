@@ -12,6 +12,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Dru
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_LongClick;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Open_Add_Drug;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.*;
@@ -69,6 +71,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
     com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription medicalPrescription;
     Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick;
     Custom_ProgressDialog progressDialog;
+    Custom_ProgressBar progressBar;
 
     //App
     Custom_AlertDialog alertDialog;
@@ -81,12 +84,14 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_medical_prescription_form);
         init();
     }
 
     void init() {
         progressDialog = new Custom_ProgressDialog(this);
+        progressBar = new Custom_ProgressBar(this);
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -232,7 +237,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
     void sendData(final String physicianName, final String clinicName) {
         progressDialog.show("Saving...");
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_MEDICAL_PRESCRIPTION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -340,28 +345,13 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
 
     void fetchDrugList() {
         try {
-            progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_MEDICAL_PRESCRIPTION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("error", response);
                             try {
-                                /*JSONArray rootJsonArray = new JSONArray(response);
-                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if (jsonObject.has("code")) {
-                                    if (jsonObject.getString("code").equals("successful")) {
-                                        JSONArray jsonArray = rootJsonArray.getJSONArray(1);
-                                        int jsonArrayLength = rootJsonArray.getJSONArray(1).length();
-                                        busDrugs = new ArrayList<>();
-                                        for (int x = 0; x < jsonArrayLength; x++) {
-                                            jsonObject = jsonArray.getJSONObject(x);
-                                            busDrugs.add(new Bus_Drug(jsonObject));
-                                        }
-                                        loadToRecyclerView();
-                                        setUpdate();
-                                    }
-                                }*/
                                 JSONArray rootJsonArray = new JSONArray(response), jsonArray;
                                 JSONObject jsonObject;
                                 if (rootJsonArray.get(0) instanceof JSONObject) {
@@ -395,14 +385,14 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                progressBar.hide();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            progressDialog.dismiss();
+                            progressBar.hide();
                         }
                     }) {
                 @Override
@@ -416,7 +406,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
-            progressDialog.dismiss();
+            progressBar.hide();
             e.printStackTrace();
         }
     }

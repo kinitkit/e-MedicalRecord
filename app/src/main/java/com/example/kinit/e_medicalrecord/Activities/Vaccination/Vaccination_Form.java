@@ -1,6 +1,7 @@
 package com.example.kinit.e_medicalrecord.Activities.Vaccination;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,10 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -20,11 +24,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
-import com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccine;
+import com.example.kinit.e_medicalrecord.Classes.Vaccination.*;
+import com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccination;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.Request.UrlString;
@@ -47,9 +53,12 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
     Intent intent;
     Patient patient;
     Viewer viewer;
+    com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccination vaccination, newVaccination;
     SimpleDateFormat simpleDateFormat;
+
     Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
+    Custom_ProgressBar progressBar;
 
     //Widgets
     Spinner spinner_vaccine;
@@ -62,7 +71,13 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         setContentView(R.layout.activity_vaccination_form);
+
+        progressBar = new Custom_ProgressBar(this);
+        progressBar.show();
+
         init();
     }
 
@@ -70,6 +85,10 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
         intent = getIntent();
         patient = intent.getExtras().getParcelable("patient");
         viewer = intent.getExtras().getParcelable("viewer");
+        if (intent.hasExtra("vaccination")) {
+            vaccination = intent.getExtras().getParcelable("vaccination");
+        }
+
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
 
@@ -101,11 +120,23 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
             }
         });
         setCalendar(calendar);
+
+        if (vaccination != null) {
+            fetchData();
+        }
     }
 
     void setCalendar(Calendar calendar) {
         simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
         et_date.setText(simpleDateFormat.format(calendar.getTime()));
+    }
+
+    void setText(){
+        spinner_vaccine.setSelection(arrayAdapter.getPosition(newVaccination.vaccine.item));
+        et_provider.setText(newVaccination.providerName);
+        et_place.setText(newVaccination.placeTaken);
+        calendar = (Calendar) newVaccination.calendar.clone();
+        setCalendar(calendar);
     }
 
     boolean validateEditText(EditText editText, String text) {
@@ -130,7 +161,7 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
     void saveData(final String strProvider, final String strPlace) {
         try {
             progressDialog.show("Saving...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_VACCINATION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -142,7 +173,11 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
                                     String code = jsonObject.getString("code");
                                     switch (code) {
                                         case "success":
-                                            Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
+                                            if(vaccination == null) {
+                                                Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), R.string.record_updated, Toast.LENGTH_SHORT).show();
+                                            }
                                             intent = new Intent();
                                             intent.putExtra("result", true);
                                             setResult(RESULT_OK, intent);
@@ -177,17 +212,22 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "insertVaccinationHistory");
+                    if(vaccination != null){
+                        params.put("action", "updateVaccinationHistory");
+                        params.put("id", String.valueOf(newVaccination.id));
+                    } else {
+                        params.put("action", "insertVaccinationHistory");
+                        if (viewer != null) {
+                            params.put("user_data_id", String.valueOf(viewer.user_id));
+                            params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
+                        } else {
+                            params.put("user_data_id", String.valueOf(patient.user_data_id));
+                            params.put("medical_staff_id", "0");
+                        }
+                    }
                     params.put("device", "mobile");
                     params.put("patient_id", String.valueOf(patient.id));
-                    if (viewer != null) {
-                        params.put("user_data_id", String.valueOf(viewer.user_id));
-                        params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
-                    } else {
-                        params.put("user_data_id", String.valueOf(patient.user_data_id));
-                        params.put("medical_staff_id", "0");
-                    }
-                    params.put("vaccination_id", String.valueOf(vaccines.get(spinner_vaccine.getSelectedItemPosition()).vaccineId));
+                    params.put("vaccine_id", String.valueOf(vaccines.get(spinner_vaccine.getSelectedItemPosition()).vaccineId));
                     params.put("provider_name", strProvider);
                     params.put("date_taken", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
                     params.put("place_taken", strPlace);
@@ -206,8 +246,7 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
         try {
             vaccines = new ArrayList<>();
             spinnerArray = new ArrayList<>();
-            progressDialog.show("Loading vaccines...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_VACCINATION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -231,7 +270,9 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                if(vaccination == null) {
+                                    progressBar.hide();
+                                }
                             }
                         }
                     },
@@ -253,6 +294,60 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             progressDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+
+    void fetchData() {
+        try {
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_VACCINATION,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
+                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                if (jsonObject.has("code")) {
+                                    String code = jsonObject.getString("code");
+                                    switch (code){
+                                        case "success":
+                                            jsonArray = rootJsonArray.getJSONArray(1);
+                                            newVaccination = new Vaccination(jsonArray.getJSONObject(0));
+                                            setText();
+                                            break;
+                                        case "empty":
+                                        case "error":
+                                            break;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                progressBar.hide();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    }
+            ) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "getVaccination");
+                    params.put("device", "mobile");
+                    params.put("id", String.valueOf(vaccination.id));
+
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            progressBar.hide();
             e.printStackTrace();
         }
     }

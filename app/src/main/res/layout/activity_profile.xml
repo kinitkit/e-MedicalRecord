@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -17,7 +16,6 @@
         android:background="@color/colorBackground" />
 
     <ImageView
-        android:id="@+id/expanded_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#D8000000"

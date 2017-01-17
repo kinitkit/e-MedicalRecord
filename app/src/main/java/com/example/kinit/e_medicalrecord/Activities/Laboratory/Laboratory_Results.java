@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -24,7 +26,9 @@ import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_Laboratory_OnClick;
 import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_Laboratory_OnLongClick;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
+import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Chemistry;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Fecalysis;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Hematology;
@@ -55,6 +59,8 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
     Patient patient;
     Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
+    Custom_ProgressBar progressBar;
+    LinearLayout nothingToShow;
     Laboratory_Tests laboratoryTests;
 
     //Widgets
@@ -69,6 +75,7 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_laboratory_results);
         init();
     }
@@ -91,6 +98,8 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
 
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
+        progressBar = new Custom_ProgressBar(this);
+        nothingToShow = (LinearLayout) findViewById(R.id.nothingToShow);
 
         btn_add = (FloatingActionButton) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
@@ -104,8 +113,8 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
     void fetchData() {
         laboratories = new ArrayList<>();
         try {
-            progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_LABORATORY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -137,14 +146,16 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                progressDialog.dismiss();
+                            } finally {
+                                progressBar.hide();
+                                NothingToShow.showNothingToShow(laboratories, recyclerView_Content, nothingToShow);
                             }
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    progressDialog.dismiss();
+                    progressBar.hide();
                 }
             }) {
                 @Override
@@ -162,29 +173,31 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            progressDialog.dismiss();
+            progressBar.hide();
         }
     }
 
     void deleteData(final Bus_Laboratory_OnLongClick busLaboratoryOnLongClick) {
         progressDialog.show("Deleting...");
         try {
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_LABORATORY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("error", response);
-                            try{
+                            try {
                                 JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if(jsonObject.getString("code").equals("successful")){
+                                if (jsonObject.getString("code").equals("successful")) {
                                     laboratories.remove(busLaboratoryOnLongClick.position);
                                     recyclerViewAdapter_Content.notifyItemRemoved(busLaboratoryOnLongClick.position);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
+                                NothingToShow.showNothingToShow(laboratories, recyclerView_Content, nothingToShow);
                             }
-                            progressDialog.dismiss();
                         }
                     },
                     new Response.ErrorListener() {
@@ -300,14 +313,14 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
         startActivityForResult(intent, 1);
     }
 
-    void setActivityUpdate(Bus_Laboratory_OnLongClick busLaboratoryOnLongClick){
+    void setActivityUpdate(Bus_Laboratory_OnLongClick busLaboratoryOnLongClick) {
         intent.putExtra("patient", patient);
         intent.putExtra("viewer", viewer);
         intent.putExtra("laboratory", busLaboratoryOnLongClick.laboratory);
         startActivityForResult(intent, 1);
     }
 
-    void updateItem(Bus_Laboratory_OnLongClick busLaboratoryOnLongClick){
+    void updateItem(Bus_Laboratory_OnLongClick busLaboratoryOnLongClick) {
         switch (laboratoryTests) {
             case BLOOD_CHEMISTRY:
                 intent = new Intent(this, Lab_Chemistry_Form.class);
@@ -340,8 +353,8 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
 
     @Subscribe
     public void onLongClickItem(Bus_Laboratory_OnLongClick busLaboratoryOnLongClick) {
-        if(viewer != null) {
-            if(busLaboratoryOnLongClick.laboratory.user_data_id == viewer.user_id) {
+        if (viewer != null) {
+            if (busLaboratoryOnLongClick.laboratory.user_data_id == viewer.user_id) {
                 action_AlertDialog(busLaboratoryOnLongClick);
             }
         } else {

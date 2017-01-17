@@ -1,13 +1,27 @@
 package com.example.kinit.e_medicalrecord.Classes.Vaccination;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Vaccination {
+public class Vaccination implements Parcelable {
 
+    public static final Parcelable.Creator<Vaccination> CREATOR = new Parcelable.Creator<Vaccination>() {
+        @Override
+        public Vaccination createFromParcel(Parcel source) {
+            return new Vaccination(source);
+        }
+
+        @Override
+        public Vaccination[] newArray(int size) {
+            return new Vaccination[size];
+        }
+    };
     public int id, patientId, userDataId;
     public String providerName, strDateTaken, strNextSchedule, placeTaken;
     public boolean status;
@@ -25,13 +39,29 @@ public class Vaccination {
             status = jsonObject.getString("status").equals("1");
             vaccine = new Vaccine(jsonObject);
             if (vaccine.vaccineScheduleId != 0) {
-                nxtSchedule = calendar;
-                nxtSchedule.add(Calendar.YEAR, vaccine.frequency);
+                nxtSchedule = (Calendar)calendar.clone();
+                nxtSchedule.add(Calendar.YEAR, vaccine.frequency_year);
+                nxtSchedule.add(Calendar.MONTH, vaccine.frequency_month);
+                nxtSchedule.add(Calendar.DAY_OF_MONTH, vaccine.frequency_day);
                 strNextSchedule = new SimpleDateFormat("MMM dd, yyyy").format(nxtSchedule.getTime());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    protected Vaccination(Parcel in) {
+        this.id = in.readInt();
+        this.patientId = in.readInt();
+        this.userDataId = in.readInt();
+        this.providerName = in.readString();
+        this.strDateTaken = in.readString();
+        this.strNextSchedule = in.readString();
+        this.placeTaken = in.readString();
+        this.status = in.readByte() != 0;
+        this.calendar = (Calendar) in.readSerializable();
+        this.nxtSchedule = (Calendar) in.readSerializable();
+        this.vaccine = in.readParcelable(Vaccine.class.getClassLoader());
     }
 
     void setDate(String date) {
@@ -43,5 +73,25 @@ public class Vaccination {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.patientId);
+        dest.writeInt(this.userDataId);
+        dest.writeString(this.providerName);
+        dest.writeString(this.strDateTaken);
+        dest.writeString(this.strNextSchedule);
+        dest.writeString(this.placeTaken);
+        dest.writeByte(this.status ? (byte) 1 : (byte) 0);
+        dest.writeSerializable(this.calendar);
+        dest.writeSerializable(this.nxtSchedule);
+        dest.writeParcelable(this.vaccine, flags);
     }
 }

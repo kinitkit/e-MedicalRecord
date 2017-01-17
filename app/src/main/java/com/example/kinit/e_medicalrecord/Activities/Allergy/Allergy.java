@@ -101,7 +101,7 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
         progressDialog.show("Loading...");
         try {
 
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ALLERGY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -181,7 +181,7 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
     void deleteData(final Bus_Allergy busAllergy) {
         progressDialog.show("Deleting...");
         try {
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ALLERGY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

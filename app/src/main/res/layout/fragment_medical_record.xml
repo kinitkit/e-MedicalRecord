@@ -6,7 +6,6 @@
     android:clickable="true">
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBackground">
@@ -220,7 +219,6 @@
                 card_view:cardCornerRadius="0dp">
 
                 <LinearLayout
-                    android:id="@+id/layout_allergy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

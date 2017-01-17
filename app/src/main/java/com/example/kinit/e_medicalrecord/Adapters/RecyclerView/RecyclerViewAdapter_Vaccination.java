@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Vaccination.Bus_Vaccination_OnLongClick;
 import com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccination;
 import com.example.kinit.e_medicalrecord.Classes.Vaccination.Vaccine;
 import com.example.kinit.e_medicalrecord.R;
@@ -39,6 +41,7 @@ public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<Recycl
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Vaccination vaccination = vaccinations.get(position);
+        holder.vaccination = vaccination;
         holder.tv_date.setText(vaccination.strDateTaken);
         holder.tv_vaccine.setText(vaccination.vaccine.item);
         holder.tv_provider.setText(vaccination.providerName);
@@ -56,10 +59,11 @@ public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<Recycl
         return vaccinations.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         TextView tv_date, tv_vaccine, tv_provider, tv_place, tv_nextSchedule;
         LinearLayout linear_layoutNextSchedule;
         CardView cardView;
+        Vaccination vaccination;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -75,7 +79,8 @@ public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<Recycl
 
         @Override
         public boolean onLongClick(View v) {
-            return false;
+            BusStation.getBus().post(new Bus_Vaccination_OnLongClick(getAdapterPosition(), vaccination));
+            return true;
         }
     }
 

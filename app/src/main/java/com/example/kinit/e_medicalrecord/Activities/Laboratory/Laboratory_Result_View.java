@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -19,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_LaboratoryFields;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Chemistry;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Fecalysis;
@@ -54,12 +56,14 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
     Lab_Urinalysis labUrinalysis;
     Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
+    Custom_ProgressBar progressBar;
     FloatingActionButton btn_tagged;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         intent = getIntent();
         enum_laboratoryTests = Laboratory_Tests.values()[intent.getIntExtra("ordinal", 0)];
         switch (enum_laboratoryTests) {
@@ -90,6 +94,7 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
 
         alertDialog = new Custom_AlertDialog(this);
         progressDialog = new Custom_ProgressDialog(this);
+        progressBar = new Custom_ProgressBar(this);
 
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -109,8 +114,8 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
 
     void fetchData(final String tableName, final int id) {
         try {
-            progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_LABORATORY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -145,14 +150,14 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                progressBar.hide();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            progressDialog.dismiss();
+                            progressBar.hide();
                             error.printStackTrace();
                         }
                     }) {
@@ -168,7 +173,7 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
-            progressDialog.dismiss();
+            progressBar.hide();
             e.printStackTrace();
         }
     }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,7 +20,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Tagged_MedPrescription;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Remove_Physician;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
+import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
@@ -55,6 +58,8 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
 
     //App
     Custom_ProgressDialog progressDialog;
+    Custom_ProgressBar progressBar;
+    LinearLayout nothingToShow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,9 +76,12 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
 
     void init() {
         progressDialog = new Custom_ProgressDialog(getActivity());
+        progressBar = new Custom_ProgressBar(getActivity());
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        nothingToShow = (LinearLayout) rootView.findViewById(R.id.nothingToShow);
+
         fetchData();
     }
 
@@ -82,7 +90,6 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
         recyclerViewLayoutM_Content = new LinearLayoutManager(getActivity());
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
-        progressDialog.dismiss();
     }
 
     public void setLab_id(int lab_id){
@@ -92,8 +99,8 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
     void fetchData() {
         try {
             taggedPhysicianLists = new ArrayList<>();
-            progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_LABORATORY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -114,7 +121,8 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                progressBar.hide();
+                                NothingToShow.showNothingToShow(taggedPhysicianLists, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
@@ -122,7 +130,7 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             error.printStackTrace();
-                            progressDialog.dismiss();
+                            progressBar.hide();
                         }
                     }
             ) {
@@ -138,14 +146,14 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            progressDialog.dismiss();
+            progressBar.hide();
         }
     }
 
     void removePhysician(final int id) {
         try {
             progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_LABORATORY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -157,6 +165,7 @@ public class Fragment_Tagged_Laboratory extends Fragment implements SwipeRefresh
                                 e.printStackTrace();
                             } finally {
                                 progressDialog.dismiss();
+                                NothingToShow.showNothingToShow(taggedPhysicianLists, recyclerView_Content, nothingToShow);
                             }
                         }
                     },

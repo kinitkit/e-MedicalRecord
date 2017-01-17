@@ -97,7 +97,7 @@ public class Login extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_USER_INFORMATION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

@@ -100,7 +100,7 @@ public class Allergy_Form extends AppCompatActivity implements View.OnClickListe
     void sendData(final String strAllergicFrom, final String strReaction, final String strTreatment) {
         try {
             progressDialog.show("Saving...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ALLERGY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

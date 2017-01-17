@@ -145,9 +145,8 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
 
     void sendData(final String strPhysicianName, final String strHospital, final String strAdmittingIpmression, final String strProcedures, final String strFuturePlan, final String strFinalDiagnosis) {
         try {
-            Log.d("error", new SimpleDateFormat("yyyy-MM-dd").format(calendarAdmitted.getTime()) +" "+ new SimpleDateFormat("yyyy-MM-dd").format(calendarDischarged.getTime()));
             progressDialog.show("Saving...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -206,16 +205,16 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
                         params.put("id", String.valueOf(admission.id));
                     } else {
                         params.put("action", "insertAdmission");
+                        if (viewer != null) {
+                            params.put("user_data_id", String.valueOf(viewer.user_id));
+                            params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
+                        } else {
+                            params.put("user_data_id", String.valueOf(patient.user_data_id));
+                            params.put("medical_staff_id", "0");
+                        }
                     }
                     params.put("device", "mobile");
                     params.put("patient_id", String.valueOf(patient.id));
-                    if (viewer != null) {
-                        params.put("user_data_id", String.valueOf(viewer.user_id));
-                        params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
-                    } else {
-                        params.put("user_data_id", String.valueOf(patient.user_data_id));
-                        params.put("medical_staff_id", "0");
-                    }
                     params.put("physician_name", strPhysicianName);
                     params.put("hospital", strHospital);
                     params.put("date_admitted", new SimpleDateFormat("yyyy-MM-dd").format(calendarAdmitted.getTime()));
@@ -246,7 +245,7 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
     void fetchData() {
         try {
             progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -21,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Drug_List;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Medical_Prescription_Click;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.*;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription;
@@ -45,8 +47,8 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
     Viewer viewer;
     Bus_Medical_Prescription_Click busMedicalPrescriptionClick;
     Drug_List[] drugLists;
-    Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
+    Custom_ProgressBar progressBar;
     com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription medicalPrescription;
 
     //Widgets
@@ -64,6 +66,7 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_medical_prescription_view);
         init();
     }
@@ -82,8 +85,8 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        progressDialog = new Custom_ProgressDialog(this);
-        progressDialog.show("Loading...");
+        progressBar = new Custom_ProgressBar(this);
+
         intent = getIntent();
         patient = intent.getExtras().getParcelable("patient");
         viewer = intent.getExtras().getParcelable("viewer");
@@ -108,7 +111,8 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
 
     void fetchData() {
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_MEDICAL_PRESCRIPTION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -146,13 +150,15 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressBar.hide();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            progressBar.hide();
                         }
                     }) {
                 @Override
@@ -167,6 +173,7 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            progressBar.hide();
         }
     }
 
@@ -184,7 +191,6 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
         tv_date.setText(medicalPrescription.date);
         getSupportActionBar().setTitle("Medical Prescription");
         getSupportActionBar().setSubtitle(patient.name);
-        progressDialog.dismiss();
     }
 
     @Override

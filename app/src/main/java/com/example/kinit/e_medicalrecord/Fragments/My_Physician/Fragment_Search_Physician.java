@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -20,7 +21,9 @@ import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapt
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Add_Physician;
 import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Search_Physician;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
+import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.Classes.My_Physician.Physician_List;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.Exception.Codes;
@@ -52,12 +55,15 @@ public class Fragment_Search_Physician extends Fragment {
 
     //App
     Custom_ProgressDialog progressDialog;
+    Custom_ProgressBar progressBar;
+    LinearLayout nothingToShow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search_physician, container, false);
         recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        nothingToShow = (LinearLayout) rootView.findViewById(R.id.nothingToShow);
 
         return rootView;
     }
@@ -66,6 +72,7 @@ public class Fragment_Search_Physician extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         progressDialog = new Custom_ProgressDialog(getActivity());
+        progressBar = new Custom_ProgressBar(getActivity());
     }
 
     void loadToRecyclerView() {
@@ -77,9 +84,9 @@ public class Fragment_Search_Physician extends Fragment {
 
     void fetchData() {
         physicianLists = new ArrayList<>();
-        progressDialog.show("Loading...");
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_MY_PHYSICIAN,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -102,14 +109,15 @@ public class Fragment_Search_Physician extends Fragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                progressBar.hide();
+                                NothingToShow.showNothingToShow(physicianLists, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            progressDialog.dismiss();
+                            progressBar.hide();
                         }
                     }) {
                 @Override
@@ -126,14 +134,14 @@ public class Fragment_Search_Physician extends Fragment {
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            progressDialog.dismiss();
+            progressBar.hide();
         }
     }
 
     void addPhysician(final int medicalStaffId) {
         progressDialog.show("Loading...");
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_MY_PHYSICIAN,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -147,17 +155,15 @@ public class Fragment_Search_Physician extends Fragment {
                                     }
                                 } else if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("success")) {
-                                        // Log.d("error", String.valueOf(physicianLists.size()));
                                         recyclerViewAdapter_Content.removeItem(position);
-                                        //physicianLists.remove(position);
-                                        Log.d("error", String.valueOf(physicianLists.size()));
-                                        Toast.makeText(getActivity(), String.valueOf(physicianLists.size())/*"Physician added"*/, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "Physician added", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
                                 progressDialog.dismiss();
+                                NothingToShow.showNothingToShow(physicianLists, recyclerView_Content, nothingToShow);
                             }
                         }
                     },

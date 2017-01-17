@@ -10,13 +10,11 @@ import android.widget.TextView;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_Laboratory_OnClick;
 import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_Laboratory_OnLongClick;
-import com.example.kinit.e_medicalrecord.BusStation.Laboratory.Bus_View_Lab_Test;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Chemistry;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Fecalysis;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Hematology;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Lab_Urinalysis;
 import com.example.kinit.e_medicalrecord.Classes.Laboratory.Laboratory;
-import com.example.kinit.e_medicalrecord.Enum.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.R;
 
 import java.util.ArrayList;

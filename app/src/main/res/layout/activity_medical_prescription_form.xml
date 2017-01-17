@@ -9,149 +9,163 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_with_backbtn" />
 
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorBackground"
-            tools:context="com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription_Form">
+        <include layout="@layout/progress_bar" />
 
-            <LinearLayout
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:background="@color/colorBackground"
+                tools:context="com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription_Form">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                            android:textColorHint="@color/colorPrimaryDark"
-                            android:textSize="17sp">
-
-                            <android.support.design.widget.TextInputEditText
-                                android:id="@+id/et_physicianName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/name_of_physician"
-                                android:inputType="text"
-                                android:paddingTop="@dimen/dp_3"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/colorTextPrimary"
-                                android:textSize="17sp" />
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                            android:textColorHint="@color/colorPrimaryDark"
-                            android:textSize="17sp">
-
-                            <android.support.design.widget.TextInputEditText
-                                android:id="@+id/et_clinic"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/clinic_name"
-                                android:inputType="text"
-                                android:paddingTop="@dimen/dp_3"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/colorTextPrimary"
-                                android:textSize="17sp" />
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                            android:textColorHint="@color/colorPrimaryDark"
-                            android:textSize="17sp">
-
-                            <android.support.design.widget.TextInputEditText
-                                android:id="@+id/et_prescriptionDate"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:clickable="true"
-                                android:focusable="false"
-                                android:hint="@string/date_of_prescription"
-                                android:paddingTop="3dp"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/colorTextPrimary"
-                                android:textColorHint="@color/colorTextPrimary"
-                                android:textSize="@dimen/sp_17" />
-                        </android.support.design.widget.TextInputLayout>
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/dp_10">
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/dp_5"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:paddingTop="@dimen/dp_5">
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColorHint="@color/colorPrimaryDark"
+                                android:textSize="17sp">
+
+                                <android.support.design.widget.TextInputEditText
+                                    android:id="@+id/et_physicianName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/name_of_physician"
+                                    android:inputType="text"
+                                    android:paddingTop="@dimen/dp_3"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="17sp" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColorHint="@color/colorPrimaryDark"
+                                android:textSize="17sp">
+
+                                <android.support.design.widget.TextInputEditText
+                                    android:id="@+id/et_clinic"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/clinic_name"
+                                    android:inputType="text"
+                                    android:paddingTop="@dimen/dp_3"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="17sp" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColorHint="@color/colorPrimaryDark"
+                                android:textSize="17sp">
+
+                                <android.support.design.widget.TextInputEditText
+                                    android:id="@+id/et_prescriptionDate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="false"
+                                    android:hint="@string/date_of_prescription"
+                                    android:paddingTop="3dp"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textColorHint="@color/colorTextPrimary"
+                                    android:textSize="@dimen/sp_17" />
+                            </android.support.design.widget.TextInputLayout>
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_marginTop="@dimen/dp_10">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/drugs_list"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                            android:textColor="@color/colorPrimaryDark" />
-
-                        <RelativeLayout
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/dp_10">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                            <android.support.v7.widget.AppCompatButton
-                                android:id="@+id/btn_add"
+                            <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="26dp"
-                                android:layout_centerInParent="true"
-                                android:background="@color/colorAccent"
-                                android:text="@string/add_drug"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                                android:textColor="#ffffff" />
-                        </RelativeLayout>
+                                android:layout_height="wrap_content"
+                                android:text="@string/drugs_list"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColor="@color/colorPrimaryDark" />
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </LinearLayout>
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/dp_10">
 
-                </android.support.v7.widget.CardView>
+                                <android.support.v7.widget.AppCompatButton
+                                    android:id="@+id/btn_add"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="26dp"
+                                    android:layout_centerInParent="true"
+                                    android:background="@color/colorAccent"
+                                    android:text="@string/add_drug"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                                    android:textColor="#ffffff" />
+                            </RelativeLayout>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_save"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:background="@color/colorAccent"
-                    android:padding="12dp"
-                    android:text="@string/save"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:textColor="#ffffff" />
-            </LinearLayout>
-        </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recyclerView"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_save"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:background="@color/colorAccent"
+                        android:padding="12dp"
+                        android:text="@string/save"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
 
 </RelativeLayout>
 

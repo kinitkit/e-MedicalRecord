@@ -146,7 +146,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
     void sendData(final String strFname, final String strMname, final String strLname, final String strContactNo, final String strGender) {
         try {
             progressDialog.show("Saving...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_SETTINGS,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -301,7 +301,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
         void makeRequest() {
             Toast.makeText(getApplicationContext(), "Uploading image...", Toast.LENGTH_SHORT).show();
             try {
-                StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL,
+                StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_SETTINGS,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -313,7 +313,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                                         String code = jsonObject.getString("code");
                                         if (code.equals("success") || code.equals("empty")) {
                                             Toast.makeText(getApplicationContext(), "Image uploaded successfully.", Toast.LENGTH_SHORT).show();
-                                            iv_profilePic.setImageBitmap(bitmap);
+                                            //iv_profilePic.setImageBitmap(bitmap);
                                         }
                                     } else if (jsonObject.has("exception")) {
                                         alertDialog.show("Error", jsonObject.getString("exception"));

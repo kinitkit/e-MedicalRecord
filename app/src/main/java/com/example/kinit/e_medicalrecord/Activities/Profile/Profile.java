@@ -47,7 +47,6 @@ import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
 import com.example.kinit.e_medicalrecord.Fragments.Profile.Fragment_Search;
 import com.example.kinit.e_medicalrecord.Fragments.Profile.Fragment_Profile;
-import com.example.kinit.e_medicalrecord.Interfaces.Profile_Communicator;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.Request.UrlString;
@@ -147,7 +146,7 @@ public class Profile extends AppCompatActivity {
     void getUserData() {
         progressDialog.show("Loading...");
         try {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_USER_INFORMATION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -272,11 +271,12 @@ public class Profile extends AppCompatActivity {
                 }
             });
 
-            SearchView searchView = (SearchView) searchItem.getActionView();
+            final SearchView searchView = (SearchView) searchItem.getActionView();
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     BusStation.getBus().post(new Bus_Search_Item(query, user.user_data_id, mode));
+                    searchView.clearFocus();
                     return false;
                 }
 
@@ -386,29 +386,4 @@ public class Profile extends AppCompatActivity {
         intent.putExtra("viewer_ordinal", mode.ordinal());
         startActivity(intent);
     }
-
-    /*private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }*/
 }
