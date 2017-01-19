@@ -63,7 +63,6 @@ public class Fragment_Search_Physician extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search_physician, container, false);
         recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        nothingToShow = (LinearLayout) rootView.findViewById(R.id.nothingToShow);
 
         return rootView;
     }
@@ -71,6 +70,7 @@ public class Fragment_Search_Physician extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        nothingToShow = (LinearLayout) rootView.findViewById(R.id.nothingToShow);
         progressDialog = new Custom_ProgressDialog(getActivity());
         progressBar = new Custom_ProgressBar(getActivity());
     }

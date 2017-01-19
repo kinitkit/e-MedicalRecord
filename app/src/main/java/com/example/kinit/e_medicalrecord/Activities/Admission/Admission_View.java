@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Classes.Admission.Admission;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
@@ -38,8 +39,8 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
     Patient patient;
     Viewer viewer;
     Admission admission;
-    Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
+    Custom_ProgressBar progressBar;
 
     TextView tv_physicianName, tv_hospital, tv_dateAdmission, tv_dateDischarged, tv_admittingImpression,
             tv_procedures, tv_futurePlan, tv_finalDiagnosis;
@@ -54,7 +55,6 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
 
     void init() {
         alertDialog = new Custom_AlertDialog(this);
-        alertDialog.builder.setNegativeButton(null, null);
         alertDialog.builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -62,7 +62,8 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        progressDialog = new Custom_ProgressDialog(this);
+        progressBar = new Custom_ProgressBar(this);
+
         intent = getIntent();
         patient = intent.getExtras().getParcelable("patient");
         viewer = intent.getExtras().getParcelable("viewer");
@@ -93,6 +94,7 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
 
     void fetchData() {
         try {
+            progressBar.show();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
@@ -115,13 +117,15 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressBar.hide();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            progressBar.hide();
                         }
                     }) {
                 @Override
@@ -135,6 +139,7 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
+            progressBar.hide();
             e.printStackTrace();
         }
     }

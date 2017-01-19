@@ -73,7 +73,6 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
 
     void init() {
         alertDialog = new Custom_AlertDialog(this);
-        alertDialog.builder.setNegativeButton(null, null);
         alertDialog.builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

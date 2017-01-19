@@ -1,18 +1,10 @@
 package com.example.kinit.e_medicalrecord.Activities.Profile;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -24,8 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.DecelerateInterpolator;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,7 +29,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Activities.Login;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Bus_Mode;
-import com.example.kinit.e_medicalrecord.BusStation.Profile.Bus_Image_Click;
 import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item;
 import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item_OnClick;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
@@ -55,7 +45,6 @@ import com.squareup.otto.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,12 +71,10 @@ public class Profile extends AppCompatActivity {
     User user;
     Mode mode;
 
-    private Animator mCurrentAnimator;
-    private int mShortAnimationDuration;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_profile);
         progressDialog = new Custom_ProgressDialog(this);
         initIntent();
@@ -95,7 +82,6 @@ public class Profile extends AppCompatActivity {
     }
 
     public void initIntent() {
-        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         user = new User();
 
         //Intent

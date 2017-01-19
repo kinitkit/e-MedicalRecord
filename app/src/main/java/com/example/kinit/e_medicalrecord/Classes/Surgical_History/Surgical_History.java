@@ -1,84 +1,73 @@
 package com.example.kinit.e_medicalrecord.Classes.Surgical_History;
 
-import android.util.Log;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-public class Surgical_History {
-    String[] month = { "", "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "August", "September", "October", "November", "December"};
+public class Surgical_History implements Parcelable {
+    public static final Parcelable.Creator<Surgical_History> CREATOR = new Parcelable.Creator<Surgical_History>() {
+        @Override
+        public Surgical_History createFromParcel(Parcel source) {
+            return new Surgical_History(source);
+        }
 
-    List<String> surgicalAttachName;
-    List<String> surgicalTitle;
-    List<String> surgicalDate;
-    List<Integer> surgicalId;
-    List<Calendar> calendars;
+        @Override
+        public Surgical_History[] newArray(int size) {
+            return new Surgical_History[size];
+        }
+    };
+    public int id, patientId, userDataId;
+    public String surgeryTitle, strDatePerformed;
+    public Calendar datePerformed;
 
-    public Surgical_History() {
-        surgicalTitle = new ArrayList<>();
-        surgicalDate = new ArrayList<>();
-        surgicalId = new ArrayList<>();
-        surgicalAttachName = new ArrayList<>();
-        calendars = new ArrayList<>();
-    }
-
-    public void setSurgicalTitleItem(String surgicalTitle) {
-        this.surgicalTitle.add(surgicalTitle);
-    }
-
-    public String getSurgicalTitleItem(int position) {
-        return surgicalTitle.get(position);
-    }
-
-    public void setSurgicalDateItem(String surgicalDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
+    public Surgical_History(JSONObject jsonObject) {
         try {
-            calendar.setTime(simpleDateFormat.parse(surgicalDate));
+            id = jsonObject.getInt("id");
+            patientId = jsonObject.getInt("patient_id");
+            userDataId = jsonObject.getInt("user_data_id");
+            surgeryTitle = jsonObject.getString("surgery_title");
+            setDate(jsonObject.getString("date_performed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected Surgical_History(Parcel in) {
+        this.id = in.readInt();
+        this.patientId = in.readInt();
+        this.userDataId = in.readInt();
+        this.surgeryTitle = in.readString();
+        this.strDatePerformed = in.readString();
+        this.datePerformed = (Calendar) in.readSerializable();
+    }
+
+    void setDate(String date) {
+        try {
+            datePerformed = Calendar.getInstance();
+            datePerformed.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date));
+            this.strDatePerformed = new SimpleDateFormat("MMM dd, yyyy").format(datePerformed.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        calendars.add(calendar);
-        Log.d("error", calendar.getTime().toString());
-        this.surgicalDate.add(simpleDateFormat.format(calendar.getTime()));
     }
 
-    public String getSurgicalDateItem(int position) {
-        return surgicalDate.get(position);
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setSurgicalIdItem(int surgicalId) {
-        this.surgicalId.add(surgicalId);
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.patientId);
+        dest.writeInt(this.userDataId);
+        dest.writeString(this.surgeryTitle);
+        dest.writeString(this.strDatePerformed);
+        dest.writeSerializable(this.datePerformed);
     }
-
-    public int getSurgicalIdItem(int position) {
-        return surgicalId.get(position);
-    }
-
-    public void setSurgicalAttachName(String fName, String mName, String lName) {
-        surgicalAttachName.add(fName + " " + mName + " " + lName);
-    }
-
-    public String getSurgicalAttachName(int position) {
-        return surgicalAttachName.get(position);
-    }
-
-    public Calendar getCalendar(int position){
-        return calendars.get(position);
-    }
-
-    public int getSize() {
-        return surgicalTitle.size();
-    }
-
-    public void removeItem(int position) {
-        surgicalId.remove(position);
-        surgicalTitle.remove(position);
-        surgicalDate.remove(position);
-    }
-
 }

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -20,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Tagged_MedPrescription;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Remove_Physician;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
@@ -60,6 +62,7 @@ public class Fragment_Tagged_Medical_Prescription extends Fragment implements Sw
     SwipeRefreshLayout swipeRefreshLayout;
 
     //App
+    Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
     Custom_ProgressBar progressBar;
     LinearLayout nothingToShow;
@@ -78,6 +81,7 @@ public class Fragment_Tagged_Medical_Prescription extends Fragment implements Sw
     }
 
     void init() {
+        alertDialog = new Custom_AlertDialog(getActivity());
         progressDialog = new Custom_ProgressDialog(getActivity());
         progressBar = new Custom_ProgressBar(getActivity());
 
@@ -151,14 +155,28 @@ public class Fragment_Tagged_Medical_Prescription extends Fragment implements Sw
     void removePhysician(final int id) {
         try {
             progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_MEDICAL_PRESCRIPTION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            //Log.d("error", response);
+                            Log.d("error", response);
                             try {
-                                taggedPhysicianLists.remove(position);
-                                recyclerViewAdapter_Content.notifyItemRemoved(position);
+                                JSONArray rootJsonArray = new JSONArray(response);
+                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                if (jsonObject.has("code")) {
+                                    String code = jsonObject.getString("code");
+                                    switch (code) {
+                                        case "success":
+                                            taggedPhysicianLists.remove(position);
+                                            recyclerViewAdapter_Content.notifyItemRemoved(position);
+                                            break;
+                                        case "failed":
+                                            alertDialog.show("Error", getString(R.string.error_occured));
+                                            break;
+                                    }
+                                } else if (jsonObject.has("exception")) {
+                                    alertDialog.show("Error", jsonObject.getString("exception"));
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {

@@ -215,6 +215,7 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
                                         deleteData(busMedicalPrescriptionLongClick);
                                     }
                                 });
+                        alertDialog.builder.setNegativeButton("Cancel", null);
                         alertDialog.show("Delete", "This item will be permanently deleted.");
                         break;
                 }

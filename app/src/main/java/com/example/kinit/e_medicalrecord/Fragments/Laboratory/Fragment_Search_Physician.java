@@ -63,7 +63,7 @@ public class Fragment_Search_Physician extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView =  inflater.inflate(R.layout.fragment_search_physician_laboratory, container, false);
+        rootView = inflater.inflate(R.layout.fragment_search_physician_laboratory, container, false);
         recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         nothingToShow = (LinearLayout) rootView.findViewById(R.id.nothingToShow);
         return rootView;
@@ -111,7 +111,8 @@ public class Fragment_Search_Physician extends Fragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressBar.show();
+                                progressBar.hide();
+                                NothingToShow.showNothingToShow(taggedPhysicianLists, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
@@ -119,7 +120,6 @@ public class Fragment_Search_Physician extends Fragment {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             progressBar.hide();
-                            NothingToShow.showNothingToShow(taggedPhysicianLists, recyclerView_Content, nothingToShow);
                         }
                     }) {
                 @Override

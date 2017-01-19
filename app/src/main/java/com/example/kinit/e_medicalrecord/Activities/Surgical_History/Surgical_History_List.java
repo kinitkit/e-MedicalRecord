@@ -1,4 +1,4 @@
-package com.example.kinit.e_medicalrecord.Activities.Admission;
+package com.example.kinit.e_medicalrecord.Activities.Surgical_History;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,15 +20,14 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Admission;
-import com.example.kinit.e_medicalrecord.BusStation.Admission.Bus_Admission_OnLongClick;
+import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Surgery;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.Admission.Bus_Admission_OnClick;
-import com.example.kinit.e_medicalrecord.Classes.Admission.Admission;
+import com.example.kinit.e_medicalrecord.BusStation.Surgical_History.Bus_SurgicalHistory_OnLongClick;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
+import com.example.kinit.e_medicalrecord.Classes.Surgical_History.Surgical_History;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.R;
@@ -43,19 +42,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Admission_List extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class Surgical_History_List extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     Intent intent;
     //Classes
     Viewer viewer;
     Patient patient;
-    Custom_ProgressDialog progressDialog;
+    ArrayList<Surgical_History> surgicalHistories;
+
     Custom_AlertDialog alertDialog;
+    Custom_ProgressDialog progressDialog;
     Custom_ProgressBar progressBar;
-    ArrayList<Admission> admissions;
 
     //Widgets
-    LinearLayout nothingToShow;
     //RecyclerView
     RecyclerView recyclerView_Content;
     RecyclerView.Adapter recyclerViewAdapter_Content;
@@ -63,12 +62,13 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
     //FAB
     FloatingActionButton btn_add;
     SwipeRefreshLayout swipeRefreshLayout;
+    LinearLayout nothingToShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_admission_list);
+        setContentView(R.layout.activity_surgical_history_list);
         init();
     }
 
@@ -80,9 +80,11 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Admission List");
+        getSupportActionBar().setTitle("Past Medical History");
         getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        nothingToShow = (LinearLayout) findViewById(R.id.nothingToShow);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -90,7 +92,6 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
         progressBar = new Custom_ProgressBar(this);
-        nothingToShow = (LinearLayout) findViewById(R.id.nothingToShow);
 
         btn_add = (FloatingActionButton) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
@@ -101,79 +102,6 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
         fetchData();
     }
 
-    void fetchData() {
-        admissions = new ArrayList<>();
-        try {
-            progressBar.show();
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ADMISSION,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("error", response);
-                            try {
-                                boolean isButtonViewable = true;
-                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
-                                JSONObject jsonObject;
-                                if (rootJsonArray.get(0) instanceof JSONArray) {
-                                    jsonArray = rootJsonArray.getJSONArray(0);
-                                    jsonObject = jsonArray.getJSONObject(0);
-                                    if (jsonObject.has("isMyPhysician")) {
-                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
-                                    }
-                                    jsonObject = rootJsonArray.getJSONObject(1);
-                                    if (jsonObject.getString("code").equals("success")) {
-                                        jsonArray = rootJsonArray.getJSONArray(2);
-                                        int jsonArrayLength = jsonArray.length();
-                                        for (int x = 0; x < jsonArrayLength; x++) {
-                                            jsonObject = jsonArray.getJSONObject(x);
-                                            admissions.add(new Admission(jsonObject));
-                                        }
-                                        loadToRecyclerView();
-                                        btn_initializer(isButtonViewable);
-                                    } else if (jsonObject.getString("code").equals("empty")) {
-                                        loadToRecyclerView();
-                                        btn_initializer(isButtonViewable);
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                progressBar.hide();
-                                NothingToShow.showNothingToShow(admissions, recyclerView_Content, nothingToShow);
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    progressBar.hide();
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("action", "getAdmissions");
-                    params.put("device", "mobile");
-                    params.put("patient_id", String.valueOf(patient.id));
-                    params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
-                    params.put("user_data_id", String.valueOf((viewer != null) ? viewer.user_id : patient.user_data_id));
-                    return params;
-                }
-            };
-            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
-            progressBar.hide();
-        }
-    }
-
-    void loadToRecyclerView() {
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_Admission(admissions);
-        recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
-        recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
-        progressDialog.dismiss();
-    }
-
     void btn_initializer(boolean isButtonViewable) {
         if (isButtonViewable) {
             btn_add.setVisibility(View.VISIBLE);
@@ -182,7 +110,78 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
         }
     }
 
-    void action_AlertDialog(final Bus_Admission_OnLongClick busAdmissionOnLongClick) {
+    void loadToRecyclerView() {
+        recyclerViewAdapter_Content = new RecyclerViewAdapter_Surgery(surgicalHistories);
+        recyclerViewLayoutM_Content = new LinearLayoutManager(this);
+        recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
+        recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
+    }
+
+    void fetchData() {
+        try {
+            surgicalHistories = new ArrayList<>();
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_SURGICAL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                boolean isButtonViewable = true;
+                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
+                                JSONObject jsonObject;
+                                int jsonArrayLength;
+                                if (rootJsonArray.get(0) instanceof JSONArray) {
+                                    jsonArray = rootJsonArray.getJSONArray(0);
+                                    jsonObject = jsonArray.getJSONObject(0);
+                                    if (jsonObject.has("isMyPhysician")) {
+                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
+                                    }
+                                    if (rootJsonArray.get(1) instanceof JSONArray) {
+                                        jsonArray = rootJsonArray.getJSONArray(1);
+                                        jsonArrayLength = jsonArray.length();
+                                        for (int x = 0; x < jsonArrayLength; x++) {
+                                            jsonObject = jsonArray.getJSONObject(x);
+                                            surgicalHistories.add(new Surgical_History(jsonObject));
+                                        }
+                                    }
+                                }
+                                loadToRecyclerView();
+                                btn_initializer(isButtonViewable);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                progressBar.hide();
+                                NothingToShow.showNothingToShow(surgicalHistories, recyclerView_Content, nothingToShow);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            progressBar.hide();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "getSurgicalHistories");
+                    params.put("device", "mobile");
+                    params.put("patient_id", String.valueOf(patient.id));
+                    params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
+
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            progressBar.hide();
+            e.printStackTrace();
+        }
+    }
+
+    void action_AlertDialog(final Bus_SurgicalHistory_OnLongClick busSurgicalHistoryOnLongClick) {
         final CharSequence actions[] = {"Edit", "Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
@@ -192,14 +191,14 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        setActivityUpdate(busAdmissionOnLongClick);
+                        setActivityUpdate(busSurgicalHistoryOnLongClick);
                         break;
                     case 1:
                         alertDialog.builder.setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        deleteData(busAdmissionOnLongClick);
+                                        deleteData(busSurgicalHistoryOnLongClick);
                                     }
                                 });
                         alertDialog.builder.setNegativeButton("Cancel", null);
@@ -211,18 +210,10 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
         builder.show();
     }
 
-    void setActivityUpdate(Bus_Admission_OnLongClick busAdmissionOnLongClick) {
-        intent = new Intent(this, Admission_Form.class);
-        intent.putExtra("patient", patient);
-        intent.putExtra("viewer", viewer);
-        intent.putExtra("admission", busAdmissionOnLongClick.admission);
-        startActivityForResult(intent, 1);
-    }
-
-    void deleteData(final Bus_Admission_OnLongClick busAdmissionOnLongClick) {
+    void deleteData(final Bus_SurgicalHistory_OnLongClick busSurgicalHistoryOnLongClick) {
         progressDialog.show("Deleting...");
         try {
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ADMISSION,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_SURGICAL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -231,16 +222,16 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
                                 JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
-                                    if (jsonObject.getString("code").equals("successful")) {
-                                        admissions.remove(busAdmissionOnLongClick.position);
-                                        recyclerViewAdapter_Content.notifyItemRemoved(busAdmissionOnLongClick.position);
+                                    if (jsonObject.getString("code").equals("success")) {
+                                        surgicalHistories.remove(busSurgicalHistoryOnLongClick.position);
+                                        recyclerViewAdapter_Content.notifyItemRemoved(busSurgicalHistoryOnLongClick.position);
                                     }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
                                 progressDialog.dismiss();
-                                NothingToShow.showNothingToShow(admissions, recyclerView_Content, nothingToShow);
+                                NothingToShow.showNothingToShow(surgicalHistories, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
@@ -253,9 +244,9 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "deleteAdmission");
+                    params.put("action", "deleteSurgicalHistory");
                     params.put("device", "mobile");
-                    params.put("id", String.valueOf(busAdmissionOnLongClick.admission.id));
+                    params.put("id", String.valueOf(busSurgicalHistoryOnLongClick.surgicalHistory.id));
                     return params;
                 }
             };
@@ -266,23 +257,34 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
         }
     }
 
-    @Subscribe
-    public void onClickItem(Bus_Admission_OnClick busAdmissionOnClick) {
-        intent = new Intent(this, Admission_View.class);
+    void setActivityUpdate(Bus_SurgicalHistory_OnLongClick busSurgicalHistoryOnLongClick) {
+        intent = new Intent(this, Surgical_History_Form.class);
         intent.putExtra("patient", patient);
         intent.putExtra("viewer", viewer);
-        intent.putExtra("admission", busAdmissionOnClick.admission);
-        startActivity(intent);
+        intent.putExtra("surgicalHistory", busSurgicalHistoryOnLongClick.surgicalHistory);
+        startActivityForResult(intent, 1);
     }
 
     @Subscribe
-    public void onLongClickItem(Bus_Admission_OnLongClick busAdmissionOnLongClick) {
+    public void onLongClickItem(Bus_SurgicalHistory_OnLongClick busSurgicalHistoryOnLongClick) {
         if (viewer != null) {
-            if (busAdmissionOnLongClick.admission.userDataId == viewer.user_id) {
-                action_AlertDialog(busAdmissionOnLongClick);
+            if (busSurgicalHistoryOnLongClick.surgicalHistory.userDataId == viewer.user_id) {
+                action_AlertDialog(busSurgicalHistoryOnLongClick);
             }
         } else {
-            action_AlertDialog(busAdmissionOnLongClick);
+            action_AlertDialog(busSurgicalHistoryOnLongClick);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_add:
+                intent = new Intent(this, Surgical_History_Form.class);
+                intent.putExtra("patient", patient);
+                intent.putExtra("viewer", viewer);
+                startActivityForResult(intent, 1);
+                break;
         }
     }
 
@@ -292,18 +294,6 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
             swipeRefreshLayout.setRefreshing(false);
         }
         fetchData();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_add:
-                intent = new Intent(this, Admission_Form.class);
-                intent.putExtra("patient", patient);
-                intent.putExtra("viewer", viewer);
-                startActivityForResult(intent, 1);
-                break;
-        }
     }
 
     @Override

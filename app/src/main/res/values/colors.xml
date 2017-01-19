@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Login-->
-    <color name="colorBackground">#f7fcfc</color>
+    <color name="colorBackground">#e0e9e9</color>
 
     <color name="colorRemove">#F44336</color>
     <color name="colorPrimary">#009688</color>

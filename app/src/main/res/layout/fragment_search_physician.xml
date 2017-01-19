@@ -5,16 +5,24 @@
     android:clickable="true"
     tools:context="com.example.kinit.e_medicalrecord.Fragments.My_Physician.Fragment_Search_Physician">
 
-    <include
-        layout="@layout/recyclerview_row_layout_nothing_to_show"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <include layout="@layout/progress_bar" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
-        android:visibility="gone"/>
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/recyclerview_row_layout_nothing_to_show"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBackground" />
+    </LinearLayout>
 
 </FrameLayout>

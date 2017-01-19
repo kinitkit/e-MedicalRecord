@@ -278,6 +278,7 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
                                         deleteData(busLaboratoryOnLongClick);
                                     }
                                 });
+                        alertDialog.builder.setNegativeButton("Cancel", null);
                         alertDialog.show("Delete", "This item will be permanently deleted.");
                         break;
                 }

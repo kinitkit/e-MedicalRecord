@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Classes.Admission.Admission;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.DatePickerFragment;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
@@ -48,6 +50,7 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
     SimpleDateFormat simpleDateFormat;
     Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
+    Custom_ProgressBar progressBar;
     //Widgets
     EditText et_physicianName, et_hospital, et_dateAdmitted, et_dateDischarged, et_admittingIpmression, et_procedures,
             et_futurePlan, et_finalDiagnosis;
@@ -57,6 +60,7 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_admission);
         init();
     }
@@ -71,6 +75,7 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
 
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
+        progressBar = new Custom_ProgressBar(this);
 
         et_physicianName = (EditText) findViewById(R.id.et_physicianName);
         et_hospital = (EditText) findViewById(R.id.et_hospital);
@@ -244,7 +249,7 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
 
     void fetchData() {
         try {
-            progressDialog.show("Loading...");
+            progressBar.show();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
@@ -268,14 +273,14 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                progressBar.hide();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            progressDialog.dismiss();
+                            progressBar.hide();
                         }
                     }) {
                 @Override
@@ -289,7 +294,7 @@ public class Admission_Form extends AppCompatActivity implements View.OnClickLis
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
-            progressDialog.dismiss();
+            progressBar.hide();
             e.printStackTrace();
         }
     }

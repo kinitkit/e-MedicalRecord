@@ -8,19 +8,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Surgical_History.Bus_SurgicalHistory_OnLongClick;
 import com.example.kinit.e_medicalrecord.BusStation.Surgical_History.Bus_Surgical_History_Item;
 import com.example.kinit.e_medicalrecord.Classes.Surgical_History.Surgical_History;
 import com.example.kinit.e_medicalrecord.Enum.Medical_Transaction;
 import com.example.kinit.e_medicalrecord.R;
 
+import java.util.ArrayList;
+
 public class RecyclerViewAdapter_Surgery extends RecyclerView.Adapter<RecyclerViewAdapter_Surgery.ViewHolder> {
-    Surgical_History surgical_history;
-    int patient_id;
+    ArrayList<Surgical_History> surgicalHistories;
 
     //Constructor
-    public RecyclerViewAdapter_Surgery(Surgical_History surgical_history, int patient_id) {
-        this.patient_id = patient_id;
-        this.surgical_history = surgical_history;
+    public RecyclerViewAdapter_Surgery(ArrayList<Surgical_History> surgicalHistories) {
+        this.surgicalHistories = surgicalHistories;
     }
 
     @Override
@@ -30,42 +31,35 @@ public class RecyclerViewAdapter_Surgery extends RecyclerView.Adapter<RecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.tv_surgeryTitle.setText(surgical_history.getSurgicalTitleItem(position));
-        holder.tv_surgeryDate.setText(String.valueOf(surgical_history.getSurgicalDateItem(position)));
-        holder.cardView_surgicalHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BusStation.getBus().post(new Bus_Surgical_History_Item(Medical_Transaction.UPDATE_SURGICAL_HISTORY, surgical_history.getSurgicalTitleItem(position), surgical_history.getCalendar(position).getTime().toString(),
-                        surgical_history.getSurgicalIdItem(position), surgical_history.getSurgicalAttachName(position)));
-            }
-        });
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Surgical_History surgicalHistory = surgicalHistories.get(position);
+        holder.surgicalHistory = surgicalHistory;
+        holder.tv_surgeryDate.setText(surgicalHistory.strDatePerformed);
+        holder.tv_surgeryTitle.setText(surgicalHistory.surgeryTitle);
     }
 
     @Override
     public int getItemCount() {
-        return surgical_history.getSize();
+        return surgicalHistories.size();
     }
 
-    public void remove(int position, boolean isRemove) {
-        if(isRemove){
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, getItemCount());
-            notifyDataSetChanged();
-        } else {
-            notifyItemChanged(position);
-        }
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+         Surgical_History surgicalHistory;
         CardView cardView_surgicalHistory;
         TextView tv_surgeryDate, tv_surgeryTitle;
 
         public ViewHolder(View view) {
             super(view);
             cardView_surgicalHistory = (CardView) view.findViewById(R.id.cardView_surgicalHistory);
+            cardView_surgicalHistory.setOnLongClickListener(this);
             tv_surgeryDate = (TextView) view.findViewById(R.id.tv_surgeryDate);
             tv_surgeryTitle = (TextView) view.findViewById(R.id.tv_surgeryTitle);
         }
-    }
+
+         @Override
+         public boolean onLongClick(View v) {
+             BusStation.getBus().post(new Bus_SurgicalHistory_OnLongClick(getAdapterPosition(), surgicalHistory));
+             return true;
+         }
+     }
 }

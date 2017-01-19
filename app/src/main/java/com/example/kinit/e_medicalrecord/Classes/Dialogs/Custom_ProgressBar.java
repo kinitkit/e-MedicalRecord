@@ -1,6 +1,7 @@
 package com.example.kinit.e_medicalrecord.Classes.Dialogs;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 

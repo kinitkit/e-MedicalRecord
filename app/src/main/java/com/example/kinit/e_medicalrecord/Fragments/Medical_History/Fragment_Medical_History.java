@@ -14,7 +14,10 @@ import com.example.kinit.e_medicalrecord.Activities.Allergy.Allergy;
 import com.example.kinit.e_medicalrecord.Activities.Laboratory.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Activities.My_Physician.My_Physician;
+import com.example.kinit.e_medicalrecord.Activities.Past_Medical_History.Past_Medical_History_List;
+import com.example.kinit.e_medicalrecord.Activities.Surgical_History.Surgical_History_List;
 import com.example.kinit.e_medicalrecord.Activities.Vaccination.Vaccination;
+import com.example.kinit.e_medicalrecord.Classes.Surgical_History.Surgical_History;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.User;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
@@ -96,7 +99,8 @@ public class Fragment_Medical_History extends Fragment {
         tv_pastMedicalHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newActivityInitializer(Medical_Transaction.PAST_MEDICAL_HISTORY.ordinal());
+                myIntent = new Intent(getActivity(), Past_Medical_History_List.class);
+                putExtra();
             }
         });
         tv_socialHistory.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +112,8 @@ public class Fragment_Medical_History extends Fragment {
         tv_surgicalHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newActivityInitializer(Medical_Transaction.SURGICAL_HISTORY.ordinal());
+                myIntent = new Intent(getActivity(), Surgical_History_List.class);
+                putExtra();
             }
         });
         tv_allergy.setOnClickListener(new View.OnClickListener() {

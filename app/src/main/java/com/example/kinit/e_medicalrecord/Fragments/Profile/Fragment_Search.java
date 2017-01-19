@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -18,7 +19,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Search;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
+import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.Classes.Search.Search_Item;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
 import com.example.kinit.e_medicalrecord.R;
@@ -43,6 +46,8 @@ public class Fragment_Search extends Fragment {
     Search_Item search_item;
     Mode mode;
     Custom_ProgressDialog progressDialog;
+    Custom_ProgressBar progressBar;
+    LinearLayout nothingToShow;
 
     //Widgets
     RecyclerView recyclerView_Content;
@@ -65,6 +70,9 @@ public class Fragment_Search extends Fragment {
 
     void init() {
         progressDialog = new Custom_ProgressDialog(getActivity());
+        progressBar = new Custom_ProgressBar(getActivity());
+        nothingToShow = (LinearLayout) rootView.findViewById(R.id.nothingToShow);
+
         search_item = new Search_Item();
     }
 
@@ -76,8 +84,9 @@ public class Fragment_Search extends Fragment {
     }
 
     void fetchData() {
-        progressDialog.show("Loading...");
+        search_item = new Search_Item();
         try {
+            progressBar.show();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_SEARCH,
                     new Response.Listener<String>() {
                         @Override
@@ -111,14 +120,15 @@ public class Fragment_Search extends Fragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                progressBar.hide();
+                                NothingToShow.showNothingToShow(search_item.user_id, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            progressDialog.dismiss();
+                            progressBar.hide();
                         }
                     }) {
                 @Override
@@ -135,7 +145,7 @@ public class Fragment_Search extends Fragment {
 
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
-            progressDialog.dismiss();
+            progressBar.hide();
             e.printStackTrace();
         }
     }

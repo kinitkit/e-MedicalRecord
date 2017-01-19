@@ -18,7 +18,6 @@ public class Laboratory_Tests extends AppCompatActivity implements View.OnClickL
     //Classes
     Viewer viewer;
     Patient patient;
-    com.example.kinit.e_medicalrecord.Enum.Laboratory_Tests laboratoryTests;
 
     //Widgets
     TextView tv_chemistry, tv_fecalysis, tv_hematology, tv_urinalysis;

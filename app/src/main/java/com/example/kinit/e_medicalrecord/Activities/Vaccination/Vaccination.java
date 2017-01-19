@@ -192,8 +192,8 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    void deleteData(final Bus_Vaccination_OnLongClick busVaccinationOnLongClick){
-        try{
+    void deleteData(final Bus_Vaccination_OnLongClick busVaccinationOnLongClick) {
+        try {
             StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_VACCINATION,
                     new Response.Listener<String>() {
                         @Override
@@ -232,7 +232,7 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
                 }
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
-        } catch (Exception e){
+        } catch (Exception e) {
             progressDialog.dismiss();
             e.printStackTrace();
         }
@@ -242,7 +242,6 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
         recyclerViewAdapter_Content = new RecyclerViewAdapter_Vaccination(vaccines, vaccinations, age);
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
-        progressDialog.dismiss();
     }
 
     void setNotification() {
@@ -280,6 +279,7 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
                                         deleteData(busVaccinationOnLongClick);
                                     }
                                 });
+                        alertDialog.builder.setNegativeButton("Cancel", null);
                         alertDialog.show("Delete", "This item will be permanently deleted.");
                         break;
                 }
@@ -309,7 +309,7 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
     }
 
     @Subscribe
-    public void onLongClickItem(Bus_Vaccination_OnLongClick busVaccinationOnLongClick){
+    public void onLongClickItem(Bus_Vaccination_OnLongClick busVaccinationOnLongClick) {
         action_AlertDialog(busVaccinationOnLongClick);
     }
 

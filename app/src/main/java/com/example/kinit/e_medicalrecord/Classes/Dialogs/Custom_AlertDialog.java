@@ -12,7 +12,6 @@ public class Custom_AlertDialog {
     public Custom_AlertDialog(Context context) {
         builder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle);
         setPositiveButton();
-        setNegativeButton();
     }
 
     public void show(String title, String msg) {

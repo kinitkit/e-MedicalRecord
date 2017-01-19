@@ -11,226 +11,235 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_with_backbtn" />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize">
+        android:layout_marginTop="?actionBarSize"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <include layout="@layout/progress_bar" />
+
+        <ScrollView
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/cardView"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="0dp">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/dp_5"
-                    android:paddingLeft="@dimen/dp_10"
-                    android:paddingRight="@dimen/dp_10"
-                    android:paddingTop="@dimen/dp_5">
+                    app:cardCornerRadius="0dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="Admission Summary"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/dp_5"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingRight="@dimen/dp_10"
+                        android:paddingTop="@dimen/dp_5">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColorHint="@color/colorPrimaryDark"
-                        android:textSize="17sp">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_physicianName"
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/name_of_physician"
-                            android:inputType="text|textCapSentences"
-                            android:maxLength="50"
-                            android:paddingTop="@dimen/dp_3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginBottom="10dp"
+                            android:text="Admission Summary"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColor="@color/colorPrimaryDark" />
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColorHint="@color/colorPrimaryDark"
-                        android:textSize="17sp">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_hospital"
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Hospital"
-                            android:inputType="text|textCapSentences"
-                            android:maxLength="100"
-                            android:paddingTop="@dimen/dp_3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark"
+                            android:textSize="17sp">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColorHint="@color/colorPrimaryDark"
-                        android:textSize="17sp">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_physicianName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/name_of_physician"
+                                android:inputType="text|textCapSentences"
+                                android:maxLength="50"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
 
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_dateAdmitted"
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:focusable="false"
-                            android:hint="Date Admitted"
-                            android:inputType="text"
-                            android:paddingTop="@dimen/dp_3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark"
+                            android:textSize="17sp">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColorHint="@color/colorPrimaryDark"
-                        android:textSize="17sp">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_hospital"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Hospital"
+                                android:inputType="text|textCapSentences"
+                                android:maxLength="100"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
 
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_dateDischarged"
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:focusable="false"
-                            android:hint="Date Discharged"
-                            android:inputType="text"
-                            android:paddingTop="@dimen/dp_3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark"
+                            android:textSize="17sp">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColorHint="@color/colorPrimaryDark"
-                        android:textSize="17sp">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_dateAdmitted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:hint="Date Admitted"
+                                android:inputType="text"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
 
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_admittingIpmression"
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Admitting Impression"
-                            android:inputType="textMultiLine|textCapSentences"
-                            android:maxLength="100"
-                            android:maxLines="5"
-                            android:paddingTop="@dimen/dp_3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark"
+                            android:textSize="17sp">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColorHint="@color/colorPrimaryDark"
-                        android:textSize="17sp">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_dateDischarged"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="false"
+                                android:hint="Date Discharged"
+                                android:inputType="text"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
 
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_procedures"
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Procedures"
-                            android:inputType="textMultiLine|textCapSentences"
-                            android:maxLength="100"
-                            android:maxLines="5"
-                            android:paddingTop="@dimen/dp_3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark"
+                            android:textSize="17sp">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColorHint="@color/colorPrimaryDark"
-                        android:textSize="17sp">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_admittingIpmression"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Admitting Impression"
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:maxLength="100"
+                                android:maxLines="5"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
 
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_futurePlan"
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Future Plan"
-                            android:inputType="textMultiLine|textCapSentences"
-                            android:maxLength="100"
-                            android:maxLines="5"
-                            android:paddingTop="@dimen/dp_3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark"
+                            android:textSize="17sp">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColorHint="@color/colorPrimaryDark"
-                        android:textSize="17sp">
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_procedures"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Procedures"
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:maxLength="100"
+                                android:maxLines="5"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
 
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_finalDiagnosis"
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Final Diagnosis"
-                            android:inputType="textMultiLine|textCapSentences"
-                            android:maxLength="100"
-                            android:maxLines="5"
-                            android:paddingTop="@dimen/dp_3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="17sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark"
+                            android:textSize="17sp">
 
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_futurePlan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Future Plan"
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:maxLength="100"
+                                android:maxLines="5"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/cardView"
-                android:background="@color/colorAccent"
-                android:padding="12dp"
-                android:text="@string/save"
-                android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                android:textColor="#ffffff" />
-        </RelativeLayout>
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColorHint="@color/colorPrimaryDark"
+                            android:textSize="17sp">
 
-    </ScrollView>
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/et_finalDiagnosis"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Final Diagnosis"
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:maxLength="100"
+                                android:maxLines="5"
+                                android:paddingTop="@dimen/dp_3"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="17sp" />
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cardView"
+                    android:background="@color/colorAccent"
+                    android:padding="12dp"
+                    android:text="@string/save"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    android:textColor="#ffffff" />
+            </RelativeLayout>
+
+        </ScrollView>
+    </LinearLayout>
 </RelativeLayout>

@@ -6,12 +6,10 @@
     <string name="Search">Search</string>
     <string name="logout">Logout</string>
     <string name="save">Save</string>
-    <string name="surgery_title">Surgery Title</string>
     <string name="grandparent">Grandparent</string>
     <string name="parent">Parent</string>
     <string name="sibling">Sibling</string>
     <string name="child">Child</string>
-    <string name="Year">Year</string>
     <string name="Currently_Use">Currently Use</string>
     <string name="Previously_Used">Previously Used</string>
     <string name="Frequency">Frequency</string>
@@ -34,7 +32,6 @@
     <string name="refill">Refill</string>
     <string name="add">ADD</string>
     <string name="remarks">Remarks</string>
-    <string name="surgery_date">Surgery Date</string>
     <string name="name_of_physician">Name of Physician</string>
     <string name="date_of_prescription">Date of Prescription</string>
     <string name="dosage">Dosage</string>
@@ -47,6 +44,10 @@
     <string name="tag">Tag</string>
     <string name="settings">Settings</string>
     <string name="required_field">This field is required.</string>
+    <string name="medical_condition">Medical Condition</string>
+    <string name="date">Date</string>
+    <string name="surgery">Surgery</string>
+    <string name="date_performed">Date Performed</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>

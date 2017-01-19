@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -22,6 +24,7 @@ import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapt
 import com.example.kinit.e_medicalrecord.BusStation.Allergy.Bus_Allergy;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
@@ -44,9 +47,11 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
     Viewer viewer;
     Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
+    Custom_ProgressBar progressBar;
     ArrayList<com.example.kinit.e_medicalrecord.Classes.Allergy.Allergy> allergies;
 
     //Widgets
+    LinearLayout nothingToShow;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView_Content;
     RecyclerView.Adapter recyclerViewAdapter_Content;
@@ -58,6 +63,7 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_allergy);
         init();
     }
@@ -79,6 +85,8 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
 
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
+        progressBar = new Custom_ProgressBar(this);
+        nothingToShow = (LinearLayout) findViewById(R.id.nothingToShow);
 
         btn_add = (FloatingActionButton) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
@@ -98,41 +106,53 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
 
     void fetchData() {
         allergies = new ArrayList<>();
-        progressDialog.show("Loading...");
         try {
-
+            progressBar.show();
             StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ALLERGY,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("error", response);
                             try {
+                                boolean isButtonViewable = true;
                                 JSONArray rootJsonArray = new JSONArray(response), jsonArray;
-                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if (jsonObject.has("code")) {
-                                    if (jsonObject.getString("code").equals("successful")) {
-                                        jsonArray = rootJsonArray.getJSONArray(1);
-                                        int jsonArrayLength = jsonArray.length();
-                                        for (int x = 0; x < jsonArrayLength; x++) {
-                                            jsonObject = jsonArray.getJSONObject(x);
-                                            allergies.add(new com.example.kinit.e_medicalrecord.Classes.Allergy.Allergy(jsonObject));
+                                JSONObject jsonObject;
+                                if (rootJsonArray.get(0) instanceof JSONArray) {
+                                    jsonArray = rootJsonArray.getJSONArray(0);
+                                    jsonObject = jsonArray.getJSONObject(0);
+                                    if (jsonObject.has("isMyPhysician")) {
+                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
+                                    }
+                                    jsonObject = rootJsonArray.getJSONObject(1);
+                                    if (jsonObject.has("code")) {
+                                        if (jsonObject.getString("code").equals("successful")) {
+                                            jsonArray = rootJsonArray.getJSONArray(1);
+                                            int jsonArrayLength = jsonArray.length();
+                                            for (int x = 0; x < jsonArrayLength; x++) {
+                                                jsonObject = jsonArray.getJSONObject(x);
+                                                allergies.add(new com.example.kinit.e_medicalrecord.Classes.Allergy.Allergy(jsonObject));
+                                            }
+                                            loadToRecyclerView();
+                                            btn_initializer(isButtonViewable);
+                                        } else {
+                                            loadToRecyclerView();
+                                            btn_initializer(isButtonViewable);
                                         }
-                                        loadToRecyclerView();
-                                    } else {
-                                        loadToRecyclerView();
+                                    } else if(jsonObject.has("exception")) {
+                                        alertDialog.show("Error", jsonObject.getString("exception"));
                                     }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                progressBar.hide();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            progressBar.hide();
                         }
                     }) {
                 @Override
@@ -141,12 +161,13 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
                     params.put("action", "getAllergies");
                     params.put("device", "mobile");
                     params.put("patient_id", String.valueOf(patient.id));
+                    params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
                     return params;
                 }
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
-            e.printStackTrace();
+            progressBar.hide();
         }
     }
 
@@ -170,6 +191,7 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
                                         deleteData(busAllergy);
                                     }
                                 });
+                        alertDialog.builder.setNegativeButton("Cancel", null);
                         alertDialog.show("Delete", "This item will be permanently deleted.");
                         break;
                 }
@@ -235,6 +257,14 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
         intent.putExtra("viewer", viewer);
         intent.putExtra("allergy", busAllergy.allergy);
         startActivityForResult(intent, 1);
+    }
+
+    void btn_initializer(boolean isButtonViewable) {
+        if (isButtonViewable) {
+            btn_add.setVisibility(View.VISIBLE);
+        } else {
+            btn_add.setVisibility(View.GONE);
+        }
     }
 
     @Subscribe

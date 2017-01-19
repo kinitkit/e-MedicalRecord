@@ -55,7 +55,11 @@
         <activity android:name=".Activities.Profile.Settings_Patient_Information" />
         <activity android:name=".Activities.Profile.Settings_Password" />
         <activity android:name=".Activities.Vaccination.Vaccination_Form" />
-        <activity android:name=".Activities.Vaccination.Vaccination"></activity>
+        <activity android:name=".Activities.Vaccination.Vaccination" />
+        <activity android:name=".Activities.Past_Medical_History.Past_Medical_History_List" />
+        <activity android:name=".Activities.Past_Medical_History.Past_Medical_History_Form" />
+        <activity android:name=".Activities.Surgical_History.Surgical_History_List" />
+        <activity android:name=".Activities.Surgical_History.Surgical_History_Form"></activity>
     </application>
 
 </manifest>

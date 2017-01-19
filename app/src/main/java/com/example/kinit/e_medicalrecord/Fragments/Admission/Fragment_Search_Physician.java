@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -20,7 +21,9 @@ import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapt
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Add_Physician;
 import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Search_Tagged_MedicalPrescription;
+import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
+import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.Exception.Codes;
@@ -53,6 +56,8 @@ public class Fragment_Search_Physician extends Fragment {
 
     //App
     Custom_ProgressDialog progressDialog;
+    Custom_ProgressBar progressBar;
+    LinearLayout nothingToShow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,6 +71,8 @@ public class Fragment_Search_Physician extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         progressDialog = new Custom_ProgressDialog(getActivity());
+        progressBar = new Custom_ProgressBar(getActivity());
+        nothingToShow = (LinearLayout) rootView.findViewById(R.id.nothingToShow);
     }
 
     void loadToRecyclerView() {
@@ -77,8 +84,9 @@ public class Fragment_Search_Physician extends Fragment {
 
     void fetchData() {
         taggedPhysicianLists = new ArrayList<>();
-        progressDialog.show("Loading...");
+
         try {
+            progressBar.show();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
                     new Response.Listener<String>() {
                         @Override
@@ -102,14 +110,15 @@ public class Fragment_Search_Physician extends Fragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressDialog.dismiss();
+                                progressBar.hide();
+                                NothingToShow.showNothingToShow(taggedPhysicianLists, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            progressDialog.dismiss();
+                            progressBar.hide();
                         }
                     }) {
                 @Override
@@ -126,7 +135,7 @@ public class Fragment_Search_Physician extends Fragment {
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            progressDialog.dismiss();
+            progressBar.hide();
         }
     }
 
@@ -156,6 +165,7 @@ public class Fragment_Search_Physician extends Fragment {
                                 e.printStackTrace();
                             } finally {
                                 progressDialog.dismiss();
+                                NothingToShow.showNothingToShow(taggedPhysicianLists, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
