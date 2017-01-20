@@ -1,8 +1,6 @@
 package com.example.kinit.e_medicalrecord.Adapters.RecyclerView;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,45 +8,39 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.kinit.e_medicalrecord.Classes.Family_History.Family_History;
 import com.example.kinit.e_medicalrecord.R;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayList;
 
-public class Family_History_ExpandableListAdapter extends BaseExpandableListAdapter {
+public class ExpandableListViewAdapter_FamilyHistory extends BaseExpandableListAdapter {
+    ArrayList<Family_History> familyHistories;
+    Context context;
 
-    private Context context;
-    private List<String> listDataHeader;
-    private List<String> listDataChild;
-    private Boolean[] isChecked;
-
-    public Family_History_ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                                List<String> listChildData, Boolean[] isChecked) {
+    public ExpandableListViewAdapter_FamilyHistory(Context context, ArrayList<Family_History> familyHistories) {
+        this.familyHistories = familyHistories;
         this.context = context;
-        this.listDataHeader = listDataHeader;
-        this.listDataChild = listChildData;
-        this.isChecked = isChecked;
     }
 
-    //Group
     @Override
     public int getGroupCount() {
-        return this.listDataHeader.size();
+        return familyHistories.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this.listDataChild.size();
+
+        return 1;
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this.listDataHeader.get(groupPosition);
+        return familyHistories.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return this.listDataChild.get(childPosition);
+        return familyHistories.get(groupPosition);
     }
 
     @Override
@@ -68,14 +60,14 @@ public class Family_History_ExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
-
+        String headerTitle = familyHistories.get(groupPosition).medicalCondition;
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.family_history_group, null);
+            convertView = layoutInflater.inflate(R.layout.family_history_group, parent, false);
         }
         TextView tv_header = (TextView) convertView.findViewById(R.id.tv_familyHistory_header);
         tv_header.setText(headerTitle);
+
         return convertView;
     }
 
@@ -83,7 +75,7 @@ public class Family_History_ExpandableListAdapter extends BaseExpandableListAdap
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.family_history_list, null);
+            convertView = layoutInflater.inflate(R.layout.family_history_list, parent, false);
         }
 
         CheckBox cb_grandparent = (CheckBox) convertView.findViewById(R.id.cb_grandparent),
@@ -91,10 +83,10 @@ public class Family_History_ExpandableListAdapter extends BaseExpandableListAdap
                 cb_sibling = (CheckBox) convertView.findViewById(R.id.cb_sibling),
                 cb_child = (CheckBox) convertView.findViewById(R.id.cb_child);
 
-        cb_grandparent.setChecked(isChecked[groupPosition * 4]);
-        cb_parent.setChecked(isChecked[(groupPosition * 4) + 1]);
-        cb_sibling.setChecked(isChecked[(groupPosition * 4) + 2]);
-        cb_child.setChecked(isChecked[(groupPosition * 4) + 3]);
+        cb_grandparent.setChecked(familyHistories.get(groupPosition).grandP);
+        cb_parent.setChecked(familyHistories.get(groupPosition).parent);
+        cb_sibling.setChecked(familyHistories.get(groupPosition).sibling);
+        cb_child.setChecked(familyHistories.get(groupPosition).child);
 
         return convertView;
     }

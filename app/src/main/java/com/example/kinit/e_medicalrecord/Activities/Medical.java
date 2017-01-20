@@ -10,24 +10,17 @@ import android.view.MenuItem;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Family_History.Bus_Family_History_Item;
-import com.example.kinit.e_medicalrecord.BusStation.Past_Medical_History.Bus_Past_Medical_History_Item;
 import com.example.kinit.e_medicalrecord.BusStation.Social_History.Bus_Social_History_Item;
 import com.example.kinit.e_medicalrecord.BusStation.General.Bus_ToolbarTitle;
 import com.example.kinit.e_medicalrecord.BusStation.General.Pop_BackStack;
 import com.example.kinit.e_medicalrecord.BusStation.General.Bus_Resume_Fragment;
-import com.example.kinit.e_medicalrecord.BusStation.Surgical_History.Bus_Surgical_History_Item;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Medical_Transaction;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
-import com.example.kinit.e_medicalrecord.Enum.Query_Type;
 import com.example.kinit.e_medicalrecord.Fragments.Family_History.Fragment_Update_Family_History;
-import com.example.kinit.e_medicalrecord.Fragments.Past_Medical_History.Fragment_Update_Past_Medical_History;
 import com.example.kinit.e_medicalrecord.Fragments.Social_History.Fragment_Update_Social_History;
-import com.example.kinit.e_medicalrecord.Fragments.Surgery.Fragment_Update_Surgical_History;
 import com.example.kinit.e_medicalrecord.Fragments.Family_History.Fragment_Family_History;
-import com.example.kinit.e_medicalrecord.Fragments.Past_Medical_History.Fragment_Past_Medical_History;
 import com.example.kinit.e_medicalrecord.Fragments.Social_History.Fragment_Social_History;
-import com.example.kinit.e_medicalrecord.Fragments.Surgery.Fragment_Surgical_History;
 import com.example.kinit.e_medicalrecord.R;
 import com.squareup.otto.Subscribe;
 
@@ -94,17 +87,6 @@ public class Medical extends AppCompatActivity {
                 fragmentFamilyHistory.setArguments(args);
                 fragmentTransaction.add(R.id.frameLayout, fragmentFamilyHistory).commit();
                 break;
-            case SURGICAL_HISTORY:
-                Fragment_Surgical_History fragmentSurgicalHistory = new Fragment_Surgical_History();
-                fragmentSurgicalHistory.setArguments(args);
-                fragmentSurgicalHistory.setViewer(viewer);
-                fragmentTransaction.add(R.id.frameLayout, fragmentSurgicalHistory).commit();
-                break;
-            case PAST_MEDICAL_HISTORY:
-                Fragment_Past_Medical_History fragmentPastMedicalHistory = new Fragment_Past_Medical_History();
-                fragmentPastMedicalHistory.setArguments(args);
-                fragmentTransaction.add(R.id.frameLayout, fragmentPastMedicalHistory).commit();
-                break;
             case SOCIAL_HISTORY:
                 Fragment_Social_History fragmentSocialHistory = new Fragment_Social_History();
                 fragmentSocialHistory.setArguments(args);
@@ -169,33 +151,6 @@ public class Medical extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onClickSurgicalHistory(Bus_Surgical_History_Item surgicalHistoryItem) { //Executes when the user presses an item or the FAB
-        Bundle args = new Bundle();
-        args.putString("patient_name", patient_name);
-        switch (surgicalHistoryItem.getTransaction()) {
-            case UPDATE_SURGICAL_HISTORY:
-                args.putInt("ordinal", Query_Type.UPDATE.ordinal());
-                args.putInt("id", surgicalHistoryItem.getId());
-                args.putString("date", surgicalHistoryItem.getDate());
-                args.putString("title", surgicalHistoryItem.getTitle());
-                args.putString("attachName", surgicalHistoryItem.getAttachName());
-                break;
-            case INSERT_SURGICAL_HISTORY:
-                args.putInt("ordinal", Query_Type.INSERT.ordinal());
-                args.putInt("patient_id", surgicalHistoryItem.getPatient_id());
-                args.putInt("user_id", user_id);
-                break;
-        }
-        Fragment_Update_Surgical_History fragmentUpdateSurgicalHistory = new Fragment_Update_Surgical_History();
-        fragmentUpdateSurgicalHistory.setArguments(args);
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, fragmentUpdateSurgicalHistory);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-        fragmentUpdateSurgicalHistory.setViewer(viewer);
-    }
-
-    @Subscribe
     public void onClickFamilyHistory(Bus_Family_History_Item busFamilyHistoryItem) {
         Bundle args = new Bundle();
         args.putInt("patient_id", busFamilyHistoryItem.getPatient_id());
@@ -212,23 +167,6 @@ public class Medical extends AppCompatActivity {
         fragmentUpdateFamilyHistory.setArguments(args);
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.frameLayout, fragmentUpdateFamilyHistory);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    @Subscribe
-    public void onClickPastMedicalHistory(Bus_Past_Medical_History_Item busPastMedicalHistoryItem) {
-        Bundle args = new Bundle();
-        args.putString("medical_condition", busPastMedicalHistoryItem.getMedicalCondition());
-        args.putInt("year", busPastMedicalHistoryItem.getYear());
-        args.putBoolean("isMedicalHistory", busPastMedicalHistoryItem.isMedicalHistory());
-        args.putInt("patient_id", busPastMedicalHistoryItem.getPatient_id());
-        args.putString("column_name", busPastMedicalHistoryItem.getColumn_name());
-        args.putString("columnYr_name", busPastMedicalHistoryItem.getColumnYr_name());
-        Fragment_Update_Past_Medical_History fragmentUpdatePastMedicalHistory = new Fragment_Update_Past_Medical_History();
-        fragmentUpdatePastMedicalHistory.setArguments(args);
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, fragmentUpdatePastMedicalHistory);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
