@@ -1,4 +1,4 @@
-package com.example.kinit.e_medicalrecord.Activities.Family_History;
+package com.example.kinit.e_medicalrecord.Activities.Social_History;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,24 +14,20 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.ExpandableListViewAdapter_FamilyHistory;
-import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.Family_History_ExpandableListAdapter;
-import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_Family_History;
-import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_PastMedicalHistory;
+import com.example.kinit.e_medicalrecord.Adapters.RecyclerView.RecyclerViewAdapter_SocialHistory;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.BusStation.Family_History.Bus_FamilyHistory_OnLongClick;
+import com.example.kinit.e_medicalrecord.BusStation.Social_History.Bus_SocialHistory_OnLongClick;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
-import com.example.kinit.e_medicalrecord.Classes.Family_History.Family_History;
 import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
+import com.example.kinit.e_medicalrecord.Classes.Social_History.Social_History;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.R;
@@ -46,25 +42,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Family_History_List extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class Social_History_List extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     Intent intent;
     //Classes
     Viewer viewer;
     Patient patient;
-    ArrayList<Family_History> familyHistories;
+    ArrayList<Social_History> socialHistories;
 
     Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
     Custom_ProgressBar progressBar;
 
     //Widgets
-    ExpandableListViewAdapter_FamilyHistory expandableListAdapter;
-    ExpandableListView expandableListView;
     //RecyclerView
     RecyclerView recyclerView_Content;
     RecyclerView.Adapter recyclerViewAdapter_Content;
     RecyclerView.LayoutManager recyclerViewLayoutM_Content;
+    //FAB
     FloatingActionButton btn_add;
     SwipeRefreshLayout swipeRefreshLayout;
     LinearLayout nothingToShow;
@@ -73,7 +68,7 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_family_history_list);
+        setContentView(R.layout.activity_social_history_list);
         init();
     }
 
@@ -85,12 +80,11 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Family History");
+        getSupportActionBar().setTitle("Social History");
         getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         nothingToShow = (LinearLayout) findViewById(R.id.nothingToShow);
-        expandableListView = (ExpandableListView) findViewById(R.id.elv_familyHistory);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -116,22 +110,17 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
         }
     }
 
-    /*void loadToExpandableListView() {
-        expandableListAdapter = new ExpandableListViewAdapter_FamilyHistory(this, familyHistories);
-        expandableListView.setAdapter(expandableListAdapter);
-    }*/
-
     void loadToRecyclerView() {
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_Family_History(familyHistories);
+        recyclerViewAdapter_Content = new RecyclerViewAdapter_SocialHistory(socialHistories);
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
     }
 
     void fetchData() {
         try {
-            familyHistories = new ArrayList<>();
+            socialHistories = new ArrayList<>();
             progressBar.show();
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_FAMILY,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_SOCIAL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -152,18 +141,17 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
                                         jsonArrayLength = jsonArray.length();
                                         for (int x = 0; x < jsonArrayLength; x++) {
                                             jsonObject = jsonArray.getJSONObject(x);
-                                            familyHistories.add(new Family_History(jsonObject));
+                                            socialHistories.add(new Social_History(jsonObject));
                                         }
                                     }
                                 }
-                                //loadToExpandableListView();
                                 loadToRecyclerView();
                                 btn_initializer(isButtonViewable);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
                                 progressBar.hide();
-                                NothingToShow.showNothingToShow(familyHistories, recyclerView_Content, nothingToShow);
+                                NothingToShow.showNothingToShow(socialHistories, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
@@ -177,7 +165,7 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "getFamilyHistories");
+                    params.put("action", "getSocialHistories");
                     params.put("device", "mobile");
                     params.put("patient_id", String.valueOf(patient.id));
                     params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
@@ -192,7 +180,7 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
         }
     }
 
-    void action_AlertDialog(final Bus_FamilyHistory_OnLongClick busFamilyHistoryOnLongClick) {
+    void action_AlertDialog(final Bus_SocialHistory_OnLongClick busSocialHistoryOnLongClick) {
         final CharSequence actions[] = {"Edit", "Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
@@ -202,14 +190,14 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        setActivityUpdate(busFamilyHistoryOnLongClick);
+                        setActivityUpdate(busSocialHistoryOnLongClick);
                         break;
                     case 1:
                         alertDialog.builder.setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        deleteData(busFamilyHistoryOnLongClick);
+                                        deleteData(busSocialHistoryOnLongClick);
                                     }
                                 });
                         alertDialog.builder.setNegativeButton("Cancel", null);
@@ -221,10 +209,10 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
         builder.show();
     }
 
-    void deleteData(final Bus_FamilyHistory_OnLongClick busFamilyHistoryOnLongClick) {
+    void deleteData(final Bus_SocialHistory_OnLongClick busSocialHistoryOnLongClick) {
         progressDialog.show("Deleting...");
         try {
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_FAMILY,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_SOCIAL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -234,15 +222,15 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("success")) {
-                                        familyHistories.remove(busFamilyHistoryOnLongClick.position);
-                                        recyclerViewAdapter_Content.notifyItemRemoved(busFamilyHistoryOnLongClick.position);
+                                        socialHistories.remove(busSocialHistoryOnLongClick.position);
+                                        recyclerViewAdapter_Content.notifyItemRemoved(busSocialHistoryOnLongClick.position);
                                     }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
                                 progressDialog.dismiss();
-                                NothingToShow.showNothingToShow(familyHistories, recyclerView_Content, nothingToShow);
+                                NothingToShow.showNothingToShow(socialHistories, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
@@ -255,9 +243,9 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "deleteFamilyHistory");
+                    params.put("action", "deleteSocialHistory");
                     params.put("device", "mobile");
-                    params.put("id", String.valueOf(busFamilyHistoryOnLongClick.familyHistory.id));
+                    params.put("id", String.valueOf(busSocialHistoryOnLongClick.socialHistory.id));
                     return params;
                 }
             };
@@ -268,22 +256,22 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
         }
     }
 
-    void setActivityUpdate(Bus_FamilyHistory_OnLongClick busFamilyHistoryOnLongClick) {
-        intent = new Intent(this, Family_History_Form.class);
+    void setActivityUpdate(Bus_SocialHistory_OnLongClick busSocialHistoryOnLongClick) {
+        intent = new Intent(this, Social_History_Form.class);
         intent.putExtra("patient", patient);
         intent.putExtra("viewer", viewer);
-        intent.putExtra("familyHistory", busFamilyHistoryOnLongClick.familyHistory);
+        intent.putExtra("socialHistory", busSocialHistoryOnLongClick.socialHistory);
         startActivityForResult(intent, 1);
     }
 
     @Subscribe
-    public void onLongClickItem(Bus_FamilyHistory_OnLongClick busFamilyHistoryOnLongClick) {
+    public void onLongClickItem(Bus_SocialHistory_OnLongClick busSocialHistoryOnLongClick) {
         if (viewer != null) {
-            if (busFamilyHistoryOnLongClick.familyHistory.userDataId == viewer.user_id) {
-                action_AlertDialog(busFamilyHistoryOnLongClick);
+            if (busSocialHistoryOnLongClick.socialHistory.userDataId == viewer.user_id) {
+                action_AlertDialog(busSocialHistoryOnLongClick);
             }
         } else {
-            action_AlertDialog(busFamilyHistoryOnLongClick);
+            action_AlertDialog(busSocialHistoryOnLongClick);
         }
     }
 
@@ -291,7 +279,7 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                intent = new Intent(this, Family_History_Form.class);
+                intent = new Intent(this, Social_History_Form.class);
                 intent.putExtra("patient", patient);
                 intent.putExtra("viewer", viewer);
                 startActivityForResult(intent, 1);

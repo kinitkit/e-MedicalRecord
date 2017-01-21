@@ -16,6 +16,7 @@ import com.example.kinit.e_medicalrecord.Activities.Laboratory.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Activities.My_Physician.My_Physician;
 import com.example.kinit.e_medicalrecord.Activities.Past_Medical_History.Past_Medical_History_List;
+import com.example.kinit.e_medicalrecord.Activities.Social_History.Social_History_List;
 import com.example.kinit.e_medicalrecord.Activities.Surgical_History.Surgical_History_List;
 import com.example.kinit.e_medicalrecord.Activities.Vaccination.Vaccination;
 import com.example.kinit.e_medicalrecord.Classes.Surgical_History.Surgical_History;
@@ -46,7 +47,7 @@ public class Fragment_Medical_History extends Fragment {
         return rootView;
     }
 
-    public void init(View view){
+    public void init(View view) {
 
         //TextView initialization
         tv_consultationResult = (TextView) view.findViewById(R.id.tv_consultationResult);
@@ -108,7 +109,8 @@ public class Fragment_Medical_History extends Fragment {
         tv_socialHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newActivityInitializer(Medical_Transaction.SOCIAL_HISTORY.ordinal());
+                myIntent = new Intent(getActivity(), Social_History_List.class);
+                putExtra();
             }
         });
         tv_surgicalHistory.setOnClickListener(new View.OnClickListener() {
@@ -133,15 +135,12 @@ public class Fragment_Medical_History extends Fragment {
                 putExtra();
             }
         });
-        if(viewer == null) {
+        if (viewer == null) {
             tv_myPhysicians.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), My_Physician.class);
-                    intent.putExtra("patient_id", user.patient_id);
-                    intent.putExtra("patient_name", user.getFullName());
-                    intent.putExtra("user_id", user.user_data_id);
-                    startActivity(intent);
+                    myIntent = new Intent(getActivity(), My_Physician.class);
+                    putExtra();
                 }
             });
         } else {
@@ -151,37 +150,14 @@ public class Fragment_Medical_History extends Fragment {
         }
     }
 
-    void newActivityInitializer(int ordinal){
-        myIntent = new Intent(getActivity(), Medical.class);
-        myIntent.putExtra("patient_id", user.patient_id);
-        myIntent.putExtra("patient_name", user.getFullName());
-        myIntent.putExtra("user_id", user.user_data_id);
-        myIntent.putExtra("ordinal", ordinal);
-        viewer_putExtra();
-        startActivity(myIntent);
-    }
 
-    void putExtra(){
+    void putExtra() {
         myIntent.putExtra("patient", patient);
         myIntent.putExtra("viewer", viewer);
-        myIntent.putExtra("patient_id", user.patient_id);
-        myIntent.putExtra("patient_name", user.getFullName());
-        myIntent.putExtra("user_id", user.user_data_id);
-        viewer_putExtra();
         startActivity(myIntent);
     }
 
-    void viewer_putExtra() {
-        if(viewer != null) {
-            myIntent.putExtra("viewer_name", viewer.name);
-            myIntent.putExtra("viewer_patient_id", viewer.patient_id);
-            myIntent.putExtra("viewer_user_id", viewer.user_id);
-            myIntent.putExtra("viewer_medicalStaff_id", viewer.medicalStaff_id);
-            myIntent.putExtra("viewer_ordinal", viewer.mode.ordinal());
-        }
-    }
-
-    public void setUser(User user, Viewer viewer){
+    public void setUser(User user, Viewer viewer) {
         this.user = user;
         this.viewer = viewer;
         patient = new Patient();

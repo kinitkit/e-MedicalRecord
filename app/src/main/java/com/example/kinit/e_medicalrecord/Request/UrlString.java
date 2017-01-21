@@ -20,6 +20,7 @@ public class UrlString {
     public static final String URL_PAST_MEDICAL = ipAddress + "/mobile_functions/past_medical_history.php";
     public static final String URL_SURGICAL = ipAddress + "/mobile_functions/surgical_history.php";
     public static final String URL_FAMILY = ipAddress + "/mobile_functions/family_history.php";
+    public static final String URL_SOCIAL = ipAddress + "/mobile_functions/social_history.php";
 
     //public static final String URL = "http://192.168.0.104:80/Medical%20Record/main.php"; // sa balay
     //public static final String URL = "http://192.168.0.146:80/Medical%20Record/main.php"; // sa balay

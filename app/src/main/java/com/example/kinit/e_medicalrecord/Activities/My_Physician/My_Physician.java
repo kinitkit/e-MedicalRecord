@@ -1,5 +1,6 @@
 package com.example.kinit.e_medicalrecord.Activities.My_Physician;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
@@ -13,14 +14,14 @@ import android.view.Window;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Search_Physician;
-import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item;
+import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Fragments.My_Physician.Fragment_My_Physician_List;
 import com.example.kinit.e_medicalrecord.Fragments.My_Physician.Fragment_Search_Physician;
 import com.example.kinit.e_medicalrecord.R;
 
 public class My_Physician extends AppCompatActivity {
-    int patient_id, user_id;
-    String patient_name;
+    Intent intent;
+    Patient patient;
 
     //App
     FragmentManager fragmentManager;
@@ -35,18 +36,17 @@ public class My_Physician extends AppCompatActivity {
     }
 
     void init() {
-        patient_id = getIntent().getIntExtra("patient_id", 0);
-        user_id = getIntent().getIntExtra("user_id", 0);
-        patient_name = getIntent().getStringExtra("patient_name");
+        intent = getIntent();
+        patient = intent.getExtras().getParcelable("patient");
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("My Physicians");
-        getSupportActionBar().setSubtitle(patient_name);
+        getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Fragment_My_Physician_List fragmentMyPhysicianList = new Fragment_My_Physician_List();
-        fragmentMyPhysicianList.setPatient_id(patient_id);
+        fragmentMyPhysicianList.setPatient_id(patient.id);
         //FragmentManager
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -74,7 +74,7 @@ public class My_Physician extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                BusStation.getBus().post(new Bus_Search_Physician(query, user_id, patient_id));
+                BusStation.getBus().post(new Bus_Search_Physician(query, patient.user_data_id, patient.id));
                 searchView.clearFocus();
                 return false;
             }

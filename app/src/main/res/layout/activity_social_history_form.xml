@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_social_history_form"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kinit.e_medicalrecord.Activities.Social_History.Social_History_Form">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_with_backbtn" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:background="@color/colorBackground"
+        android:orientation="vertical">
+
+        <include layout="@layout/progress_bar" />
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_5">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textSize="17sp">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/et_substance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Substance"
+                            android:inputType="text|textCapSentences"
+                            android:paddingTop="@dimen/dp_3"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="17sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <CheckBox
+                        android:id="@+id/cb_currentlyUse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-5dp"
+                        android:text="@string/Currently_Use"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/sp_17" />
+
+                    <CheckBox
+                        android:id="@+id/cb_previouslyUsed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-5dp"
+                        android:text="@string/Previously_Used"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/sp_17" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textSize="17sp">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/et_frequency"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:hint="@string/Frequency"
+                            android:inputType="text|textCapSentences"
+                            android:paddingTop="@dimen/dp_3"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="17sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textSize="17sp">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/et_length"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:hint="@string/How_Long"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:paddingTop="@dimen/dp_3"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="17sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_textInputLayout_margin"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textSize="17sp">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/et_stopped"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:hint="@string/If_Stopped"
+                            android:inputType="number"
+                            android:maxLength="4"
+                            android:paddingTop="@dimen/dp_3"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="17sp" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:background="@color/colorAccent"
+                android:padding="12dp"
+                android:text="@string/save"
+                android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

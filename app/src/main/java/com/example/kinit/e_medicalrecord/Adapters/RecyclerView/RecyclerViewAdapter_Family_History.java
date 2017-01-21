@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.kinit.e_medicalrecord.BusStation.BusStation;
+import com.example.kinit.e_medicalrecord.BusStation.Family_History.Bus_FamilyHistory_OnLongClick;
 import com.example.kinit.e_medicalrecord.Classes.Family_History.Family_History;
 import com.example.kinit.e_medicalrecord.R;
 
@@ -61,7 +63,8 @@ public class RecyclerViewAdapter_Family_History extends RecyclerView.Adapter<Rec
 
         @Override
         public boolean onLongClick(View v) {
-            return false;
+            BusStation.getBus().post(new Bus_FamilyHistory_OnLongClick(getAdapterPosition(), familyHistory));
+            return true;
         }
     }
 }
