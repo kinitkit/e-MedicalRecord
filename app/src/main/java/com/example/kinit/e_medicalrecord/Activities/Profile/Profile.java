@@ -31,6 +31,7 @@ import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Bus_Mode;
 import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item;
 import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_Item_OnClick;
+import com.example.kinit.e_medicalrecord.BusStation.Search.Bus_Search_OnClick;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.User.User;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
@@ -173,12 +174,12 @@ public class Profile extends AppCompatActivity {
                                         recentCode = "";
                                     }
                                 }
-                                if (!user.image.equals("null")) {
-                                    Log.d("error", user.image);
-                                    imgRqst(UrlString.getImageUrl(user.image));
-                                } else {
+                                //if (!user.image.equals("null")) {
+                                    //Log.d("error", user.image);
+                                    //imgRqst(UrlString.getImageUrl(user.image));
+                                //} else {
                                     init();
-                                }
+                                //}
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
@@ -217,7 +218,6 @@ public class Profile extends AppCompatActivity {
                     new Response.Listener<Bitmap>() {
                         @Override
                         public void onResponse(Bitmap response) {
-
                             profPic = response;
                             init();
                         }
@@ -360,6 +360,20 @@ public class Profile extends AppCompatActivity {
     }
 
     @Subscribe
+    public void onClickSearchItem(Bus_Search_OnClick busSearchOnClick){
+        Intent intent = new Intent(this, Profile.class);
+        intent.putExtra("user_id", busSearchOnClick.searchUser.userId);
+        intent.putExtra("patient_id", busSearchOnClick.searchUser.patientId);
+        intent.putExtra("medicalStaff_id", busSearchOnClick.searchUser.medicalStaffId);
+        intent.putExtra("viewer_name", user.getFullName());
+        intent.putExtra("viewer_patient_id", user.patient_id);
+        intent.putExtra("viewer_user_id", user.user_data_id);
+        intent.putExtra("viewer_medicalStaff_id", user.medical_staff_id);
+        intent.putExtra("viewer_ordinal", mode.ordinal());
+        startActivity(intent);
+    }
+
+    /*@Subscribe
     public void searchItemOnClick(Bus_Search_Item_OnClick busSearchItemOnClick) {
         Intent intent = new Intent(this, Profile.class);
         intent.putExtra("user_id", busSearchItemOnClick.user_id);
@@ -371,5 +385,5 @@ public class Profile extends AppCompatActivity {
         intent.putExtra("viewer_medicalStaff_id", user.medical_staff_id);
         intent.putExtra("viewer_ordinal", mode.ordinal());
         startActivity(intent);
-    }
+    }*/
 }

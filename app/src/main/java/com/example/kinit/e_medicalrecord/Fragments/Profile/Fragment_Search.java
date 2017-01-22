@@ -23,6 +23,7 @@ import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.Classes.Search.Search_Item;
+import com.example.kinit.e_medicalrecord.Classes.Search.Search_User;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.Request.Custom_Singleton;
@@ -32,6 +33,7 @@ import com.squareup.otto.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +45,7 @@ public class Fragment_Search extends Fragment {
     int user_id;
 
     //Classes
-    Search_Item search_item;
+    ArrayList<Search_User> searchUsers;
     Mode mode;
     Custom_ProgressDialog progressDialog;
     Custom_ProgressBar progressBar;
@@ -72,19 +74,17 @@ public class Fragment_Search extends Fragment {
         progressDialog = new Custom_ProgressDialog(getActivity());
         progressBar = new Custom_ProgressBar(getActivity());
         nothingToShow = (LinearLayout) rootView.findViewById(R.id.nothingToShow);
-
-        search_item = new Search_Item();
     }
 
     void loadToRecyclerView() {
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_Search(search_item);
+        recyclerViewAdapter_Content = new RecyclerViewAdapter_Search(searchUsers);
         recyclerViewLayoutM_Content = new LinearLayoutManager(getActivity());
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
     }
 
     void fetchData() {
-        search_item = new Search_Item();
+        searchUsers = new ArrayList<>();
         try {
             progressBar.show();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_SEARCH,
@@ -101,18 +101,7 @@ public class Fragment_Search extends Fragment {
                                         int jsonArrayLength = rootJsonArray.getJSONArray(1).length();
                                         for (int x = 0; x < jsonArrayLength; x++) {
                                             jsonObject = jsonArray.getJSONObject(x);
-                                            search_item.user_id.add(Integer.parseInt(jsonObject.getString("id")));
-                                            search_item.setName(jsonObject.getString("first_name"),
-                                                    jsonObject.getString("middle_name"), jsonObject.getString("last_name"));
-                                            if(jsonObject.has("user_type")) {
-                                                search_item.setMedicalType(jsonObject.getString("user_type"));
-                                                search_item.medicalStaff_id.add(search_item.setId(jsonObject.getString("medicalStaff_id")));
-                                                search_item.patient_id.add(0);
-                                            } else {
-                                                search_item.setMedicalType("null");
-                                                search_item.medicalStaff_id.add(0);
-                                                search_item.patient_id.add(search_item.setId(jsonObject.getString("patient_id")));
-                                            }
+                                            searchUsers.add(new Search_User(jsonObject));
                                         }
                                         loadToRecyclerView();
                                     }
@@ -121,7 +110,7 @@ public class Fragment_Search extends Fragment {
                                 e.printStackTrace();
                             } finally {
                                 progressBar.hide();
-                                NothingToShow.showNothingToShow(search_item.user_id, recyclerView_Content, nothingToShow);
+                                NothingToShow.showNothingToShow(searchUsers, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
@@ -167,7 +156,6 @@ public class Fragment_Search extends Fragment {
         this.mode = busSearchItem.mode;
         this.name = busSearchItem.name;
         this.user_id = busSearchItem.user_id;
-        search_item = new Search_Item();
         fetchData();
     }
 }

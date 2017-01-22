@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
@@ -13,6 +14,7 @@ import com.example.kinit.e_medicalrecord.BusStation.Medical_Prescription.Bus_Rem
 import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.R;
+import com.example.kinit.e_medicalrecord.Request.Glide_ImgLoader;
 
 import java.util.ArrayList;
 
@@ -33,7 +35,9 @@ public class RecyclerViewAdapter_Tagged_MedPrescription extends RecyclerView.Ada
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tv_name.setText(taggedPhysicianLists.get(position).name);
+        Tagged_Physician_List taggedPhysicianList = taggedPhysicianLists.get(position);
+        Glide_ImgLoader.with(holder.iv_profilePic.getContext(), taggedPhysicianList.image, 0, 0,holder.iv_profilePic);
+        holder.tv_name.setText(taggedPhysicianList.name);
     }
 
     @Override
@@ -42,11 +46,13 @@ public class RecyclerViewAdapter_Tagged_MedPrescription extends RecyclerView.Ada
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView iv_profilePic;
         TextView tv_name;
         Button btn_add, btn_remove;
 
         public ViewHolder(View itemView, My_Physician_Button_Mode buttonMode) {
             super(itemView);
+            iv_profilePic = (ImageView) itemView.findViewById(R.id.iv_profilePic);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             btn_remove = (Button) itemView.findViewById(R.id.btn_remove);
             btn_add = (Button) itemView.findViewById(R.id.btn_add);

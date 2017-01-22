@@ -28,6 +28,7 @@ import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Classes.General.NothingToShow;
+import com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Classes.User.Patient;
 import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
@@ -43,11 +44,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Medical_Prescription extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class Medical_Prescription_List extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     Intent intent;
     //Classes
-    ArrayList<com.example.kinit.e_medicalrecord.Classes.Medical_Prescription.Medical_Prescription> medicalPrescriptions;
+    ArrayList<Medical_Prescription> medicalPrescriptions;
     Viewer viewer;
     Patient patient;
     Custom_ProgressDialog progressDialog;
@@ -74,19 +75,8 @@ public class Medical_Prescription extends AppCompatActivity implements SwipeRefr
 
     void init() {
         intent = getIntent();
-        patient = new Patient();
-        patient.id = intent.getIntExtra("patient_id", 0);
-        patient.name = intent.getStringExtra("patient_name");
-        patient.user_data_id = intent.getIntExtra("user_id", 0);
-
-        if (intent.hasExtra("viewer_user_id")) {
-            viewer = new Viewer();
-            viewer.name = intent.getStringExtra("viewer_name");
-            viewer.user_id = intent.getIntExtra("viewer_user_id", 0);
-            viewer.patient_id = intent.getIntExtra("viewer_patient_id", 0);
-            viewer.medicalStaff_id = intent.getIntExtra("viewer_medicalStaff_id", 0);
-            viewer.mode = Mode.values()[intent.getIntExtra("viewer_ordinal", 0)];
-        }
+        patient = intent.getExtras().getParcelable("patient");
+        viewer = intent.getExtras().getParcelable("viewer");
 
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

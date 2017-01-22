@@ -55,8 +55,6 @@
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
 
-                    <include layout="@layout/layout_item_divider" />
-
                     <TextView
                         android:id="@+id/tv_labResult"
                         android:layout_width="match_parent"
@@ -105,6 +103,19 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/tv_vaccination"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/ic_vaccine"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:text="Vaccination"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="17sp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -133,7 +144,7 @@
                         android:id="@+id/tv_admissionHistory"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:drawableLeft="@mipmap/ic_family1"
+                        android:drawableLeft="@mipmap/ic_admission"
                         android:drawablePadding="10dp"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
@@ -141,8 +152,6 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
-
-                    <include layout="@layout/layout_item_divider" />
 
                     <TextView
                         android:id="@+id/tv_familyHistory"
@@ -157,8 +166,6 @@
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
 
-                    <include layout="@layout/layout_item_divider" />
-
                     <TextView
                         android:id="@+id/tv_pastMedicalHistory"
                         android:layout_width="match_parent"
@@ -171,8 +178,6 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
-
-                    <include layout="@layout/layout_item_divider" />
 
                     <TextView
                         android:id="@+id/tv_socialHistory"
@@ -187,8 +192,6 @@
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
 
-                    <include layout="@layout/layout_item_divider" />
-
                     <TextView
                         android:id="@+id/tv_surgicalHistory"
                         android:layout_width="match_parent"
@@ -201,26 +204,13 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/tv_vaccination"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:drawableLeft="@mipmap/ic_family1"
-                        android:drawablePadding="10dp"
-                        android:ellipsize="end"
-                        android:gravity="center_vertical"
-                        android:text="Vaccination"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="17sp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="10dp"
                 card_view:cardCornerRadius="0dp">
 
                 <LinearLayout
@@ -250,10 +240,6 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="17sp" />
-
-                    <include
-                        android:id="@+id/item_divider"
-                        layout="@layout/layout_item_divider" />
 
                     <TextView
                         android:id="@+id/tv_myPhysicians"

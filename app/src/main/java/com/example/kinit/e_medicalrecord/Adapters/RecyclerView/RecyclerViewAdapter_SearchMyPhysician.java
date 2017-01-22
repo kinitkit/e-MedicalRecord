@@ -1,19 +1,21 @@
 package com.example.kinit.e_medicalrecord.Adapters.RecyclerView;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Add_Physician;
 import com.example.kinit.e_medicalrecord.BusStation.My_Physician.Bus_Remove_Physician;
 import com.example.kinit.e_medicalrecord.Classes.My_Physician.Physician_List;
 import com.example.kinit.e_medicalrecord.Enum.My_Physician_Button_Mode;
 import com.example.kinit.e_medicalrecord.R;
+import com.example.kinit.e_medicalrecord.Request.UrlString;
 
 import java.util.ArrayList;
 
@@ -35,7 +37,15 @@ public class RecyclerViewAdapter_SearchMyPhysician extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tv_name.setText(physicianLists.get(position).name);
+        Physician_List physicianList = physicianLists.get(position);
+        holder.physicianList = physicianList;
+
+        Glide.with(holder.iv_profilePic.getContext())
+                .load(UrlString.getImageUrl(physicianList.image))
+                .error(R.mipmap.icon_user_default)
+                .into(holder.iv_profilePic);
+
+        holder.tv_name.setText(physicianList.name);
     }
 
     @Override
@@ -43,17 +53,20 @@ public class RecyclerViewAdapter_SearchMyPhysician extends RecyclerView.Adapter<
         return physicianLists.size();
     }
 
-    public void removeItem(int position){
+    public void removeItem(int position) {
         physicianLists.remove(position);
         notifyItemRemoved(position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        Physician_List physicianList;
+        ImageView iv_profilePic;
         TextView tv_name;
         Button btn_add, btn_remove;
 
         public ViewHolder(View itemView, My_Physician_Button_Mode buttonMode) {
             super(itemView);
+            iv_profilePic = (ImageView) itemView.findViewById(R.id.iv_profilePic);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             btn_remove = (Button) itemView.findViewById(R.id.btn_remove);
             btn_add = (Button) itemView.findViewById(R.id.btn_add);
@@ -76,10 +89,10 @@ public class RecyclerViewAdapter_SearchMyPhysician extends RecyclerView.Adapter<
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_add:
-                    BusStation.getBus().post(new Bus_Add_Physician(getAdapterPosition(), physicianLists.get(getAdapterPosition())));
+                    BusStation.getBus().post(new Bus_Add_Physician(getAdapterPosition(), physicianList));
                     break;
                 case R.id.btn_remove:
-                    BusStation.getBus().post(new Bus_Remove_Physician(getAdapterPosition(), physicianLists.get(getAdapterPosition())));
+                    BusStation.getBus().post(new Bus_Remove_Physician(getAdapterPosition(), physicianList));
                     break;
             }
         }

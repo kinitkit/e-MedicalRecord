@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
+import com.bumptech.glide.Glide;
 import com.example.kinit.e_medicalrecord.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.BusStation.Bus_Mode;
 import com.example.kinit.e_medicalrecord.BusStation.Profile.Bus_Image_Click;
@@ -21,6 +23,8 @@ import com.example.kinit.e_medicalrecord.Classes.User.Viewer;
 import com.example.kinit.e_medicalrecord.Enum.Mode;
 import com.example.kinit.e_medicalrecord.Fragments.Medical_History.Fragment_Medical_History;
 import com.example.kinit.e_medicalrecord.R;
+import com.example.kinit.e_medicalrecord.Request.Glide_ImgLoader;
+import com.example.kinit.e_medicalrecord.Request.UrlString;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -40,8 +44,6 @@ public class Fragment_Profile extends Fragment implements View.OnClickListener {
     Mode mode;
     Viewer viewer;
 
-    //Animator mCurrentAnimator;
-    int mShortAnimationDuration;
     ImageButton ib_profPic;
     Bitmap profPic;
 
@@ -68,13 +70,12 @@ public class Fragment_Profile extends Fragment implements View.OnClickListener {
         fragment_medicalInfo.setUser(user, viewer);
 
         ib_profPic = (ImageButton) rootView.findViewById(R.id.ib_profPic);
-        if (profPic != null) {
-            ib_profPic.setImageBitmap(profPic);
-        } else {
-            ib_profPic.setImageResource(R.mipmap.icon_user_default);
-        }
-        ib_profPic.setOnClickListener(this);
-        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        Glide.with(getActivity())
+                .load(UrlString.getImageUrl(user.image))
+                .error(R.mipmap.icon_user_default)
+                .into(ib_profPic);
+
         initializeViewPager();
     }
 

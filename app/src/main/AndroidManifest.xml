@@ -29,9 +29,8 @@
                 android:name="android.app.search"
                 android:resource="@xml/search" />
         </activity>
-        <activity android:name=".Activities.Medical" />
         <activity android:name=".Activities.My_Physician.My_Physician" />
-        <activity android:name=".Activities.Medical_Prescription.Medical_Prescription" />
+        <activity android:name=".Activities.Medical_Prescription.Medical_Prescription_List" />
         <activity android:name=".Activities.Medical_Prescription.Medical_Prescription_Form" />
         <activity android:name=".Activities.Medical_Prescription.Drug_Form" />
         <activity android:name=".Activities.Medical_Prescription.Tagged_Medical_Prescription" />
