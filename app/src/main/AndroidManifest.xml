@@ -62,7 +62,8 @@
         <activity android:name=".Activities.Family_History.Family_History_List" />
         <activity android:name=".Activities.Family_History.Family_History_Form" />
         <activity android:name=".Activities.Social_History.Social_History_List" />
-        <activity android:name=".Activities.Social_History.Social_History_Form"></activity>
+        <activity android:name=".Activities.Social_History.Social_History_Form" />
+        <activity android:name=".Activities.Consultation.Consultation_List"></activity>
     </application>
 
 </manifest>

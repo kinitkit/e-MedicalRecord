@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.kinit.e_medicalrecord.Activities.Admission.Admission_List;
 import com.example.kinit.e_medicalrecord.Activities.Allergy.Allergy;
+import com.example.kinit.e_medicalrecord.Activities.Consultation.Consultation_List;
 import com.example.kinit.e_medicalrecord.Activities.Family_History.Family_History_List;
 import com.example.kinit.e_medicalrecord.Activities.Laboratory.Laboratory_Tests;
 import com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription_List;
@@ -63,7 +64,8 @@ public class Fragment_Medical_History extends Fragment {
         tv_consultationResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                myIntent = new Intent(getActivity(), Consultation_List.class);
+                putExtra();
             }
         });
         tv_labResult.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +73,6 @@ public class Fragment_Medical_History extends Fragment {
             public void onClick(View v) {
                 myIntent = new Intent(getActivity(), Laboratory_Tests.class);
                 putExtra();
-                //newActivityInitializer(Medical_Transaction.LAB_RESULT.ordinal());
             }
         });
 
@@ -148,7 +149,6 @@ public class Fragment_Medical_History extends Fragment {
 
 
     void putExtra() {
-        Log.d("error", patient.name);
         myIntent.putExtra("patient", patient);
         myIntent.putExtra("viewer", viewer);
         startActivity(myIntent);
