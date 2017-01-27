@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Drug_Form">
+    tools:context="com.example.kinit.e_medicalrecord.Medical_Prescription.Activity.Drug_Form">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

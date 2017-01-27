@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Activities.Laboratory.Laboratory_Result_View"
+    tools:context="com.example.kinit.e_medicalrecord.Laboratory.Activity.Laboratory_Result_View"
     tools:keep="@layout/activity_laboratory_result_view">
 
 </RelativeLayout>

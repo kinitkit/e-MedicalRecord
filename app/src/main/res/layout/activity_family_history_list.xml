@@ -5,7 +5,7 @@
     android:id="@+id/activity_family_history_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Activities.Family_History.Family_History_List">
+    tools:context="com.example.kinit.e_medicalrecord.Family_History.Activity.Family_History_List">
 
     <include
         android:id="@+id/toolbar"

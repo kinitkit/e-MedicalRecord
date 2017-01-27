@@ -5,7 +5,7 @@
     android:id="@+id/activity_past_medical_history"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Activities.Past_Medical_History.Past_Medical_History_List">
+    tools:context="com.example.kinit.e_medicalrecord.Past_Medical_History.Activity.Past_Medical_History_List">
 
     <include
         android:id="@+id/toolbar"

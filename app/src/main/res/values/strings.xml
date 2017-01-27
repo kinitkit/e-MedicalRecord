@@ -48,6 +48,22 @@
     <string name="date">Date</string>
     <string name="surgery">Surgery</string>
     <string name="date_performed">Date Performed</string>
+    <string name="physician">Physician</string>
+    <string name="chief_complaint">Chief Complaint</string>
+    <string name="history_of_present_illness">History of Present Illness</string>
+    <string name="review_of_systems">Review of Systems</string>
+    <string name="add_system_reviews">Add System Reviews</string>
+    <string name="general_constitutional">General/ Constitutional:</string>
+    <string name="skin_breast">Skin/ Breast:</string>
+    <string name="eyes_ears_nose_mouth_throat">Eyes/ Ears/ Nose/ Mouth/ Throat:</string>
+    <string name="cardiovascular">Cardiovascular:</string>
+    <string name="respiratory">Respiratory:</string>
+    <string name="gastrointestinal">Gastrointestinal:</string>
+    <string name="genito_urinary">Genito- Urinary:</string>
+    <string name="musculoskeletal">Musculoskeletal:</string>
+    <string name="allergic_immunologic_lymphatic_endocrine_hematologic">Allergic/ Immunologic/ Lymphatic/ Endocrine/ Hematologic:</string>
+    <string name="neurologic_psychiatric">Neurologic/ Psychiatric:</string>
+    <string name="diagnosis">Diagnosis</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>

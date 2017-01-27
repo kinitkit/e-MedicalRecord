@@ -23,7 +23,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Medical_Prescription_View">
+            tools:context="com.example.kinit.e_medicalrecord.Medical_Prescription.Activity.Medical_Prescription_View">
 
 
             <android.support.v4.widget.NestedScrollView

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.kinit.e_medicalrecord.Activities.Medical_Prescription.Tagged_Medical_Prescription">
+    tools:context="com.example.kinit.e_medicalrecord.Medical_Prescription.Activity.Tagged_Medical_Prescription">
 
     <include
         android:id="@+id/toolbar"

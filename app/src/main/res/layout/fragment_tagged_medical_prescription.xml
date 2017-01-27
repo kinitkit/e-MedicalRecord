@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="com.example.kinit.e_medicalrecord.Fragments.Medical_Prescription.Fragment_Tagged_Medical_Prescription">
+    tools:context="com.example.kinit.e_medicalrecord.Medical_Prescription.Fragment.Fragment_Tagged_Medical_Prescription">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"

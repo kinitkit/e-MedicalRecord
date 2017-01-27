@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="com.example.kinit.e_medicalrecord.Activities.Vaccination.Vaccination_Form">
+    tools:context="com.example.kinit.e_medicalrecord.Vaccination.Activity.Vaccination_Form">
 
     <include
         android:id="@+id/toolbar"

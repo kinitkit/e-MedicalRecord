@@ -5,7 +5,7 @@
     android:id="@+id/activity_surgical_history_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Activities.Surgical_History.Surgical_History_List">
+    tools:context="com.example.kinit.e_medicalrecord.Surgical_History.Activity.Surgical_History_List">
 
     <include
         android:id="@+id/toolbar"
