@@ -94,7 +94,7 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
 
         recyclerView_Content = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerViewLayoutM_Content = new LinearLayoutManager(this);
-
+        recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         fetchData();
     }
 
@@ -110,7 +110,6 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
 
     void loadToRecyclerView() {
         recyclerViewAdapter_Content = new RecyclerViewAdapter_Consultation(consultations);
-        recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
     }
 

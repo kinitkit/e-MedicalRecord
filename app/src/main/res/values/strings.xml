@@ -64,6 +64,13 @@
     <string name="allergic_immunologic_lymphatic_endocrine_hematologic">Allergic/ Immunologic/ Lymphatic/ Endocrine/ Hematologic:</string>
     <string name="neurologic_psychiatric">Neurologic/ Psychiatric:</string>
     <string name="diagnosis">Diagnosis</string>
+    <string name="vital_signs">Vital Signs</string>
+    <string name="height_cm">Height (cm)</string>
+    <string name="weight_kg">Weight (kg)</string>
+    <string name="temperature_celsius">Temperature (Celsius)</string>
+    <string name="respiration_rate">Respiration Rate</string>
+    <string name="blood_pressure">Blood Pressure</string>
+    <string name="pulse_rate">Pulse Rate</string>
 
     <string-array name="spinner_gender_options">
         <item name="male">Male</item>

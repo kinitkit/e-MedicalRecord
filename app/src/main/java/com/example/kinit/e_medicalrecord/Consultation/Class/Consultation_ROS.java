@@ -25,4 +25,8 @@ public class Consultation_ROS extends Review_Of_Systems {
         this.rosCategoryId = rosCategoryId;
         this.category = category;
     }
+
+    public Consultation_ROS() {
+
+    }
 }

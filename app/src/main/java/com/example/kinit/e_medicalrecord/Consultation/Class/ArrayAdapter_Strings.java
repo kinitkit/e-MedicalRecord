@@ -26,8 +26,17 @@ public class ArrayAdapter_Strings {
         arrayNeuro = new ArrayList<>();
         arrayAllergic = new ArrayList<>();
 
-        arrayCategoryId = arrayGeneralId = arraySkinBreastId = arrayEyesEarsId = arrayCardioId = arrayRespiId =
-                arrayGastroId = arrayGenitoId = arrayMusculoId = arrayNeuroId = arrayAllergicId = new ArrayList<>();
+        arrayCategoryId = new ArrayList<>();
+        arrayGeneralId = new ArrayList<>();
+        arraySkinBreastId = new ArrayList<>();
+        arrayEyesEarsId = new ArrayList<>();
+        arrayCardioId = new ArrayList<>();
+        arrayRespiId = new ArrayList<>();
+        arrayGastroId = new ArrayList<>();
+        arrayGenitoId = new ArrayList<>();
+        arrayMusculoId = new ArrayList<>();
+        arrayNeuroId = new ArrayList<>();
+        arrayAllergicId = new ArrayList<>();
 
         try {
             int jsonArrayLength = jsonArray.length();
@@ -37,10 +46,11 @@ public class ArrayAdapter_Strings {
             for (int x = 0; x < jsonArrayLength; x++) {
                 jsonObject = jsonArray.getJSONObject(x);
                 reviewOfSystems.add(new Review_Of_Systems(jsonObject));
-                reviewOfSystemsLone = reviewOfSystems.get(reviewOfSystems.size()-1);
+                reviewOfSystemsLone = reviewOfSystems.get(reviewOfSystems.size() - 1);
 
                 if (!arrayCategory.contains(reviewOfSystemsLone.category)) {
                     arrayCategory.add(reviewOfSystemsLone.category);
+                    arrayCategoryId.add(reviewOfSystemsLone.rosCategoryId);
                 }
                 switch (reviewOfSystemsLone.rosCategoryId) {
                     case 1:

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -65,6 +66,10 @@ public class Review_Of_Systems_Dialog extends DialogFragment implements AdapterV
         setArrayAdapterExamination(arrayAdapterStrings.arrayGeneral);
         spinner_category.setAdapter(arrayAdapter_category);
         spinner_category.setOnItemSelectedListener(this);
+        if (consultationRos != null) {
+            spinner_category.setSelection(arrayAdapter_category.getPosition(consultationRos.category));
+            et_remarks.setText(consultationRos.remarks);
+        }
 
         return builder;
     }
@@ -76,6 +81,10 @@ public class Review_Of_Systems_Dialog extends DialogFragment implements AdapterV
     void setArrayAdapterExamination(ArrayList<String> arrayList) {
         arrayAdapter_examination = new ArrayAdapter<>(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayList);
         spinner_examination.setAdapter(arrayAdapter_examination);
+    }
+
+    public void setFields(Consultation_ROS consultationRos) {
+        this.consultationRos = consultationRos;
     }
 
     boolean validateEditText(EditText editText, String text) {
@@ -112,6 +121,7 @@ public class Review_Of_Systems_Dialog extends DialogFragment implements AdapterV
     void sendData() {
         BusStation.getBus().post(new Bus_ConsultationROS(queryType, 0, consultationRos));
         builder.dismiss();
+        consultationRos = null;
     }
 
     int getRosId() {
@@ -177,6 +187,10 @@ public class Review_Of_Systems_Dialog extends DialogFragment implements AdapterV
             case 9:
                 setArrayAdapterExamination(arrayAdapterStrings.arrayAllergic);
                 break;
+        }
+        if(consultationRos != null && consultationRos.item != null){
+            spinner_examination.setSelection(arrayAdapter_examination.getPosition(consultationRos.item));
+            consultationRos.item = null;
         }
     }
 

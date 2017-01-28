@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter_SearchMyPhysician extends RecyclerView.Adapter<RecyclerViewAdapter_SearchMyPhysician.ViewHolder> {
 
-    ArrayList<Physician_List> physicianLists = new ArrayList<>();
-    My_Physician_Button_Mode buttonMode;
+    private ArrayList<Physician_List> physicianLists = new ArrayList<>();
+    private My_Physician_Button_Mode buttonMode;
 
     public RecyclerViewAdapter_SearchMyPhysician(ArrayList<Physician_List> physicianLists, My_Physician_Button_Mode buttonMode) {
         this.buttonMode = buttonMode;

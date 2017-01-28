@@ -1,10 +1,13 @@
 package com.example.kinit.e_medicalrecord.Consultation.Activity;
 
 import android.app.DatePickerDialog;
-import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,17 +17,20 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Consultation.Bus.Bus_ConsultationROS;
+import com.example.kinit.e_medicalrecord.Consultation.Bus.Bus_ConsultationRos_OnLongClick;
 import com.example.kinit.e_medicalrecord.Consultation.Class.ArrayAdapter_Strings;
 import com.example.kinit.e_medicalrecord.Consultation.Class.Consultation;
+import com.example.kinit.e_medicalrecord.Consultation.Class.Consultation_ROS;
 import com.example.kinit.e_medicalrecord.Consultation.Class.Review_Of_Systems;
 import com.example.kinit.e_medicalrecord.Consultation.Fragment.Review_Of_Systems_Dialog;
+import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_ReviewOfSystems;
 import com.example.kinit.e_medicalrecord.General.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressBar;
@@ -53,6 +59,10 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
     Viewer viewer;
     SimpleDateFormat simpleDateFormat;
     Consultation consultation;
+    Bus_ConsultationRos_OnLongClick busConsultationRosOnLongClick;
+    ArrayList<Consultation_ROS> consultationRos_general, consultationRos_skinBreast, consultationRos_eyesEars,
+            consultationRos_cardio, consultationRos_respi, consultationRos_gastro, consultationRos_genito,
+            consultationRos_musculo, consultationRos_neuro, consultationRos_allergic;
     ArrayList<Review_Of_Systems> reviewOfSystems;
     ArrayAdapter_Strings arrayAdapterStrings;
 
@@ -62,9 +72,16 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
     Review_Of_Systems_Dialog reviewOfSystemsDialog;
 
     //Widgets
-    EditText et_physician, et_date, et_chiefComplaint, et_presentIllness, et_diagnosis;
+    EditText et_physician, et_date, et_chiefComplaint, et_presentIllness, et_diagnosis, et_height, et_weight, et_temperature,
+            et_bloodPressure, et_respirationRate, et_pulseRate;
     Button btn_save;
     ImageButton btn_add;
+    LinearLayout linear_general, linear_skinBreast, linear_eyesEars, linear_cardio, linear_respi, linear_gastro, linear_genito,
+            linear_musculo, linear_neuro, linear_allergic;
+    RecyclerView recyclerView_general, recyclerView_skinBreast, recyclerView_eyesEars, recyclerView_cardio, recyclerView_respi,
+            recyclerView_gastro, recyclerView_genito, recyclerView_musculo, recyclerView_neuro, recyclerView_allergic;
+    RecyclerViewAdapter_ReviewOfSystems adapter_general, adapter_skinBreast, adapter_eyesEars, adapter_cardio, adapter_respi, adapter_gastro, adapter_genito,
+            adapter_musculo, adapter_neuro, adapter_allergic;
     Calendar calendar;
     DatePickerFragment datePickerFragment;
 
@@ -100,11 +117,18 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
         et_chiefComplaint = (EditText) findViewById(R.id.et_chiefComplaint);
         et_presentIllness = (EditText) findViewById(R.id.et_presentIllness);
         et_diagnosis = (EditText) findViewById(R.id.et_diagnosis);
+        et_height = (EditText) findViewById(R.id.et_height);
+        et_weight = (EditText) findViewById(R.id.et_weight);
+        et_temperature = (EditText) findViewById(R.id.et_temperature);
+        et_bloodPressure = (EditText) findViewById(R.id.et_bloodPressure);
+        et_respirationRate = (EditText) findViewById(R.id.et_respirationRate);
+        et_pulseRate = (EditText) findViewById(R.id.et_pulseRate);
+        et_date.setOnClickListener(this);
+
         btn_save = (Button) findViewById(R.id.btn_save);
         btn_add = (ImageButton) findViewById(R.id.btn_add);
         btn_save.setOnClickListener(this);
         btn_add.setOnClickListener(this);
-        et_date.setOnClickListener(this);
 
         calendar = Calendar.getInstance();
 
@@ -119,12 +143,295 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
             }
         });
         setCalendar(calendar);
-
         reviewOfSystemsDialog = new Review_Of_Systems_Dialog();
+        initLinearLayoutsAndRecyclerView();
 
         getVaccines();
         if (consultation != null) {
             //fetchData();
+        }
+    }
+
+    void initLinearLayoutsAndRecyclerView() {
+        initArrayList();
+
+        //LinearLayout Section
+        linear_general = (LinearLayout) findViewById(R.id.linear_general);
+        linear_skinBreast = (LinearLayout) findViewById(R.id.linear_skinBreast);
+        linear_eyesEars = (LinearLayout) findViewById(R.id.linear_eyesEars);
+        linear_cardio = (LinearLayout) findViewById(R.id.linear_cardio);
+        linear_respi = (LinearLayout) findViewById(R.id.linear_respi);
+        linear_gastro = (LinearLayout) findViewById(R.id.linear_gastro);
+        linear_genito = (LinearLayout) findViewById(R.id.linear_genito);
+        linear_musculo = (LinearLayout) findViewById(R.id.linear_musculo);
+        linear_neuro = (LinearLayout) findViewById(R.id.linear_neuro);
+        linear_allergic = (LinearLayout) findViewById(R.id.linear_allergic);
+
+        //RecyclerView Section
+        recyclerView_general = (RecyclerView) findViewById(R.id.recyclerView_general);
+        recyclerView_skinBreast = (RecyclerView) findViewById(R.id.recyclerView_skinBreast);
+        recyclerView_eyesEars = (RecyclerView) findViewById(R.id.recyclerView_eyesEars);
+        recyclerView_cardio = (RecyclerView) findViewById(R.id.recyclerView_cardio);
+        recyclerView_respi = (RecyclerView) findViewById(R.id.recyclerView_respi);
+        recyclerView_gastro = (RecyclerView) findViewById(R.id.recyclerView_gastro);
+        recyclerView_genito = (RecyclerView) findViewById(R.id.recyclerView_genito);
+        recyclerView_musculo = (RecyclerView) findViewById(R.id.recyclerView_musculo);
+        recyclerView_neuro = (RecyclerView) findViewById(R.id.recyclerView_neuro);
+        recyclerView_allergic = (RecyclerView) findViewById(R.id.recyclerView_allergic);
+
+        //RecyclerView Adapter Section
+        adapter_general = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_general));
+        adapter_skinBreast = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_skinBreast));
+        adapter_eyesEars = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_eyesEars));
+        adapter_cardio = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_cardio));
+        adapter_respi = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_respi));
+        adapter_gastro = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_gastro));
+        adapter_genito = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_genito));
+        adapter_musculo = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_musculo));
+        adapter_neuro = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_neuro));
+        adapter_allergic = new RecyclerViewAdapter_ReviewOfSystems(getClone(consultationRos_allergic));
+
+        //Set RecyclerView Adapter Section
+        recyclerView_general.setAdapter(adapter_general);
+        recyclerView_skinBreast.setAdapter(adapter_skinBreast);
+        recyclerView_eyesEars.setAdapter(adapter_eyesEars);
+        recyclerView_cardio.setAdapter(adapter_cardio);
+        recyclerView_respi.setAdapter(adapter_respi);
+        recyclerView_gastro.setAdapter(adapter_gastro);
+        recyclerView_genito.setAdapter(adapter_genito);
+        recyclerView_musculo.setAdapter(adapter_musculo);
+        recyclerView_neuro.setAdapter(adapter_neuro);
+        recyclerView_allergic.setAdapter(adapter_allergic);
+        //
+        //RecyclerView LayoutManager Section
+        RecyclerView.LayoutManager layoutManager_general, layoutManager_SkinBreast, layoutManager_eyesEars,
+                layoutManager_cardio, layoutManager_respi, layoutManager_gastro, layoutManager_genito,
+                layoutManager_musculo, layoutManager_neuro, layoutManager_allergic;
+
+        layoutManager_general = new LinearLayoutManager(this);
+        layoutManager_SkinBreast = new LinearLayoutManager(this);
+        layoutManager_eyesEars = new LinearLayoutManager(this);
+        layoutManager_cardio = new LinearLayoutManager(this);
+        layoutManager_respi = new LinearLayoutManager(this);
+        layoutManager_gastro = new LinearLayoutManager(this);
+        layoutManager_genito = new LinearLayoutManager(this);
+        layoutManager_musculo = new LinearLayoutManager(this);
+        layoutManager_neuro = new LinearLayoutManager(this);
+        layoutManager_allergic = new LinearLayoutManager(this);
+
+        recyclerView_general.setLayoutManager(layoutManager_general);
+        recyclerView_skinBreast.setLayoutManager(layoutManager_SkinBreast);
+        recyclerView_eyesEars.setLayoutManager(layoutManager_eyesEars);
+        recyclerView_cardio.setLayoutManager(layoutManager_cardio);
+        recyclerView_respi.setLayoutManager(layoutManager_respi);
+        recyclerView_gastro.setLayoutManager(layoutManager_gastro);
+        recyclerView_genito.setLayoutManager(layoutManager_genito);
+        recyclerView_musculo.setLayoutManager(layoutManager_musculo);
+        recyclerView_neuro.setLayoutManager(layoutManager_neuro);
+        recyclerView_allergic.setLayoutManager(layoutManager_allergic);
+
+        initArrayList();
+    }
+
+    void initArrayList() {
+        consultationRos_general = new ArrayList<>();
+        consultationRos_skinBreast = new ArrayList<>();
+        consultationRos_eyesEars = new ArrayList<>();
+        consultationRos_cardio = new ArrayList<>();
+        consultationRos_respi = new ArrayList<>();
+        consultationRos_gastro = new ArrayList<>();
+        consultationRos_genito = new ArrayList<>();
+        consultationRos_musculo = new ArrayList<>();
+        consultationRos_neuro = new ArrayList<>();
+        consultationRos_allergic = new ArrayList<>();
+    }
+
+    ArrayList<Consultation_ROS> getClone(ArrayList<Consultation_ROS> consultationRoses) {
+        return (ArrayList<Consultation_ROS>) consultationRoses.clone();
+    }
+
+    void insertCheckWhichCategory(Consultation_ROS consultationRos) {
+        switch (consultationRos.rosCategoryId) {
+            case 1:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_general, adapter_general, linear_general);
+                break;
+            case 2:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_skinBreast, adapter_skinBreast, linear_skinBreast);
+                break;
+            case 3:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_eyesEars, adapter_eyesEars, linear_eyesEars);
+                break;
+            case 4:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_cardio, adapter_cardio, linear_cardio);
+                break;
+            case 5:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_respi, adapter_respi, linear_respi);
+                break;
+            case 6:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_gastro, adapter_gastro, linear_gastro);
+                break;
+            case 7:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_genito, adapter_genito, linear_genito);
+                break;
+            case 8:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_musculo, adapter_musculo, linear_musculo);
+                break;
+            case 9:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_neuro, adapter_neuro, linear_neuro);
+                break;
+            case 10:
+                insertToArrayAndUpdateAdapter(consultationRos, consultationRos_allergic, adapter_allergic, linear_allergic);
+                break;
+        }
+    }
+
+    void updateCheckWhichCategory(Bus_ConsultationROS consultationROS) {
+        switch (busConsultationRosOnLongClick.consultationRos.rosCategoryId) {
+            case 1:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_general, adapter_general);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_general, adapter_general, linear_general);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+            case 2:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_skinBreast, adapter_skinBreast);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_skinBreast, adapter_skinBreast, linear_skinBreast);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+            case 3:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_eyesEars, adapter_eyesEars);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_eyesEars, adapter_eyesEars, linear_eyesEars);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+            case 4:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_cardio, adapter_cardio);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_cardio, adapter_cardio, linear_cardio);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+            case 5:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_respi, adapter_respi);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_respi, adapter_respi, linear_respi);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+            case 6:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_gastro, adapter_gastro);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_gastro, adapter_gastro, linear_gastro);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+            case 7:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_genito, adapter_genito);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_genito, adapter_genito, linear_genito);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+            case 8:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_musculo, adapter_musculo);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_musculo, adapter_musculo, linear_musculo);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+            case 9:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_neuro, adapter_neuro);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_neuro, adapter_neuro, linear_neuro);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+            case 10:
+                if (busConsultationRosOnLongClick.consultationRos.rosCategoryId == consultationROS.consultationRos.rosCategoryId) {
+                    updateArrayAndAdapter(busConsultationRosOnLongClick, consultationROS.consultationRos, consultationRos_allergic, adapter_allergic);
+                } else {
+                    deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_allergic, adapter_allergic, linear_allergic);
+                    insertCheckWhichCategory(consultationROS.consultationRos);
+                }
+                break;
+        }
+    }
+
+    void deleteCheckWhichCategory(Bus_ConsultationRos_OnLongClick busConsultationRosOnLongClick) {
+        switch (busConsultationRosOnLongClick.consultationRos.rosCategoryId) {
+            case 1:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_general, adapter_general, linear_general);
+                break;
+            case 2:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_skinBreast, adapter_skinBreast, linear_skinBreast);
+                break;
+            case 3:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_eyesEars, adapter_eyesEars, linear_eyesEars);
+                break;
+            case 4:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_cardio, adapter_cardio, linear_cardio);
+                break;
+            case 5:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_respi, adapter_respi, linear_respi);
+                break;
+            case 6:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_gastro, adapter_gastro, linear_gastro);
+                break;
+            case 7:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_genito, adapter_genito, linear_genito);
+                break;
+            case 8:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_musculo, adapter_musculo, linear_musculo);
+                break;
+            case 9:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_neuro, adapter_neuro, linear_neuro);
+                break;
+            case 10:
+                deleteFromArrayAndAdapter(busConsultationRosOnLongClick, consultationRos_allergic, adapter_allergic, linear_allergic);
+                break;
+        }
+    }
+
+    void updateArrayAndAdapter(Bus_ConsultationRos_OnLongClick busConsultationRosOnLongClick, Consultation_ROS consultationRos,
+                               ArrayList<Consultation_ROS> consultationRos_array, RecyclerViewAdapter_ReviewOfSystems consultationRos_adapter) {
+        consultationRos_array.set(busConsultationRosOnLongClick.position, consultationRos);
+        consultationRos_adapter.updateItem(busConsultationRosOnLongClick.position, consultationRos);
+        this.busConsultationRosOnLongClick = null;
+    }
+
+    void insertToArrayAndUpdateAdapter(Consultation_ROS consultationRos, ArrayList<Consultation_ROS> consultationRos_array,
+                                       RecyclerViewAdapter_ReviewOfSystems consultationRos_adapter, LinearLayout consultationRos_linearLayout) {
+        consultationRos_array.add(consultationRos);
+        checkIfArrayIsEmpty(consultationRos_array, consultationRos_linearLayout);
+        consultationRos_adapter.addItem(consultationRos);
+    }
+
+    void deleteFromArrayAndAdapter(Bus_ConsultationRos_OnLongClick busConsultationRosOnLongClick, ArrayList<Consultation_ROS> consultationRos_array,
+                                   RecyclerViewAdapter_ReviewOfSystems consultationRos_adapter, LinearLayout consultationRos_linearLayout) {
+        consultationRos_array.remove(busConsultationRosOnLongClick.position);
+        consultationRos_adapter.removeItem(busConsultationRosOnLongClick.position);
+        checkIfArrayIsEmpty(consultationRos_array, consultationRos_linearLayout);
+        this.busConsultationRosOnLongClick = null;
+    }
+
+    void checkIfArrayIsEmpty(ArrayList<Consultation_ROS> consultationRos_array, LinearLayout consultationRos_linearLayout) {
+        if (consultationRos_array.size() > 0) {
+            consultationRos_linearLayout.setVisibility(View.VISIBLE);
+        } else {
+            consultationRos_linearLayout.setVisibility(View.GONE);
         }
     }
 
@@ -144,13 +451,34 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
         return isThereNoError;
     }
 
-    /*void onClickSave() {
-        String strMedicalCondition = et_medicalCondition.getText().toString().trim();
-
-        if (validateEditText(et_medicalCondition, strMedicalCondition)) {
-            saveData(strMedicalCondition);
+    void showDialog(Consultation_ROS consultationRos) {
+        reviewOfSystemsDialog.show(getSupportFragmentManager(), "Review Of Systems Dialog");
+        if (consultationRos != null) {
+            reviewOfSystemsDialog.setFields(new Consultation_ROS(consultationRos.remarks, consultationRos.consultationRosId,
+                    consultationRos.item, consultationRos.rosCategoryId, consultationRos.category));
         }
-    }*/
+    }
+
+    void action_AlertDialog(final Bus_ConsultationRos_OnLongClick busConsultationRosOnLongClick) {
+        final CharSequence actions[] = {"Edit", "Delete"};
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Choose Action");
+        builder.setItems(actions, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        showDialog(busConsultationRosOnLongClick.consultationRos);
+                        break;
+                    case 1:
+                        deleteCheckWhichCategory(busConsultationRosOnLongClick);
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
 
     void getVaccines() {
         try {
@@ -171,12 +499,6 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
                                             jsonArray = rootJsonArray.getJSONArray(1);
                                             arrayAdapterStrings = new ArrayAdapter_Strings(jsonArray);
                                             reviewOfSystems = arrayAdapterStrings.reviewOfSystems;
-
-                                            /*int jsonArrayLength = jsonArray.length();
-                                            for (int x = 0; x < jsonArrayLength; x++) {
-                                                jsonObject = jsonArray.getJSONObject(x);
-                                                reviewOfSystems.add(new Review_Of_Systems(jsonObject));
-                                            }*/
                                             reviewOfSystemsDialog.setArrayList(arrayAdapterStrings);
                                             break;
                                         case "empty":
@@ -215,156 +537,22 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
         }
     }
 
-    void saveData(final String strMedicalCondition) {
-        try {
-            progressDialog.show("Saving...");
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_PAST_MEDICAL,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("error", response);
-                            try {
-                                JSONArray rootJsonArray = new JSONArray(response);
-                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if (jsonObject.has("code")) {
-                                    String code = jsonObject.getString("code");
-                                    switch (code) {
-                                        case "success":
-                                            if (consultation == null) {
-                                                Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(getApplicationContext(), R.string.record_updated, Toast.LENGTH_SHORT).show();
-                                            }
-                                            intent = new Intent();
-                                            intent.putExtra("result", true);
-                                            setResult(RESULT_OK, intent);
-                                            finish();
-                                            break;
-                                        case "unauthorized":
-                                            alertDialog.show("Error", getString(R.string.unauthorized_to_insert));
-                                            break;
-                                        case "empty":
-                                            alertDialog.show("Error", getString(R.string.error_occured));
-                                            break;
-                                        default:
-                                            alertDialog.show("Error", getString(R.string.error_occured));
-                                            break;
-                                    }
-                                } else if (jsonObject.has("exception")) {
-                                    alertDialog.show("Error", jsonObject.getString("exception"));
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                progressDialog.dismiss();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            progressDialog.dismiss();
-                        }
-                    }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<>();
-                    if (consultation != null) {
-                        params.put("action", "updatePastMedicalHistory");
-                        params.put("id", String.valueOf(consultation.id));
-                    } else {
-                        params.put("action", "insertPastMedicalHistory");
-                        if (viewer != null) {
-                            params.put("user_data_id", String.valueOf(viewer.user_id));
-                            params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
-                        } else {
-                            params.put("user_data_id", String.valueOf(patient.user_data_id));
-                            params.put("medical_staff_id", "0");
-                        }
-                    }
-                    params.put("device", "mobile");
-                    params.put("patient_id", String.valueOf(patient.id));
-                    params.put("medical_condition", strMedicalCondition);
-                    params.put("date_time", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
-
-                    return params;
-                }
-            };
-            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
-        } catch (Exception e) {
-            progressDialog.dismiss();
-            e.printStackTrace();
+    @Subscribe
+    public void onClickDialogOk(Bus_ConsultationROS consultationROS) {
+        switch (consultationROS.queryType) {
+            case INSERT:
+                insertCheckWhichCategory(consultationROS.consultationRos);
+                break;
+            case UPDATE:
+                updateCheckWhichCategory(consultationROS);
+                break;
         }
-    }
-
-    /*void fetchData() {
-        try {
-            progressBar.show();
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_PAST_MEDICAL,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("error", response);
-                            try {
-                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
-                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if (jsonObject.has("code")) {
-                                    String code = jsonObject.getString("code");
-                                    switch (code){
-                                        case "success":
-                                            jsonArray = rootJsonArray.getJSONArray(1);
-                                            pastMedicalHistory = new Past_Medical_History(jsonArray.getJSONObject(0));
-                                            setText();
-                                            break;
-                                        case "empty":
-                                        case "error":
-                                            break;
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                progressBar.hide();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                        }
-                    }
-            ) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("action", "getPastMedicalHistoryData");
-                    params.put("device", "mobile");
-                    params.put("id", String.valueOf(pastMedicalHistory.id));
-
-                    return params;
-                }
-            };
-            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
-        } catch (Exception e) {
-            progressBar.hide();
-            e.printStackTrace();
-        }
-    }*/
-
-    void setText() {
-        //et_medicalCondition.setText(pastMedicalHistory.medicalCondition);
-        //calendar = (Calendar) pastMedicalHistory.dateTime.clone();
-        setCalendar(calendar);
-    }
-
-    void showDialog() {
-        reviewOfSystemsDialog.show(getSupportFragmentManager(), "Review Of Systems Dialog");
     }
 
     @Subscribe
-    public void onClickDialogOk(Bus_ConsultationROS consultationROS) {
-
+    public void onLongClickRos(Bus_ConsultationRos_OnLongClick busConsultationRosOnLongClick) {
+        this.busConsultationRosOnLongClick = busConsultationRosOnLongClick;
+        action_AlertDialog(this.busConsultationRosOnLongClick);
     }
 
     @Override
@@ -374,7 +562,7 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
                 //onClickSave();
                 break;
             case R.id.btn_add:
-                showDialog();
+                showDialog(null);
                 break;
             case R.id.et_date:
                 datePickerFragment.show(getSupportFragmentManager(), "DatePicker");
