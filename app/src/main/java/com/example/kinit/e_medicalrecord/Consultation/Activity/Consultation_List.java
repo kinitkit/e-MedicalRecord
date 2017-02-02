@@ -1,8 +1,10 @@
 package com.example.kinit.e_medicalrecord.Consultation.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.kinit.e_medicalrecord.Consultation.Bus.Bus_Consultation;
 import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_Consultation;
 import com.example.kinit.e_medicalrecord.General.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.Consultation.Class.Consultation;
@@ -30,6 +33,7 @@ import com.example.kinit.e_medicalrecord.Profile.Class.Viewer;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.General.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.General.Request.UrlString;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -113,6 +117,54 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
     }
 
+    void action_AlertDialog(final Bus_Consultation busConsultation) {
+        final CharSequence actions[] = {"Edit", "Delete"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Choose Action");
+        builder.setItems(actions, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        //setActivityUpdate(busPastMedicalHistoryOnLongClick);
+                        break;
+                    case 1:
+                        alertDialog.builder.setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deleteData(busConsultation);
+                                    }
+                                });
+                        alertDialog.builder.setNegativeButton("Cancel", null);
+                        alertDialog.show("Delete", "This item will be permanently deleted.");
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
+
+    /*void setActivityUpdate(Bus_PastMedicalHistory_OnLongClick busPastMedicalHistoryOnLongClick) {
+        intent = new Intent(this, Past_Medical_History_Form.class);
+        intent.putExtra("patient", patient);
+        intent.putExtra("viewer", viewer);
+        intent.putExtra("pastMedicalHistory", busPastMedicalHistoryOnLongClick.pastMedicalHistory);
+        startActivityForResult(intent, 1);
+    }
+
+    @Subscribe
+    public void onLongClickItem(Bus_PastMedicalHistory_OnLongClick busPastMedicalHistoryOnLongClick) {
+        if (viewer != null) {
+            if (busPastMedicalHistoryOnLongClick.pastMedicalHistory.userDataId == viewer.user_id) {
+                action_AlertDialog(busPastMedicalHistoryOnLongClick);
+            }
+        } else {
+            action_AlertDialog(busPastMedicalHistoryOnLongClick);
+        }
+    }*/
+
     void fetchData() {
         try {
             consultations = new ArrayList<>();
@@ -183,39 +235,10 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
         }
     }
 
-    /*void action_AlertDialog(final Bus_PastMedicalHistory_OnLongClick busPastMedicalHistoryOnLongClick) {
-        final CharSequence actions[] = {"Edit", "Delete"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
-        builder.setTitle("Choose Action");
-        builder.setItems(actions, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        setActivityUpdate(busPastMedicalHistoryOnLongClick);
-                        break;
-                    case 1:
-                        alertDialog.builder.setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        deleteData(busPastMedicalHistoryOnLongClick);
-                                    }
-                                });
-                        alertDialog.builder.setNegativeButton("Cancel", null);
-                        alertDialog.show("Delete", "This item will be permanently deleted.");
-                        break;
-                }
-            }
-        });
-        builder.show();
-    }
-
-    void deleteData(final Bus_PastMedicalHistory_OnLongClick busPastMedicalHistoryOnLongClick) {
+    void deleteData(final Bus_Consultation busConsultation) {
         progressDialog.show("Deleting...");
         try {
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_PAST_MEDICAL,
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_CONSULTATION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -225,15 +248,15 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("success")) {
-                                        pastMedicalHistories.remove(busPastMedicalHistoryOnLongClick.position);
-                                        recyclerViewAdapter_Content.notifyItemRemoved(busPastMedicalHistoryOnLongClick.position);
+                                        consultations.remove(busConsultation.position);
+                                        recyclerViewAdapter_Content.notifyItemRemoved(busConsultation.position);
                                     }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
                                 progressDialog.dismiss();
-                                NothingToShow.showNothingToShow(pastMedicalHistories, recyclerView_Content, nothingToShow);
+                                NothingToShow.showNothingToShow(consultations, recyclerView_Content, nothingToShow);
                             }
                         }
                     },
@@ -246,9 +269,9 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "deletePastMedicalHistory");
+                    params.put("action", "deleteConsultation");
                     params.put("device", "mobile");
-                    params.put("id", String.valueOf(busPastMedicalHistoryOnLongClick.pastMedicalHistory.id));
+                    params.put("id", String.valueOf(busConsultation.consultation.id));
                     return params;
                 }
             };
@@ -259,30 +282,33 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
         }
     }
 
-    void setActivityUpdate(Bus_PastMedicalHistory_OnLongClick busPastMedicalHistoryOnLongClick) {
-        intent = new Intent(this, Past_Medical_History_Form.class);
-        intent.putExtra("patient", patient);
-        intent.putExtra("viewer", viewer);
-        intent.putExtra("pastMedicalHistory", busPastMedicalHistoryOnLongClick.pastMedicalHistory);
-        startActivityForResult(intent, 1);
-    }
-
     @Subscribe
-    public void onLongClickItem(Bus_PastMedicalHistory_OnLongClick busPastMedicalHistoryOnLongClick) {
-        if (viewer != null) {
-            if (busPastMedicalHistoryOnLongClick.pastMedicalHistory.userDataId == viewer.user_id) {
-                action_AlertDialog(busPastMedicalHistoryOnLongClick);
-            }
-        } else {
-            action_AlertDialog(busPastMedicalHistoryOnLongClick);
+    public void onClickItem(Bus_Consultation busConsultation) {
+        switch (busConsultation.type) {
+            case 0:
+                Intent intent = new Intent(this, Consultation_View.class);
+                intent.putExtra("patient", patient);
+                intent.putExtra("viewer", viewer);
+                intent.putExtra("consultation", busConsultation.consultation);
+                startActivity(intent);
+                break;
+            case 1:
+                if (viewer != null) {
+                    if (busConsultation.consultation.userDataId == viewer.user_id) {
+                        action_AlertDialog(busConsultation);
+                    }
+                } else {
+                    action_AlertDialog(busConsultation);
+                }
+                break;
         }
-    }*/
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                intent = new Intent(this, Consultation_Form.class);
+                Intent intent = new Intent(this, Consultation_Form.class);
                 intent.putExtra("patient", patient);
                 intent.putExtra("viewer", viewer);
                 startActivityForResult(intent, 1);

@@ -64,7 +64,8 @@
         <activity android:name=".Social_History.Activity.Social_History_List" />
         <activity android:name=".Social_History.Activity.Social_History_Form" />
         <activity android:name=".Consultation.Activity.Consultation_List" />
-        <activity android:name=".Consultation.Activity.Consultation_Form"></activity>
+        <activity android:name=".Consultation.Activity.Consultation_Form" />
+        <activity android:name=".Consultation.Activity.Consultation_View"></activity>
     </application>
 
 </manifest>

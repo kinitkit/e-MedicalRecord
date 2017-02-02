@@ -32,13 +32,14 @@ public class Consultation implements Parcelable {
             temperature = jsonObject.getDouble("temperature");
             pulseRate = jsonObject.getInt("pulse_rate");
             status = jsonObject.getString("status").equals("1");
+            diagnosis = jsonObject.getString("diagnosis");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void setDateAndTime(String date) {
+    void setDateAndTime(String date) {
         try {
             dateTime = Calendar.getInstance();
             dateTime.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date));

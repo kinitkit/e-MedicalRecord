@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -54,6 +55,7 @@ import java.util.Map;
 
 public class Consultation_Form extends AppCompatActivity implements View.OnClickListener {
 
+    int counter;
     Intent intent;
     Patient patient;
     Viewer viewer;
@@ -147,9 +149,6 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
         initLinearLayoutsAndRecyclerView();
 
         getVaccines();
-        if (consultation != null) {
-            //fetchData();
-        }
     }
 
     void initLinearLayoutsAndRecyclerView() {
@@ -445,6 +444,7 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
 
         if (text.isEmpty()) {
             editText.setError(getString(R.string.required_field));
+            editText.requestFocus();
             isThereNoError = false;
         }
 
@@ -480,6 +480,31 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
         builder.show();
     }
 
+    private void onClickSave() {
+        String strPhysician = et_physician.getText().toString().trim(), strChiefComplaint = et_chiefComplaint.getText().toString().trim(),
+                strPresentIllness = et_presentIllness.getText().toString().trim(), strDiagnosis = et_diagnosis.getText().toString().trim();
+
+        if (validateEditText(et_physician, strPhysician) && validateEditText(et_chiefComplaint, strChiefComplaint) &&
+                validateEditText(et_presentIllness, strPresentIllness) && validateEditText(et_diagnosis, strDiagnosis)) {
+            if (!consultationRos_general.isEmpty() || !consultationRos_skinBreast.isEmpty() || !consultationRos_eyesEars.isEmpty() ||
+                    !consultationRos_cardio.isEmpty() || !consultationRos_respi.isEmpty() || !consultationRos_gastro.isEmpty() ||
+                    !consultationRos_genito.isEmpty() || !consultationRos_musculo.isEmpty() || !consultationRos_neuro.isEmpty() ||
+                    !consultationRos_allergic.isEmpty()) {
+                saveData(strPhysician, strChiefComplaint, strPresentIllness, strDiagnosis);
+            } else {
+                alertDialog.show("Error", "Review of systems is empty.");
+            }
+        }
+    }
+
+    void insertArrayToMap(Map params, ArrayList<Consultation_ROS> consultationRoses) {
+        for (Consultation_ROS consultationRos : consultationRoses) {
+            params.put("ros_id[" + (counter) + "]", String.valueOf(consultationRos.rosId));
+            params.put("remarks[" + (counter) + "]", consultationRos.remarks);
+            ++counter;
+        }
+    }
+
     void getVaccines() {
         try {
             progressBar.show();
@@ -500,6 +525,9 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
                                             arrayAdapterStrings = new ArrayAdapter_Strings(jsonArray);
                                             reviewOfSystems = arrayAdapterStrings.reviewOfSystems;
                                             reviewOfSystemsDialog.setArrayList(arrayAdapterStrings);
+                                            if (consultation != null) {
+
+                                            }
                                             break;
                                         case "empty":
                                         case "error":
@@ -537,6 +565,181 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
         }
     }
 
+    void fetchData() {
+        try {
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_CONSULTATION,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("view", response);
+                            try {
+                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
+                                JSONObject jsonObject;
+                                int jsonArrayLength;
+
+                                if (rootJsonArray.get(0) instanceof JSONObject) {
+                                    jsonObject = rootJsonArray.getJSONObject(0);
+                                    if (jsonObject.has("code")) {
+                                        String code = jsonObject.getString("code");
+                                        switch (code) {
+                                            case "success":
+                                                if (rootJsonArray.get(1) instanceof JSONArray) {
+                                                    jsonArray = rootJsonArray.getJSONArray(1);
+                                                    jsonObject = jsonArray.getJSONObject(0);
+                                                    consultation = new Consultation(jsonObject);
+
+                                                    if (rootJsonArray.get(2) instanceof JSONArray) {
+                                                        jsonArray = rootJsonArray.getJSONArray(2);
+                                                        jsonArrayLength = jsonArray.length();
+                                                        for(int x = 0; x < jsonArrayLength; x++){
+                                                            insertCheckWhichCategory(new Consultation_ROS(jsonArray.getJSONObject(x)));
+                                                        }
+                                                        //setToEditText();
+                                                    }
+                                                }
+                                                break;
+                                            case "error":
+                                                break;
+                                        }
+                                    } else if (jsonObject.has("exception")) {
+                                        Log.d("exception", jsonObject.getString("exception"));
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                progressBar.hide();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressBar.hide();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "getConsultation");
+                    params.put("device", "mobile");
+                    params.put("id", String.valueOf(consultation.id));
+
+                    return params;
+                }
+            };
+
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            progressBar.hide();
+        }
+    }
+
+    void saveData(final String strPhysician, final String strChiefComplaint, final String strPresentIllness, final String strDiagnosis) {
+        try {
+            progressDialog.show("Saving...");
+            counter = 0;
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_CONSULTATION,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                JSONArray rootJsonArray = new JSONArray(response);
+                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                if (jsonObject.has("code")) {
+                                    String code = jsonObject.getString("code");
+                                    switch (code) {
+                                        case "success":
+                                            if (consultation == null) {
+                                                Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), R.string.record_updated, Toast.LENGTH_SHORT).show();
+                                            }
+                                            intent = new Intent();
+                                            intent.putExtra("result", true);
+                                            setResult(RESULT_OK, intent);
+                                            finish();
+                                            break;
+                                        case "unauthorized":
+                                            alertDialog.show("Error", getString(R.string.unauthorized_to_insert));
+                                            break;
+                                        case "empty":
+                                            alertDialog.show("Error", getString(R.string.error_occured));
+                                            break;
+                                        default:
+                                            alertDialog.show("Error", getString(R.string.error_occured));
+                                            break;
+                                    }
+                                } else if (jsonObject.has("exception")) {
+                                    alertDialog.show("Error", jsonObject.getString("exception"));
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressDialog.dismiss();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    if (consultation != null) {
+                        params.put("action", "updateConsultation");
+                        params.put("id", String.valueOf(consultation.id));
+                    } else {
+                        params.put("action", "insertConsultation");
+                        if (viewer != null) {
+                            params.put("user_data_id", String.valueOf(viewer.user_id));
+                            params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
+                        } else {
+                            params.put("user_data_id", String.valueOf(patient.user_data_id));
+                            params.put("medical_staff_id", "0");
+                        }
+                    }
+                    params.put("device", "mobile");
+                    params.put("patient_id", String.valueOf(patient.id));
+                    params.put("physician_name", strPhysician);
+                    params.put("date_time", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
+                    params.put("chief_complaint", strChiefComplaint);
+                    params.put("present_illness", strPresentIllness);
+                    params.put("diagnosis", strDiagnosis);
+                    params.put("height", et_height.getText().toString());
+                    params.put("weight", et_weight.getText().toString());
+                    params.put("blood_pressure", et_bloodPressure.getText().toString());
+                    params.put("respiration_rate", et_respirationRate.getText().toString());
+                    params.put("temperature", et_temperature.getText().toString());
+                    params.put("pulse_rate", et_pulseRate.getText().toString());
+
+                    insertArrayToMap(params, consultationRos_general);
+                    insertArrayToMap(params, consultationRos_skinBreast);
+                    insertArrayToMap(params, consultationRos_eyesEars);
+                    insertArrayToMap(params, consultationRos_cardio);
+                    insertArrayToMap(params, consultationRos_respi);
+                    insertArrayToMap(params, consultationRos_gastro);
+                    insertArrayToMap(params, consultationRos_genito);
+                    insertArrayToMap(params, consultationRos_musculo);
+                    insertArrayToMap(params, consultationRos_neuro);
+                    insertArrayToMap(params, consultationRos_allergic);
+
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+
     @Subscribe
     public void onClickDialogOk(Bus_ConsultationROS consultationROS) {
         switch (consultationROS.queryType) {
@@ -559,7 +762,7 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_save:
-                //onClickSave();
+                onClickSave();
                 break;
             case R.id.btn_add:
                 showDialog(null);
