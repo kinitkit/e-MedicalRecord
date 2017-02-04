@@ -1,4 +1,4 @@
-package com.example.kinit.e_medicalrecord.Admission.Fragment;
+package com.example.kinit.e_medicalrecord.Consultation.Fragment;
 
 
 import android.os.Bundle;
@@ -19,16 +19,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_Tagged_MedPrescription;
 import com.example.kinit.e_medicalrecord.General.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Remove_Physician;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.General.NothingToShow;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.General.Enum.My_Physician_Button_Mode;
-import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.General.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.General.Request.UrlString;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Remove_Physician;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Tagged_Physician_List;
+import com.example.kinit.e_medicalrecord.R;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
@@ -38,13 +38,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class Fragment_Tagged_Consultation extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     //View
     View rootView;
 
     //Primitive Data Types
-    int admission_id, position;
+    int consultation_id, position;
     ArrayList<Tagged_Physician_List> taggedPhysicianLists;
 
     //Widgets
@@ -64,7 +64,8 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_tagged_admission, container, false);
+        // Inflate the layout for this fragment
+        rootView = inflater.inflate(R.layout.fragment_tagged_consultation, container, false);
         return rootView;
     }
 
@@ -97,7 +98,7 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
         try {
             taggedPhysicianLists = new ArrayList<>();
             progressBar.show();
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_CONSULTATION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -134,9 +135,9 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "admissionTaggedPhysician");
+                    params.put("action", "consultationTaggedPhysician");
                     params.put("device", "mobile");
-                    params.put("admission_id", String.valueOf(admission_id));
+                    params.put("consultation_id", String.valueOf(consultation_id));
                     return params;
                 }
             };
@@ -150,11 +151,10 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
     void removePhysician(final int id) {
         try {
             progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_CONSULTATION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d("error", response);
                             Log.d("error", response);
                             try {
                                 JSONArray rootJsonArray = new JSONArray(response);
@@ -190,7 +190,7 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "removeAdmissionPhysician");
+                    params.put("action", "removeConsultationPhysician");
                     params.put("device", "mobile");
                     params.put("id", String.valueOf(id));
                     return params;
@@ -202,8 +202,8 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
         }
     }
 
-    public void setAdmission_id(int admission_id){
-        this.admission_id = admission_id;
+    public void setConsultation_id(int consultation_id){
+        this.consultation_id = consultation_id;
     }
 
     @Subscribe
@@ -237,4 +237,5 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
         super.onDestroy();
         rootView = null;
     }
+
 }

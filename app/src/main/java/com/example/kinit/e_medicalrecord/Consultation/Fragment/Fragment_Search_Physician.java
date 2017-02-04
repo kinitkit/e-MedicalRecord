@@ -1,9 +1,8 @@
-package com.example.kinit.e_medicalrecord.Admission.Fragment;
+package com.example.kinit.e_medicalrecord.Consultation.Fragment;
 
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,16 +19,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_Tagged_MedPrescription;
 import com.example.kinit.e_medicalrecord.General.BusStation.BusStation;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Remove_Physician;
-import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.General.NothingToShow;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Tagged_Physician_List;
 import com.example.kinit.e_medicalrecord.General.Enum.My_Physician_Button_Mode;
-import com.example.kinit.e_medicalrecord.R;
+import com.example.kinit.e_medicalrecord.General.Exception.Codes;
 import com.example.kinit.e_medicalrecord.General.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.General.Request.UrlString;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Add_Physician;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Search_Tagged_MedicalPrescription;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Tagged_Physician_List;
+import com.example.kinit.e_medicalrecord.R;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
@@ -38,25 +39,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class Fragment_Search_Physician extends Fragment {
 
     //View
     View rootView;
 
-    //Primitive Data Types
-    int admission_id, position;
+    String name;
+    int user_id, position;
+    int consultation_id;
+
     ArrayList<Tagged_Physician_List> taggedPhysicianLists;
 
     //Widgets
-    //RecyclerView
     RecyclerView recyclerView_Content;
     RecyclerViewAdapter_Tagged_MedPrescription recyclerViewAdapter_Content;
     RecyclerView.LayoutManager recyclerViewLayoutM_Content;
-    //SwipeRefreshLayout
-    SwipeRefreshLayout swipeRefreshLayout;
 
     //App
-    Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
     Custom_ProgressBar progressBar;
     LinearLayout nothingToShow;
@@ -64,40 +63,32 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_tagged_admission, container, false);
+        rootView = inflater.inflate(R.layout.fragment_search_physician_consultation, container, false);
+        recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        init();
-    }
-
-    void init() {
-        alertDialog = new Custom_AlertDialog(getActivity());
         progressDialog = new Custom_ProgressDialog(getActivity());
         progressBar = new Custom_ProgressBar(getActivity());
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        recyclerView_Content = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         nothingToShow = (LinearLayout) rootView.findViewById(R.id.nothingToShow);
-        fetchData();
     }
 
     void loadToRecyclerView() {
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_Tagged_MedPrescription(taggedPhysicianLists, My_Physician_Button_Mode.REMOVE);
+        recyclerViewAdapter_Content = new RecyclerViewAdapter_Tagged_MedPrescription(taggedPhysicianLists, My_Physician_Button_Mode.ADD);
         recyclerViewLayoutM_Content = new LinearLayoutManager(getActivity());
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
-        progressDialog.dismiss();
     }
 
     void fetchData() {
+        taggedPhysicianLists = new ArrayList<>();
+
         try {
-            taggedPhysicianLists = new ArrayList<>();
             progressBar.show();
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_CONSULTATION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -113,6 +104,8 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
                                             taggedPhysicianLists.add(new Tagged_Physician_List(jsonArray.getJSONObject(x)));
                                         }
                                         loadToRecyclerView();
+                                    } else if (jsonObject.getString("code").equals("empty")) {
+                                        loadToRecyclerView();
                                     }
                                 }
                             } catch (Exception e) {
@@ -126,17 +119,17 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
                             progressBar.hide();
                         }
-                    }
-            ) {
+                    }) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "admissionTaggedPhysician");
+                    params.put("action", "searchConsultationPhysicians");
                     params.put("device", "mobile");
-                    params.put("admission_id", String.valueOf(admission_id));
+                    params.put("user_id", String.valueOf(user_id));
+                    params.put("name", name);
+                    params.put("consultation_id", String.valueOf(consultation_id));
                     return params;
                 }
             };
@@ -147,31 +140,27 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
         }
     }
 
-    void removePhysician(final int id) {
+    void addPhysician(final int medical_staff_id) {
+        progressDialog.show("Loading...");
         try {
-            progressDialog.show("Loading...");
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_ADMISSION,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_CONSULTATION,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.d("error", response);
-                            Log.d("error", response);
                             try {
                                 JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if (jsonObject.has("code")) {
-                                    String code = jsonObject.getString("code");
-                                    switch (code) {
-                                        case "success":
-                                            taggedPhysicianLists.remove(position);
-                                            recyclerViewAdapter_Content.notifyItemRemoved(position);
-                                            break;
-                                        case "failed":
-                                            alertDialog.show("Error", getString(R.string.error_occured));
-                                            break;
+                                if (jsonObject.has("exception")) {
+                                    if (jsonObject.getString("exception").contains(Codes.SQLSTATE23000)) {
+                                        Toast.makeText(getActivity(), "This physician is already in your list", Toast.LENGTH_SHORT).show();
                                     }
-                                } else if (jsonObject.has("exception")) {
-                                    alertDialog.show("Error", jsonObject.getString("exception"));
+                                } else if (jsonObject.has("code")) {
+                                    if (jsonObject.getString("code").equals("success")) {
+                                        taggedPhysicianLists.remove(position);
+                                        recyclerViewAdapter_Content.notifyItemRemoved(position);
+                                        Toast.makeText(getActivity(), "Physician added", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -190,34 +179,18 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put("action", "removeAdmissionPhysician");
+                    params.put("action", "addConsultationPhysician");
                     params.put("device", "mobile");
-                    params.put("id", String.valueOf(id));
+                    params.put("medical_staff_id", String.valueOf(medical_staff_id));
+                    params.put("consultation_id", String.valueOf(consultation_id));
                     return params;
                 }
             };
             Custom_Singleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            progressDialog.dismiss();
         }
-    }
-
-    public void setAdmission_id(int admission_id){
-        this.admission_id = admission_id;
-    }
-
-    @Subscribe
-    public void onClickRemove(Bus_Remove_Physician busRemovePhysician) {
-        this.position = busRemovePhysician.position;
-        removePhysician(busRemovePhysician.taggedPhysicianList.id);
-    }
-
-    @Override
-    public void onRefresh() {
-        if (swipeRefreshLayout.isRefreshing()) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-        fetchData();
     }
 
     @Override
@@ -237,4 +210,19 @@ public class Fragment_Tagged_Admission extends Fragment implements SwipeRefreshL
         super.onDestroy();
         rootView = null;
     }
+
+    @Subscribe
+    public void isSearchClicked(Bus_Search_Tagged_MedicalPrescription busSearchTaggedMedicalPrescription) {
+        this.name = busSearchTaggedMedicalPrescription.name;
+        this.user_id = busSearchTaggedMedicalPrescription.user_id;
+        this.consultation_id = busSearchTaggedMedicalPrescription.id;
+        fetchData();
+    }
+
+    @Subscribe
+    public void onClickAdd(Bus_Add_Physician busAddPhysician) {
+        this.position = busAddPhysician.position;
+        addPhysician(busAddPhysician.taggedPhysicianList.medical_staff_id);
+    }
+
 }

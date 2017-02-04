@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -31,7 +32,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Admission_View extends AppCompatActivity implements View.OnClickListener {
+import static com.example.kinit.e_medicalrecord.R.id.menu_tag;
+
+public class Admission_View extends AppCompatActivity {
 
     //Classes
     Intent intent;
@@ -43,7 +46,6 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
 
     TextView tv_physicianName, tv_hospital, tv_dateAdmission, tv_dateDischarged, tv_admittingImpression,
             tv_procedures, tv_futurePlan, tv_finalDiagnosis;
-    FloatingActionButton btn_tagged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +84,6 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
         tv_procedures = (TextView) findViewById(R.id.tv_procedures);
         tv_futurePlan = (TextView) findViewById(R.id.tv_futurePlan);
         tv_finalDiagnosis = (TextView) findViewById(R.id.tv_finalDiagnosis);
-        btn_tagged = (FloatingActionButton) findViewById(R.id.btn_tagged);
-        btn_tagged.setOnClickListener(this);
-
-        if (viewer != null) {
-            btn_tagged.setVisibility(View.GONE);
-        }
         fetchData();
     }
 
@@ -155,20 +151,23 @@ public class Admission_View extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_tagged:
-                intent = new Intent(this, Tagged_Admission.class);
-                intent.putExtra("admission_id", admission.id);
-                intent.putExtra("patient", patient);
-                startActivity(intent);
-                break;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        if (viewer == null) {
+            getMenuInflater().inflate(R.menu.menu_with_tag, menu);
         }
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case menu_tag:
+                Intent intent = new Intent(this, Tagged_Admission.class);
+                intent.putExtra("admission_id", admission.id);
+                intent.putExtra("patient", patient);
+                startActivity(intent);
+                break;
             case android.R.id.home:
                 this.finish();
                 return true;

@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.kinit.e_medicalrecord.R.id.menu_tag;
+
 public class Consultation_View extends AppCompatActivity {
 
     //Classes
@@ -248,7 +250,7 @@ public class Consultation_View extends AppCompatActivity {
         }
     }
 
-    void setToEditText(){
+    void setToEditText() {
         tv_physician.setText(consultation.physicianName);
         tv_date.setText(consultation.strDateTime);
         tv_chiefComplaint.setText(consultation.chiefComplaint);
@@ -289,7 +291,7 @@ public class Consultation_View extends AppCompatActivity {
                                                     if (rootJsonArray.get(2) instanceof JSONArray) {
                                                         jsonArray = rootJsonArray.getJSONArray(2);
                                                         jsonArrayLength = jsonArray.length();
-                                                        for(int x = 0; x < jsonArrayLength; x++){
+                                                        for (int x = 0; x < jsonArrayLength; x++) {
                                                             insertCheckWhichCategory(new Consultation_ROS(jsonArray.getJSONObject(x)));
                                                         }
                                                         setToEditText();
@@ -337,13 +339,21 @@ public class Consultation_View extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_with_tag, menu);
+        if (viewer == null) {
+            getMenuInflater().inflate(R.menu.menu_with_tag, menu);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case menu_tag:
+                Intent intent = new Intent(this, Tagged_Consultation.class);
+                intent.putExtra("consultation_id", consultation.id);
+                intent.putExtra("patient", patient);
+                startActivity(intent);
+                break;
             case android.R.id.home:
                 this.finish();
                 return true;

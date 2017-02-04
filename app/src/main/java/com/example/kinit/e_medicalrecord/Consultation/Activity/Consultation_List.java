@@ -80,7 +80,7 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Consultation");
+        getSupportActionBar().setTitle("Consultation List");
         getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -105,10 +105,8 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
     void btn_initializer(boolean isButtonViewable) {
         if (isButtonViewable) {
             btn_add.show();
-            //btn_add.setVisibility(View.VISIBLE);
         } else {
             btn_add.hide();
-            //btn_add.setVisibility(View.GONE);
         }
     }
 
@@ -127,7 +125,7 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        //setActivityUpdate(busPastMedicalHistoryOnLongClick);
+                        setActivityUpdate(busConsultation);
                         break;
                     case 1:
                         alertDialog.builder.setPositiveButton("OK",
@@ -146,24 +144,13 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
         builder.show();
     }
 
-    /*void setActivityUpdate(Bus_PastMedicalHistory_OnLongClick busPastMedicalHistoryOnLongClick) {
-        intent = new Intent(this, Past_Medical_History_Form.class);
+    void setActivityUpdate(Bus_Consultation busConsultation) {
+        intent = new Intent(this, Consultation_Form.class);
         intent.putExtra("patient", patient);
         intent.putExtra("viewer", viewer);
-        intent.putExtra("pastMedicalHistory", busPastMedicalHistoryOnLongClick.pastMedicalHistory);
+        intent.putExtra("consultation", busConsultation.consultation);
         startActivityForResult(intent, 1);
     }
-
-    @Subscribe
-    public void onLongClickItem(Bus_PastMedicalHistory_OnLongClick busPastMedicalHistoryOnLongClick) {
-        if (viewer != null) {
-            if (busPastMedicalHistoryOnLongClick.pastMedicalHistory.userDataId == viewer.user_id) {
-                action_AlertDialog(busPastMedicalHistoryOnLongClick);
-            }
-        } else {
-            action_AlertDialog(busPastMedicalHistoryOnLongClick);
-        }
-    }*/
 
     void fetchData() {
         try {

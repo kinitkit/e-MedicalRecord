@@ -505,6 +505,21 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
         }
     }
 
+    void setToEditText() {
+        et_physician.setText(consultation.physicianName);
+        setCalendar(consultation.dateTime);
+        calendar = (Calendar) consultation.dateTime.clone();
+        et_chiefComplaint.setText(consultation.chiefComplaint);
+        et_presentIllness.setText(consultation.presentIllness);
+        et_diagnosis.setText(consultation.diagnosis);
+        et_height.setText(String.valueOf(consultation.height));
+        et_weight.setText(String.valueOf(consultation.weight));
+        et_temperature.setText(String.valueOf(consultation.temperature));
+        et_bloodPressure.setText(consultation.physicianName);
+        et_respirationRate.setText(String.valueOf(consultation.respirationRate));
+        et_pulseRate.setText(String.valueOf(consultation.pulseRate));
+    }
+
     void getVaccines() {
         try {
             progressBar.show();
@@ -526,7 +541,7 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
                                             reviewOfSystems = arrayAdapterStrings.reviewOfSystems;
                                             reviewOfSystemsDialog.setArrayList(arrayAdapterStrings);
                                             if (consultation != null) {
-
+                                                fetchData();
                                             }
                                             break;
                                         case "empty":
@@ -537,7 +552,9 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                progressBar.hide();
+                                if(consultation == null) {
+                                    progressBar.hide();
+                                }
                             }
                         }
                     },
@@ -567,7 +584,6 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
 
     void fetchData() {
         try {
-            progressBar.show();
             StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_CONSULTATION,
                     new Response.Listener<String>() {
                         @Override
@@ -592,10 +608,10 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
                                                     if (rootJsonArray.get(2) instanceof JSONArray) {
                                                         jsonArray = rootJsonArray.getJSONArray(2);
                                                         jsonArrayLength = jsonArray.length();
-                                                        for(int x = 0; x < jsonArrayLength; x++){
+                                                        for (int x = 0; x < jsonArrayLength; x++) {
                                                             insertCheckWhichCategory(new Consultation_ROS(jsonArray.getJSONObject(x)));
                                                         }
-                                                        //setToEditText();
+                                                        setToEditText();
                                                     }
                                                 }
                                                 break;
@@ -704,9 +720,9 @@ public class Consultation_Form extends AppCompatActivity implements View.OnClick
                             params.put("user_data_id", String.valueOf(patient.user_data_id));
                             params.put("medical_staff_id", "0");
                         }
+                        params.put("patient_id", String.valueOf(patient.id));
                     }
                     params.put("device", "mobile");
-                    params.put("patient_id", String.valueOf(patient.id));
                     params.put("physician_name", strPhysician);
                     params.put("date_time", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
                     params.put("chief_complaint", strChiefComplaint);
