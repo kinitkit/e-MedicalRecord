@@ -30,6 +30,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Profile.Class.User;
@@ -53,7 +54,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
     User user;
     Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
-    String selectedImagePath, imageName, encodedString;
+    String selectedImagePath, encodedString;
     Bitmap bitmap;
     File file;
     Uri fileUri, imageUri;
@@ -108,6 +109,10 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
         et_lName.setText(user.lastName);
         et_contactNo.setText(user.contactNumber);
         spinner_gender.setSelection(arrayAdapter_gender.getPosition(user.gender));
+        Glide.with(this)
+                .load(UrlString.getImageUrl(user.image))
+                .error(R.mipmap.icon_user_default)
+                .into(iv_profilePic);
     }
 
     boolean validateEditText(EditText editText, String text, String code) {
@@ -313,7 +318,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                                         String code = jsonObject.getString("code");
                                         if (code.equals("success") || code.equals("empty")) {
                                             Toast.makeText(getApplicationContext(), "Image uploaded successfully.", Toast.LENGTH_SHORT).show();
-                                            //iv_profilePic.setImageBitmap(bitmap);
+                                            iv_profilePic.setImageBitmap(bitmap);
                                         }
                                     } else if (jsonObject.has("exception")) {
                                         alertDialog.show("Error", jsonObject.getString("exception"));

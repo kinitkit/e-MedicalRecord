@@ -47,10 +47,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="150dp"
                         android:adjustViewBounds="true"
-                        android:background="@mipmap/kinit"
+                        android:background="#000000"
                         android:contentDescription="@string/profile_picture"
                         android:fitsSystemWindows="true"
-                        android:scaleType="fitCenter"/>
+                        android:scaleType="fitXY" />
 
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/btn_upload"

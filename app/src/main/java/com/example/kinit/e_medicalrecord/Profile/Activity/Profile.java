@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -79,6 +80,7 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         progressDialog = new Custom_ProgressDialog(this);
         initIntent();
+        initWidgets();
         getUserData();
     }
 
@@ -108,17 +110,21 @@ public class Profile extends AppCompatActivity {
         }
     }
 
+    void initWidgets(){
+        //Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (viewer != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
     void init() {
         //SharedPreferences
         sharedPreferences = getSharedPreferences("com.example.kinit.e_medicalrecord", Context.MODE_PRIVATE);
 
-        //Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(user.getFullName());
-        if (viewer != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
         //Fragment
         fragment_profile = new Fragment_Profile();
@@ -174,12 +180,7 @@ public class Profile extends AppCompatActivity {
                                         recentCode = "";
                                     }
                                 }
-                                //if (!user.image.equals("null")) {
-                                    //Log.d("error", user.image);
-                                    //imgRqst(UrlString.getImageUrl(user.image));
-                                //} else {
                                     init();
-                                //}
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
@@ -209,28 +210,6 @@ public class Profile extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             progressDialog.dismiss();
-        }
-    }
-
-    void imgRqst(String url) {
-        try {
-            ImageRequest imageRequest = new ImageRequest(url,
-                    new Response.Listener<Bitmap>() {
-                        @Override
-                        public void onResponse(Bitmap response) {
-                            profPic = response;
-                            init();
-                        }
-                    }, 0, 0, ImageView.ScaleType.CENTER_CROP, null,
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                        }
-                    });
-            Custom_Singleton.getInstance(this).addToRequestQueue(imageRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

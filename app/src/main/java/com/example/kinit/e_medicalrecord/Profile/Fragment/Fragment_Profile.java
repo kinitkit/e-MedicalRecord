@@ -1,7 +1,6 @@
 package com.example.kinit.e_medicalrecord.Profile.Fragment;
 
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -41,7 +40,6 @@ public class Fragment_Profile extends Fragment {
     Viewer viewer;
 
     ImageButton ib_profPic;
-    Bitmap profPic;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,11 +110,10 @@ public class Fragment_Profile extends Fragment {
         this.viewPager.setAdapter(viewPagerAdapter);
     }
 
-    public void setUser(User user, Mode mode, Viewer viewer, Bitmap profPic) {
+    public void setUser(User user, Mode mode, Viewer viewer) {
         this.user = user;
         this.mode = mode;
         this.viewer = viewer;
-        this.profPic = profPic;
     }
 
     @Override
