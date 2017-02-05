@@ -108,16 +108,11 @@ public class Family_History_List extends AppCompatActivity implements SwipeRefre
 
     void btn_initializer(boolean isButtonViewable) {
         if (isButtonViewable) {
-            btn_add.setVisibility(View.VISIBLE);
+            btn_add.show();
         } else {
-            btn_add.setVisibility(View.GONE);
+            btn_add.hide();
         }
     }
-
-    /*void loadToExpandableListView() {
-        expandableListAdapter = new ExpandableListViewAdapter_FamilyHistory(this, familyHistories);
-        expandableListView.setAdapter(expandableListAdapter);
-    }*/
 
     void loadToRecyclerView() {
         recyclerViewAdapter_Content = new RecyclerViewAdapter_Family_History(familyHistories);

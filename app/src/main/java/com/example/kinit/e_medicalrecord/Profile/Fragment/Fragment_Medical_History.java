@@ -18,7 +18,7 @@ import com.example.kinit.e_medicalrecord.My_Physician.Activity.My_Physician;
 import com.example.kinit.e_medicalrecord.Past_Medical_History.Activity.Past_Medical_History_List;
 import com.example.kinit.e_medicalrecord.Social_History.Activity.Social_History_List;
 import com.example.kinit.e_medicalrecord.Surgical_History.Activity.Surgical_History_List;
-import com.example.kinit.e_medicalrecord.Vaccination.Activity.Vaccination;
+import com.example.kinit.e_medicalrecord.Vaccination.Activity.Vaccination_List;
 import com.example.kinit.e_medicalrecord.Profile.Class.Patient;
 import com.example.kinit.e_medicalrecord.Profile.Class.User;
 import com.example.kinit.e_medicalrecord.Profile.Class.Viewer;
@@ -128,7 +128,7 @@ public class Fragment_Medical_History extends Fragment {
         tv_vaccination.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myIntent = new Intent(getActivity(), Vaccination.class);
+                myIntent = new Intent(getActivity(), Vaccination_List.class);
                 putExtra();
             }
         });

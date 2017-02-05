@@ -18,14 +18,10 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<RecyclerViewAdapter_Vaccination.ViewHolder> {
 
-    ArrayList<Vaccine> vaccines;
-    ArrayList<Vaccination> vaccinations;
-    int age;
+    private ArrayList<Vaccination> vaccinations;
 
-    public RecyclerViewAdapter_Vaccination(ArrayList<Vaccine> vaccines, ArrayList<Vaccination> vaccinations, int age) {
-        this.vaccines = vaccines;
+    public RecyclerViewAdapter_Vaccination(ArrayList<Vaccination> vaccinations) {
         this.vaccinations = vaccinations;
-        this.age = age;
     }
 
 
@@ -40,7 +36,7 @@ public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<Recycl
         Vaccination vaccination = vaccinations.get(position);
         holder.vaccination = vaccination;
         holder.tv_date.setText(vaccination.strDateTaken);
-        holder.tv_vaccine.setText(vaccination.vaccine.item);
+        holder.tv_vaccine.setText(vaccination.item);
         holder.tv_provider.setText(vaccination.providerName);
         holder.tv_place.setText(vaccination.placeTaken);
         if (vaccination.strNextSchedule != null) {
@@ -80,5 +76,4 @@ public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<Recycl
             return true;
         }
     }
-
 }

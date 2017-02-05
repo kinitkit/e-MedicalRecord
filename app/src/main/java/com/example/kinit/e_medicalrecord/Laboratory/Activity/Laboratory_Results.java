@@ -223,9 +223,9 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
 
     void btn_initializer(boolean isButtonViewable) {
         if (isButtonViewable) {
-            btn_add.setVisibility(View.VISIBLE);
+            btn_add.show();
         } else {
-            btn_add.setVisibility(View.GONE);
+            btn_add.hide();
         }
     }
 

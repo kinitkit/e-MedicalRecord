@@ -90,7 +90,7 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Vaccination Form");
+        getSupportActionBar().setTitle("Vaccination_List Form");
         getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -125,7 +125,7 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
     }
 
     void setText(){
-        spinner_vaccine.setSelection(arrayAdapter.getPosition(newVaccination.vaccine.item));
+        spinner_vaccine.setSelection(arrayAdapter.getPosition(newVaccination.item));
         et_provider.setText(newVaccination.providerName);
         et_place.setText(newVaccination.placeTaken);
         calendar = (Calendar) newVaccination.calendar.clone();

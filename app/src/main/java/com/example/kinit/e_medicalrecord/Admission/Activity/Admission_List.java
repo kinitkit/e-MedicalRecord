@@ -176,9 +176,9 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
 
     void btn_initializer(boolean isButtonViewable) {
         if (isButtonViewable) {
-            btn_add.setVisibility(View.VISIBLE);
+            btn_add.show();
         } else {
-            btn_add.setVisibility(View.GONE);
+            btn_add.hide();
         }
     }
 

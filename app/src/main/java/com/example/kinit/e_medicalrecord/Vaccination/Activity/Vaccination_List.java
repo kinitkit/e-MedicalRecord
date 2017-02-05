@@ -30,28 +30,30 @@ import com.example.kinit.e_medicalrecord.General.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.General.Classes.Notification.Custom_Notification;
 import com.example.kinit.e_medicalrecord.Profile.Class.Patient;
 import com.example.kinit.e_medicalrecord.Profile.Class.Viewer;
-import com.example.kinit.e_medicalrecord.Vaccination.Class.Vaccine;
+import com.example.kinit.e_medicalrecord.Vaccination.Class.Vaccination;
 import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.General.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.General.Request.UrlString;
+import com.example.kinit.e_medicalrecord.Vaccination.Class.Vaccine_Schedule;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Vaccination extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class Vaccination_List extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     int age;
     Intent intent;
     //Classes
     Viewer viewer;
     Patient patient;
-    ArrayList<Vaccine> vaccines;
-    ArrayList<com.example.kinit.e_medicalrecord.Vaccination.Class.Vaccination> vaccinations;
+    ArrayList<Vaccine_Schedule> vaccineSchedules;
+    ArrayList<Vaccination> vaccinations;
 
     Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
@@ -109,16 +111,86 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
 
     void btn_initializer(boolean isButtonViewable) {
         if (isButtonViewable) {
-            btn_add.setVisibility(View.VISIBLE);
+            btn_add.show();
         } else {
-            btn_add.setVisibility(View.GONE);
+            btn_add.hide();
         }
+    }
+
+    void loadToRecyclerView() {
+        recyclerViewAdapter_Content = new RecyclerViewAdapter_Vaccination(vaccinations);
+        recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
+        recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
+    }
+
+    void setNextScheduleAndNotification() {
+        int count = 0;
+        for (Vaccination vaccination : vaccinations) {
+            for (Vaccine_Schedule vaccineSchedule : vaccineSchedules) {
+                if (vaccination.vaccineId == vaccineSchedule.vaccineId) {
+                    if (age >= vaccineSchedule.ageStartYear && age <= vaccineSchedule.ageEndYear) {
+                        vaccination.nxtSchedule = (Calendar) vaccination.calendar.clone();
+                        vaccination.nxtSchedule.add(Calendar.YEAR, vaccineSchedule.frequencyYear);
+                        vaccination.nxtSchedule.add(Calendar.MONTH, vaccineSchedule.frequencyMonth);
+                        vaccination.nxtSchedule.add(Calendar.DAY_OF_MONTH, vaccineSchedule.frequencyDay);
+                        vaccination.setStrNextSchedule();
+                    }
+                }
+            }
+
+            /*if (vaccination.vaccine.vaccineScheduleId != 0) {
+                if (age >= vaccination.vaccine.ageStart && age <= vaccination.vaccine.ageEnd) {
+                    ++count;
+                }
+            }*/
+        }
+        if (count > 0) {
+            notification.showVaccination("Vaccination_List", count + ((count == 1) ? " vaccination is " : " vaccinations are ")
+                    + "about to due.");
+        }
+    }
+
+    void action_AlertDialog(final Bus_Vaccination_OnLongClick busVaccinationOnLongClick) {
+        final CharSequence actions[] = {"Edit", "Delete"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Choose Action");
+        builder.setItems(actions, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        setActivityUpdate(busVaccinationOnLongClick);
+                        break;
+                    case 1:
+                        alertDialog.builder.setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deleteData(busVaccinationOnLongClick);
+                                    }
+                                });
+                        alertDialog.builder.setNegativeButton("Cancel", null);
+                        alertDialog.show("Delete", "This item will be permanently deleted.");
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
+
+    void setActivityUpdate(Bus_Vaccination_OnLongClick busVaccinationOnLongClick) {
+        intent = new Intent(this, Vaccination_Form.class);
+        intent.putExtra("patient", patient);
+        intent.putExtra("viewer", viewer);
+        intent.putExtra("vaccination", busVaccinationOnLongClick.vaccination);
+        startActivityForResult(intent, 1);
     }
 
     void fetchData() {
         try {
             progressBar.show();
-            vaccines = new ArrayList<>();
+            vaccineSchedules = new ArrayList<>();
             vaccinations = new ArrayList<>();
             StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_VACCINATION,
                     new Response.Listener<String>() {
@@ -141,19 +213,19 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
                                         jsonArrayLength = jsonArray.length();
                                         for (int x = 0; x < jsonArrayLength; x++) {
                                             jsonObject = jsonArray.getJSONObject(x);
-                                            vaccines.add(new Vaccine(jsonObject));
+                                            vaccineSchedules.add(new Vaccine_Schedule(jsonObject));
                                         }
                                         if (rootJsonArray.get(2) instanceof JSONArray) {
                                             jsonArray = rootJsonArray.getJSONArray(2);
                                             jsonArrayLength = jsonArray.length();
                                             for (int x = 0; x < jsonArrayLength; x++) {
                                                 jsonObject = jsonArray.getJSONObject(x);
-                                                vaccinations.add(new com.example.kinit.e_medicalrecord.Vaccination.Class.Vaccination(jsonObject));
+                                                vaccinations.add(new Vaccination(jsonObject));
                                             }
                                             if (rootJsonArray.get(3) instanceof JSONObject) {
                                                 jsonObject = rootJsonArray.getJSONObject(3);
                                                 age = jsonObject.getInt("age");
-                                                setNotification();
+                                                setNextScheduleAndNotification();
                                                 btn_initializer(isButtonViewable);
                                                 loadToRecyclerView();
                                             }
@@ -236,64 +308,6 @@ public class Vaccination extends AppCompatActivity implements View.OnClickListen
             progressDialog.dismiss();
             e.printStackTrace();
         }
-    }
-
-    void loadToRecyclerView() {
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_Vaccination(vaccines, vaccinations, age);
-        recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
-        recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
-    }
-
-    void setNotification() {
-        int count = 0;
-        for (com.example.kinit.e_medicalrecord.Vaccination.Class.Vaccination vaccination : vaccinations) {
-            if (vaccination.vaccine.vaccineScheduleId != 0) {
-                if (age >= vaccination.vaccine.ageStart && age <= vaccination.vaccine.ageEnd) {
-                    ++count;
-                }
-            }
-        }
-        if (count > 0) {
-            notification.showVaccination("Vaccination", count + ((count == 1) ? " vaccination is " : " vaccinations are ")
-                    + "about to due.");
-        }
-    }
-
-    void action_AlertDialog(final Bus_Vaccination_OnLongClick busVaccinationOnLongClick) {
-        final CharSequence actions[] = {"Edit", "Delete"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
-        builder.setTitle("Choose Action");
-        builder.setItems(actions, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        setActivityUpdate(busVaccinationOnLongClick);
-                        break;
-                    case 1:
-                        alertDialog.builder.setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        deleteData(busVaccinationOnLongClick);
-                                    }
-                                });
-                        alertDialog.builder.setNegativeButton("Cancel", null);
-                        alertDialog.show("Delete", "This item will be permanently deleted.");
-                        break;
-                }
-            }
-        });
-        builder.show();
-    }
-
-    void setActivityUpdate(Bus_Vaccination_OnLongClick busVaccinationOnLongClick) {
-        intent = new Intent(this, Vaccination_Form.class);
-        intent.putExtra("patient", patient);
-        intent.putExtra("viewer", viewer);
-        intent.putExtra("vaccination", busVaccinationOnLongClick.vaccination);
-        startActivityForResult(intent, 1);
     }
 
     @Override
