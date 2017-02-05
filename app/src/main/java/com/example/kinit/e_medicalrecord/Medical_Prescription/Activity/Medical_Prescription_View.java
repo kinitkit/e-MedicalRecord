@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -37,7 +38,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Medical_Prescription_View extends AppCompatActivity implements View.OnClickListener {
+import static com.example.kinit.e_medicalrecord.R.id.menu_tag;
+
+public class Medical_Prescription_View extends AppCompatActivity {
 
     Intent intent;
 
@@ -56,7 +59,6 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
     RecyclerView.Adapter recyclerViewAdapter_Content;
     RecyclerView.LayoutManager recyclerViewLayoutM_Content;
     TextView tv_physicianName, tv_clinicName, tv_date;
-    FloatingActionButton btn_tagged;
 
     /*============================
         END OF GLOBAL VARIABLES
@@ -96,15 +98,23 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
         tv_clinicName = (TextView) findViewById(R.id.tv_clinicName);
         tv_date = (TextView) findViewById(R.id.tv_date);
 
-
-        btn_tagged = (FloatingActionButton) findViewById(R.id.btn_tagged);
-        btn_tagged.setOnClickListener(this);
-
-        if (viewer != null) {
-            btn_tagged.setVisibility(View.GONE);
-        }
-
         recyclerView_Content = (RecyclerView) findViewById(R.id.recyclerView);
+    }
+
+    void loadToRecyclerView() {
+        recyclerViewAdapter_Content = new RecyclerViewAdapter_Drug_List(drugLists);
+        recyclerViewLayoutM_Content = new LinearLayoutManager(this);
+        recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
+        recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
+        setTextViewTexts();
+    }
+
+    void setTextViewTexts() {
+        tv_physicianName.setText(medicalPrescription.physicianName);
+        tv_clinicName.setText(medicalPrescription.clinic_name);
+        tv_date.setText(medicalPrescription.date);
+        getSupportActionBar().setTitle("Medical Prescription");
+        getSupportActionBar().setSubtitle(patient.name);
     }
 
     void fetchData() {
@@ -175,34 +185,6 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
         }
     }
 
-    void loadToRecyclerView() {
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_Drug_List(drugLists);
-        recyclerViewLayoutM_Content = new LinearLayoutManager(this);
-        recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
-        recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
-        setTextViewTexts();
-    }
-
-    void setTextViewTexts() {
-        tv_physicianName.setText(medicalPrescription.physicianName);
-        tv_clinicName.setText(medicalPrescription.clinic_name);
-        tv_date.setText(medicalPrescription.date);
-        getSupportActionBar().setTitle("Medical Prescription");
-        getSupportActionBar().setSubtitle(patient.name);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_tagged:
-                intent = new Intent(this, Tagged_Medical_Prescription.class);
-                intent.putExtra("medical_prescription_id", medicalPrescription.medicalPrescription_id);
-                intent.putExtra("patient", patient);
-                startActivity(intent);
-                break;
-        }
-    }
-
     void alertDialog_showError(String code) {
         if (code.equals("medicalPrescriptionNotAvailable")) {
             alertDialog.show("Notice", "Medical Prescription is not available!");
@@ -210,10 +192,24 @@ public class Medical_Prescription_View extends AppCompatActivity implements View
             alertDialog.show("Error", getString(R.string.error_occured));
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        if (viewer == null) {
+            getMenuInflater().inflate(R.menu.menu_with_tag, menu);
+        }
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case menu_tag:
+                Intent intent = new Intent(this, Tagged_Medical_Prescription.class);
+                intent.putExtra("medical_prescription_id", medicalPrescription.medicalPrescription_id);
+                intent.putExtra("patient", patient);
+                startActivity(intent);
+                break;
             case android.R.id.home:
                 this.finish();
                 return true;

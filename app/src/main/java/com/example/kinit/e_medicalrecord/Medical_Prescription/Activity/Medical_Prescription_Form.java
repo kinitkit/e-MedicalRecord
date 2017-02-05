@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -53,7 +54,8 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
 
     //Widgets
     EditText et_clinic, et_physicianName, et_prescriptionDate;
-    Button btn_add, btn_save;
+    Button btn_save;
+    ImageButton btn_add;
     RecyclerView recyclerView_Content;
     RecyclerView.Adapter recyclerViewAdapter_Content;
     RecyclerView.LayoutManager recyclerViewLayoutM_Content;
@@ -109,7 +111,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
         et_prescriptionDate = (EditText) findViewById(R.id.et_prescriptionDate);
         et_prescriptionDate.setOnClickListener(this);
 
-        btn_add = (Button) findViewById(R.id.btn_add);
+        btn_add = (ImageButton) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
         btn_save = (Button) findViewById(R.id.btn_save);
         btn_save.setOnClickListener(this);

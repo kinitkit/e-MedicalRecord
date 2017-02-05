@@ -2,6 +2,7 @@ package com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import com.example.kinit.e_medicalrecord.R;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter_Allergy extends RecyclerView.Adapter<RecyclerViewAdapter_Allergy.ViewHolder> {
-    ArrayList<Allergy> allergies;
+    private ArrayList<Allergy> allergies;
 
     public RecyclerViewAdapter_Allergy(ArrayList<Allergy> allergies) {
         this.allergies = allergies;

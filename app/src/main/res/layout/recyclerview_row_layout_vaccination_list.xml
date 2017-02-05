@@ -9,9 +9,10 @@
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="0dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/dp_5"
         android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10"
@@ -21,25 +22,40 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/colorTextSecondary"
             android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/tv_vaccine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_date"
-            android:layout_marginBottom="10dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/colorPrimaryDark" />
 
         <LinearLayout
-            android:id="@+id/linear_layoutProvider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_vaccine"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vaccine:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_vaccine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="@dimen/sp_17" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_5"
             android:orientation="horizontal">
 
@@ -55,7 +71,7 @@
                 android:id="@+id/tv_provider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_10"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="@dimen/sp_17" />
@@ -81,7 +97,7 @@
                 android:id="@+id/tv_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_10"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="@dimen/sp_17" />
@@ -107,10 +123,10 @@
                 android:id="@+id/tv_nextSchedule"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_10"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="@dimen/sp_17" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </android.support.v7.widget.CardView>

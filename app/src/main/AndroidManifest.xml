@@ -35,7 +35,7 @@
         <activity android:name=".Medical_Prescription.Activity.Drug_Form" />
         <activity android:name=".Medical_Prescription.Activity.Tagged_Medical_Prescription" />
         <activity android:name=".Medical_Prescription.Activity.Medical_Prescription_View" />
-        <activity android:name=".Allergy.Activity.Allergy" />
+        <activity android:name=".Allergy.Activity.Allergy_List" />
         <activity android:name=".Allergy.Activity.Allergy_Form" />
         <activity android:name=".Laboratory.Activity.Laboratory_Tests" />
         <activity android:name=".Laboratory.Activity.Laboratory_Results" />

@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -40,7 +41,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Laboratory_Result_View extends AppCompatActivity implements View.OnClickListener {
+import static com.example.kinit.e_medicalrecord.R.id.menu_tag;
+
+public class Laboratory_Result_View extends AppCompatActivity {
 
     String table_name;
     Intent intent;
@@ -57,7 +60,6 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
     Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
     Custom_ProgressBar progressBar;
-    FloatingActionButton btn_tagged;
 
 
     @Override
@@ -101,13 +103,6 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        btn_tagged = (FloatingActionButton) findViewById(R.id.btn_tagged);
-        btn_tagged.setOnClickListener(this);
-
-        if (viewer != null) {
-            btn_tagged.setVisibility(View.GONE);
-        }
 
         fetchData(table_name, laboratory.lab_id);
     }
@@ -335,20 +330,23 @@ public class Laboratory_Result_View extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_tagged:
-                intent = new Intent(this, Tagged_Laboratory.class);
-                intent.putExtra("patient", patient);
-                intent.putExtra("lab_id", laboratory.lab_id);
-                startActivity(intent);
-                break;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        if (viewer == null) {
+            getMenuInflater().inflate(R.menu.menu_with_tag, menu);
         }
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case menu_tag:
+                Intent intent = new Intent(this, Tagged_Laboratory.class);
+                intent.putExtra("patient", patient);
+                intent.putExtra("lab_id", laboratory.lab_id);
+                startActivity(intent);
+                break;
             case android.R.id.home:
                 this.finish();
                 return true;

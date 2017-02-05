@@ -8,9 +8,10 @@ import android.support.v7.app.NotificationCompat;
 import com.example.kinit.e_medicalrecord.R;
 
 public class Custom_Notification {
-    NotificationCompat.Builder builder;
-    Notification notification;
-    Context context;
+    private final static String GROUP_VACCINE = "group_vaccine";
+    private NotificationCompat.Builder builder;
+    private Notification notification;
+    private Context context;
 
     public Custom_Notification(Context context) {
         this.context = context;
@@ -18,13 +19,27 @@ public class Custom_Notification {
         notification = new Notification();
     }
 
-    public void showVaccination(String title, String message) {
-        builder.setSmallIcon(R.mipmap.ic_launcher)
+    public void showVaccinationToBeExpired(String title, String message) {
+        Notification notification = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.mipmap.ic_logo)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
-                .setTicker(message);
-        notification = builder.build();
+                .setTicker(message)
+                .setGroup(GROUP_VACCINE)
+                .build();
         NotificationManagerCompat.from(context).notify(0, notification);
+    }
+
+    public void showVaccinationExpired(String title, String message){
+        Notification notification = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.mipmap.ic_logo)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setTicker(message)
+                .setGroup(GROUP_VACCINE)
+                .build();
+        NotificationManagerCompat.from(context).notify(1, notification);
     }
 }

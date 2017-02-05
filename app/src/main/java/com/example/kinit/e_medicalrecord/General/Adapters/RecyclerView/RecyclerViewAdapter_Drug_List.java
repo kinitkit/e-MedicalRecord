@@ -85,10 +85,6 @@ public class RecyclerViewAdapter_Drug_List extends RecyclerView.Adapter<Recycler
         }
     }
 
-    public void updateItem(int position, Bus_Drug busDrug){
-
-    }
-
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_drug, tv_strength, tv_amount, tv_route, tv_frequency, tv_why, tv_many, tv_refill;
         CardView cardView;

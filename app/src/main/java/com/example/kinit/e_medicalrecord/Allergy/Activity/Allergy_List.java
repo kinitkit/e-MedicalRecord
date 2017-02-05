@@ -20,12 +20,14 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.kinit.e_medicalrecord.Allergy.Class.Allergy;
 import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_Allergy;
 import com.example.kinit.e_medicalrecord.Allergy.Bus.Bus_Allergy;
 import com.example.kinit.e_medicalrecord.General.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressDialog;
+import com.example.kinit.e_medicalrecord.General.Classes.General.NothingToShow;
 import com.example.kinit.e_medicalrecord.Profile.Class.Patient;
 import com.example.kinit.e_medicalrecord.Profile.Class.Viewer;
 import com.example.kinit.e_medicalrecord.R;
@@ -40,7 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Allergy extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class Allergy_List extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     //Classes
     Patient patient;
@@ -48,7 +50,7 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
     Custom_ProgressDialog progressDialog;
     Custom_AlertDialog alertDialog;
     Custom_ProgressBar progressBar;
-    ArrayList<com.example.kinit.e_medicalrecord.Allergy.Class.Allergy> allergies;
+    ArrayList<Allergy> allergies;
 
     //Widgets
     LinearLayout nothingToShow;
@@ -101,74 +103,6 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
         recyclerViewAdapter_Content = new RecyclerViewAdapter_Allergy(allergies);
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
-        progressDialog.dismiss();
-    }
-
-    void fetchData() {
-        allergies = new ArrayList<>();
-        try {
-            progressBar.show();
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ALLERGY,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("error", response);
-                            try {
-                                boolean isButtonViewable = true;
-                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
-                                JSONObject jsonObject;
-                                if (rootJsonArray.get(0) instanceof JSONArray) {
-                                    jsonArray = rootJsonArray.getJSONArray(0);
-                                    jsonObject = jsonArray.getJSONObject(0);
-                                    if (jsonObject.has("isMyPhysician")) {
-                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
-                                    }
-                                    jsonObject = rootJsonArray.getJSONObject(1);
-                                    if (jsonObject.has("code")) {
-                                        if (jsonObject.getString("code").equals("successful")) {
-                                            jsonArray = rootJsonArray.getJSONArray(1);
-                                            int jsonArrayLength = jsonArray.length();
-                                            for (int x = 0; x < jsonArrayLength; x++) {
-                                                jsonObject = jsonArray.getJSONObject(x);
-                                                allergies.add(new com.example.kinit.e_medicalrecord.Allergy.Class.Allergy(jsonObject));
-                                            }
-                                            loadToRecyclerView();
-                                            btn_initializer(isButtonViewable);
-                                        } else {
-                                            loadToRecyclerView();
-                                            btn_initializer(isButtonViewable);
-                                        }
-                                    } else if(jsonObject.has("exception")) {
-                                        alertDialog.show("Error", jsonObject.getString("exception"));
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                progressBar.hide();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            progressBar.hide();
-                        }
-                    }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("action", "getAllergies");
-                    params.put("device", "mobile");
-                    params.put("patient_id", String.valueOf(patient.id));
-                    params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
-                    return params;
-                }
-            };
-            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
-        } catch (Exception e) {
-            progressBar.hide();
-        }
     }
 
     void action_AlertDialog(final Bus_Allergy busAllergy) {
@@ -198,6 +132,90 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
             }
         });
         builder.show();
+    }
+
+    void updateItem(Bus_Allergy busAllergy) {
+        intent = new Intent(this, Allergy_Form.class);
+        intent.putExtra("patient", patient);
+        intent.putExtra("viewer", viewer);
+        intent.putExtra("allergy", busAllergy.allergy);
+        startActivityForResult(intent, 1);
+    }
+
+    void btn_initializer(boolean isButtonViewable) {
+        if (isButtonViewable) {
+            btn_add.show();
+        } else {
+            btn_add.hide();
+        }
+    }
+
+    void fetchData() {
+        allergies = new ArrayList<>();
+        try {
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_ALLERGY,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                boolean isButtonViewable = true;
+                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
+                                JSONObject jsonObject;
+                                if (rootJsonArray.get(0) instanceof JSONArray) {
+                                    jsonArray = rootJsonArray.getJSONArray(0);
+                                    jsonObject = jsonArray.getJSONObject(0);
+                                    if (jsonObject.has("isMyPhysician")) {
+                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
+                                    }
+                                    jsonObject = rootJsonArray.getJSONObject(1);
+                                    if (jsonObject.has("code")) {
+                                        if (jsonObject.getString("code").equals("success")) {
+                                            jsonArray = rootJsonArray.getJSONArray(2);
+                                            int jsonArrayLength = jsonArray.length();
+                                            for (int x = 0; x < jsonArrayLength; x++) {
+                                                jsonObject = jsonArray.getJSONObject(x);
+                                                allergies.add(new Allergy(jsonObject));
+                                            }
+                                            loadToRecyclerView();
+                                            btn_initializer(isButtonViewable);
+                                        } else {
+                                            loadToRecyclerView();
+                                            btn_initializer(isButtonViewable);
+                                        }
+                                    } else if(jsonObject.has("exception")) {
+                                        alertDialog.show("Error", jsonObject.getString("exception"));
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                NothingToShow.showNothingToShow(allergies, recyclerView_Content, nothingToShow);
+                                progressBar.hide();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressBar.hide();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "getAllergies");
+                    params.put("device", "mobile");
+                    params.put("patient_id", String.valueOf(patient.id));
+                    params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            progressBar.hide();
+        }
     }
 
     void deleteData(final Bus_Allergy busAllergy) {
@@ -248,22 +266,6 @@ public class Allergy extends AppCompatActivity implements View.OnClickListener, 
         } catch (Exception e) {
             progressDialog.dismiss();
             e.printStackTrace();
-        }
-    }
-
-    void updateItem(Bus_Allergy busAllergy) {
-        intent = new Intent(this, Allergy_Form.class);
-        intent.putExtra("patient", patient);
-        intent.putExtra("viewer", viewer);
-        intent.putExtra("allergy", busAllergy.allergy);
-        startActivityForResult(intent, 1);
-    }
-
-    void btn_initializer(boolean isButtonViewable) {
-        if (isButtonViewable) {
-            btn_add.show();
-        } else {
-            btn_add.hide();
         }
     }
 

@@ -80,7 +80,7 @@ public class Surgical_History_List extends AppCompatActivity implements SwipeRef
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Past Medical History");
+        getSupportActionBar().setTitle("Surgical History");
         getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

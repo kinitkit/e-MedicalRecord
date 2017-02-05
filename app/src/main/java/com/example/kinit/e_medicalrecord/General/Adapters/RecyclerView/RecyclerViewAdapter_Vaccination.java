@@ -1,5 +1,6 @@
 package com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +40,17 @@ public class RecyclerViewAdapter_Vaccination extends RecyclerView.Adapter<Recycl
         holder.tv_vaccine.setText(vaccination.item);
         holder.tv_provider.setText(vaccination.providerName);
         holder.tv_place.setText(vaccination.placeTaken);
+        switch (vaccination.scheduleStatus){
+            case 1:
+                holder.cardView.setBackgroundColor(Color.parseColor("#FFFDE7"));
+                break;
+            case -1:
+                holder.cardView.setBackgroundColor(Color.parseColor("#FBE9E7"));
+                break;
+            default:
+                holder.cardView.setBackgroundColor(Color.WHITE);
+                break;
+        }
         if (vaccination.strNextSchedule != null) {
             holder.linear_layoutNextSchedule.setVisibility(View.VISIBLE);
             holder.tv_nextSchedule.setText(vaccination.strNextSchedule);

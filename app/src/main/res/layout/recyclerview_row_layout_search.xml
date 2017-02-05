@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,8 +9,8 @@
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/dp_5"
-    android:paddingLeft="@dimen/dp_5"
-    android:paddingRight="@dimen/dp_10"
+    android:paddingStart="@dimen/dp_10"
+    android:paddingEnd="@dimen/dp_10"
     android:paddingTop="@dimen/dp_5">
 
     <RelativeLayout
@@ -38,7 +37,6 @@
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Kinit Rikina"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/sp_17" />
@@ -48,7 +46,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_name"
-            android:text="Physician"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/colorTextSecondary"
             android:textSize="@dimen/sp_17" />

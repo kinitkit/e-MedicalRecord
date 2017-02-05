@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 public class Vaccination extends Vaccine implements Parcelable {
 
-    public int id, patientId, userDataId;
+    public int id, patientId, userDataId, scheduleStatus = 0;
     public String providerName, strDateTaken, strNextSchedule, placeTaken;
     private boolean status;
     public Calendar calendar, nxtSchedule;

@@ -90,7 +90,7 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Vaccination_List Form");
+        getSupportActionBar().setTitle("Vaccination Form");
         getSupportActionBar().setSubtitle(patient.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -113,10 +113,6 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
             }
         });
         setCalendar(calendar);
-
-        if (vaccination != null) {
-            fetchData();
-        }
     }
 
     void setCalendar(Calendar calendar) {
@@ -264,7 +260,9 @@ public class Vaccination_Form extends AppCompatActivity implements View.OnClickL
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
-                                if(vaccination == null) {
+                                if (vaccination != null) {
+                                    fetchData();
+                                } else {
                                     progressBar.hide();
                                 }
                             }

@@ -68,13 +68,13 @@ public class Allergy_Form extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if(allergy != null) {
-            getSupportActionBar().setTitle("Update Allergy");
+            getSupportActionBar().setTitle("Update Allergy_List");
             getSupportActionBar().setSubtitle(allergy.fr);
             et_allergicFrom.setText(allergy.fr);
             et_reaction.setText(allergy.reaction);
             et_treatment.setText(allergy.treatment);
         } else {
-            getSupportActionBar().setTitle("Allergy Form");
+            getSupportActionBar().setTitle("Allergy_List Form");
             getSupportActionBar().setSubtitle(patient.name);
         }
     }

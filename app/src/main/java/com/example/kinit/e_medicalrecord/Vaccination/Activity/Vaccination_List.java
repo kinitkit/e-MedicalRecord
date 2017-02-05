@@ -42,8 +42,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Vaccination_List extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
@@ -54,6 +56,7 @@ public class Vaccination_List extends AppCompatActivity implements View.OnClickL
     Patient patient;
     ArrayList<Vaccine_Schedule> vaccineSchedules;
     ArrayList<Vaccination> vaccinations;
+    Calendar calendarThisDay;
 
     Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
@@ -124,7 +127,8 @@ public class Vaccination_List extends AppCompatActivity implements View.OnClickL
     }
 
     void setNextScheduleAndNotification() {
-        int count = 0;
+        setNewCalendar();
+        int countToBeExpired = 0, countExpired = 0;
         for (Vaccination vaccination : vaccinations) {
             for (Vaccine_Schedule vaccineSchedule : vaccineSchedules) {
                 if (vaccination.vaccineId == vaccineSchedule.vaccineId) {
@@ -134,20 +138,48 @@ public class Vaccination_List extends AppCompatActivity implements View.OnClickL
                         vaccination.nxtSchedule.add(Calendar.MONTH, vaccineSchedule.frequencyMonth);
                         vaccination.nxtSchedule.add(Calendar.DAY_OF_MONTH, vaccineSchedule.frequencyDay);
                         vaccination.setStrNextSchedule();
+
+                        switch (vaccination.nxtSchedule.compareTo(calendarThisDay)) {
+                            case 1:
+                                Date dateNextSched = new Date(vaccination.nxtSchedule.getTimeInMillis()),
+                                        dateNow = new Date(calendarThisDay.getTimeInMillis());
+                                long diff = dateNextSched.getTime() - dateNow.getTime();
+
+                                if (TimeUnit.MILLISECONDS.toDays(diff) <= 10) {
+                                    ++countToBeExpired;
+                                    vaccination.scheduleStatus = 1;
+                                }
+                                break;
+                            case 0:
+                                ++countToBeExpired;
+                                vaccination.scheduleStatus = 1;
+                                break;
+                            case -1:
+                                ++countExpired;
+                                vaccination.scheduleStatus = -1;
+                                break;
+                        }
                     }
                 }
             }
-
-            /*if (vaccination.vaccine.vaccineScheduleId != 0) {
-                if (age >= vaccination.vaccine.ageStart && age <= vaccination.vaccine.ageEnd) {
-                    ++count;
-                }
-            }*/
         }
-        if (count > 0) {
-            notification.showVaccination("Vaccination_List", count + ((count == 1) ? " vaccination is " : " vaccinations are ")
+        if (countToBeExpired > 0) {
+            notification.showVaccinationToBeExpired("Vaccination", countToBeExpired + ((countToBeExpired == 1) ? " vaccination is " : " vaccinations are ")
                     + "about to due.");
         }
+
+        if (countExpired > 0) {
+            notification.showVaccinationExpired("Vaccination", countExpired + ((countExpired == 1) ? " vaccination needs " : " vaccinations need ")
+                    + " to be taken.");
+        }
+    }
+
+    void setNewCalendar() {
+        calendarThisDay = Calendar.getInstance();
+        calendarThisDay.set(Calendar.HOUR, 0);
+        calendarThisDay.set(Calendar.MINUTE, 0);
+        calendarThisDay.set(Calendar.SECOND, 0);
+        calendarThisDay.set(Calendar.MILLISECOND, 0);
     }
 
     void action_AlertDialog(final Bus_Vaccination_OnLongClick busVaccinationOnLongClick) {

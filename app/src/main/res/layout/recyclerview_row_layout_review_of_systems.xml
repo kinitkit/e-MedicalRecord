@@ -24,7 +24,7 @@
         android:id="@+id/tv_remarks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/colorTextSecondary"
         android:textSize="14sp" />
 

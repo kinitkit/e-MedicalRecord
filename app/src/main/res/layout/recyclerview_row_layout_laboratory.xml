@@ -47,7 +47,7 @@
                 android:id="@+id/tv_physicianName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_10"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="@dimen/sp_17" />
@@ -73,7 +73,7 @@
                 android:id="@+id/tv_labName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_10"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="@dimen/sp_17" />

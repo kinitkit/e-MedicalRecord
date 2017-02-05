@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kinit.e_medicalrecord.Admission.Activity.Admission_List;
-import com.example.kinit.e_medicalrecord.Allergy.Activity.Allergy;
+import com.example.kinit.e_medicalrecord.Allergy.Activity.Allergy_List;
 import com.example.kinit.e_medicalrecord.Consultation.Activity.Consultation_List;
 import com.example.kinit.e_medicalrecord.Family_History.Activity.Family_History_List;
 import com.example.kinit.e_medicalrecord.Laboratory.Activity.Laboratory_Tests;
@@ -120,7 +120,7 @@ public class Fragment_Medical_History extends Fragment {
         tv_allergy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myIntent = new Intent(getActivity(), Allergy.class);
+                myIntent = new Intent(getActivity(), Allergy_List.class);
                 putExtra();
             }
         });
