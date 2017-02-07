@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,6 +32,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.Profile.Class.User;
@@ -55,6 +57,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
     Custom_AlertDialog alertDialog;
     Custom_ProgressDialog progressDialog;
     String selectedImagePath, encodedString;
+    boolean isImageChanged, isInformationChanged;
     Bitmap bitmap;
     File file;
     Uri fileUri, imageUri;
@@ -76,6 +79,8 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
     }
 
     void init() {
+        isImageChanged = false;
+        isInformationChanged = false;
         intent = getIntent();
         user = intent.getExtras().getParcelable("user");
 
@@ -111,6 +116,8 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
         spinner_gender.setSelection(arrayAdapter_gender.getPosition(user.gender));
         Glide.with(this)
                 .load(UrlString.getImageUrl(user.image))
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .error(R.mipmap.icon_user_default)
                 .into(iv_profilePic);
     }
@@ -161,7 +168,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     String code = jsonObject.getString("code");
-                                    if (code.equals("success")) {
+                                    if (code.equals("success") || code.equals("empty")) {
                                         Toast.makeText(getApplicationContext(), getString(R.string.record_updated), Toast.LENGTH_SHORT).show();
                                         user.firstName = strFname;
                                         user.middleName = strMname;
@@ -171,6 +178,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                                         intent = new Intent();
                                         intent.putExtra("result", true);
                                         intent.putExtra("user", user);
+                                        intent.putExtra("isInformationChanged", true);
                                         setResult(RESULT_OK, intent);
                                         finish();
                                     } else {
@@ -253,8 +261,17 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
             if (requestCode == SELECT_PICTURE) {
                 imageUri = data.getData();
                 new Encode_Image().execute();
+                isImageChanged = true;
             }
         }
+    }
+
+    void setUpChanged(){
+        Intent intent = new Intent();
+        intent.putExtra("isInformationChanged", isInformationChanged);
+        intent.putExtra("isImageChanged", isImageChanged);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
@@ -273,10 +290,27 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
+                && keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        setUpChanged();
     }
 
     private class Encode_Image extends AsyncTask<Void, Void, Void> {
@@ -311,7 +345,7 @@ public class Settings_Personal_Information extends AppCompatActivity implements 
                             @Override
                             public void onResponse(String response) {
                                 try {
-                                    Log.d("error", response);
+                                    Log.d("error ewq", response);
                                     JSONArray rootJsonArray = new JSONArray(response);
                                     JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                     if (jsonObject.has("code")) {

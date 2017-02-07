@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -52,6 +53,7 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
     DatePickerFragment datePickerFragment;
     SimpleDateFormat simpleDateFormat;
     Calendar calendar;
+    private boolean isInformationChanged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
     }
 
     void init() {
+        isInformationChanged = false;
         intent = getIntent();
         user = intent.getExtras().getParcelable("user");
 
@@ -142,12 +145,11 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
                         @Override
                         public void onResponse(String response) {
                             try {
-                                Log.d("error", response);
                                 JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                 if(jsonObject.has("code")){
                                     String code = jsonObject.getString("code");
-                                    if(code.equals("success")){
+                                    if(code.equals("success") || code.equals("empty")){
                                         Toast.makeText(getApplicationContext(), getString(R.string.record_updated), Toast.LENGTH_SHORT).show();
                                         user.address = strAddress;
                                         user.nationality = strNationality;
@@ -155,11 +157,8 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
                                         user.occupation = strOccupation;
                                         user.civilStatus = strCivilStatus;
                                         user.setBirthday(new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
-                                        intent = new Intent();
-                                        intent.putExtra("result", true);
-                                        intent.putExtra("user", user);
-                                        setResult(RESULT_OK, intent);
-                                        finish();
+                                        isInformationChanged = true;
+                                        setUpChanged();
                                     } else {
                                         alertDialog.show("Error", getString(R.string.error_occured));
                                     }
@@ -201,6 +200,14 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
         }
     }
 
+    void setUpChanged(){
+        Intent intent = new Intent();
+        intent.putExtra("user", user);
+        intent.putExtra("isInformationChanged", isInformationChanged);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -218,9 +225,26 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
+                && keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        setUpChanged();
     }
 }

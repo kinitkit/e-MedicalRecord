@@ -3,14 +3,15 @@
     android:id="@+id/linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
     android:background="#ffffff"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/dp_5"
-    android:paddingStart="@dimen/dp_10"
     android:paddingEnd="@dimen/dp_10"
+    android:paddingStart="@dimen/dp_10"
     android:paddingTop="@dimen/dp_5">
 
     <RelativeLayout

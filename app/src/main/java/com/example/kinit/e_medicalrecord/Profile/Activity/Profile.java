@@ -58,7 +58,6 @@ public class Profile extends AppCompatActivity {
     //Primitive Data Types
     boolean isPatient = false, isMedicalStaff = false;
     String recentCode = "";
-    Bitmap profPic;
 
     //Fragment
     Fragment_Profile fragment_profile;
@@ -67,11 +66,13 @@ public class Profile extends AppCompatActivity {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     Custom_ProgressDialog progressDialog;
+    Toolbar toolbar;
 
     //Classes
     Viewer viewer;
     User user;
     Mode mode;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,6 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         progressDialog = new Custom_ProgressDialog(this);
         initIntent();
-        initWidgets();
         getUserData();
     }
 
@@ -110,34 +110,44 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    void initWidgets(){
-        //Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        if (viewer != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
     void init() {
         //SharedPreferences
         sharedPreferences = getSharedPreferences("com.example.kinit.e_medicalrecord", Context.MODE_PRIVATE);
 
+        if (toolbar == null) {
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+        }
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(user.getFullName());
+        if (viewer != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         //Fragment
-        fragment_profile = new Fragment_Profile();
-        fragment_profile.setUser(user, mode, viewer, profPic);
+        if (fragment_profile == null) {
+            fragment_profile = new Fragment_Profile();
+        }
+
+        fragment_profile.setUser(user, mode, viewer);
 
         //FragmentManager
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, fragment_profile).commit();
+        if (fragmentManager == null) {
+            fragmentManager = getSupportFragmentManager();
+
+        }
+        if (fragmentTransaction == null) {
+            fragmentTransaction = fragmentManager.beginTransaction();
+        }
+        if (fragmentTransaction.isEmpty()) {
+            fragmentTransaction.add(R.id.frameLayout, fragment_profile).commit();
+        }
+
     }
 
     void getUserData() {
-        progressDialog.show("Loading...");
+        if (fragmentTransaction == null) {
+            progressDialog.show("Loading...");
+        }
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_USER_INFORMATION,
                     new Response.Listener<String>() {
@@ -180,7 +190,7 @@ public class Profile extends AppCompatActivity {
                                         recentCode = "";
                                     }
                                 }
-                                    init();
+                                init();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             } finally {
@@ -256,7 +266,6 @@ public class Profile extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.menu_search:
                 Fragment_Search fragmentSearch = new Fragment_Search();
@@ -265,17 +274,11 @@ public class Profile extends AppCompatActivity {
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
-
-            case R.id.menu_mode:
-                Mode_AlertDialog();
-                break;
-
             case R.id.menu_edit:
                 intent = new Intent(this, Settings.class);
                 intent.putExtra("user", user);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 break;
-
             case R.id.menu_logout:
                 intent = new Intent(getBaseContext(), Login.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -287,7 +290,6 @@ public class Profile extends AppCompatActivity {
                 editor.apply();
                 startActivity(intent);
                 break;
-
             case android.R.id.home:
                 this.finish();
                 return true;
@@ -296,34 +298,20 @@ public class Profile extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void Mode_AlertDialog() {
-        final CharSequence modes[] = {"Patient", "Medical Staff"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
-        builder.setTitle("Choose Mode");
-        builder.setItems(modes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        Toast.makeText(getApplicationContext(), "You are now in patient mode", Toast.LENGTH_SHORT).show();
-                        if (mode != Mode.PATIENT) {
-                            mode = Mode.PATIENT;
-                            BusStation.getBus().post(new Bus_Mode(mode));
-                        }
-                        break;
-                    case 1:
-                        Toast.makeText(getApplicationContext(), "You are now in medical staff mode", Toast.LENGTH_SHORT).show();
-                        if (mode != Mode.MEDICAL_STAFF) {
-                            mode = Mode.MEDICAL_STAFF;
-                            BusStation.getBus().post(new Bus_Mode(mode));
-                        }
-
-                        break;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                if (data.getBooleanExtra("isInformationChanged", false)) {
+                    getUserData();
+                }
+                if(data.hasExtra("isImageChanged")){
+                    if(data.getBooleanExtra("isImageChanged", false)){
+                        fragment_profile.setImage();
+                    }
                 }
             }
-        });
-        builder.show();
+        }
     }
 
     @Override
@@ -339,7 +327,7 @@ public class Profile extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onClickSearchItem(Bus_Search_OnClick busSearchOnClick){
+    public void onClickSearchItem(Bus_Search_OnClick busSearchOnClick) {
         Intent intent = new Intent(this, Profile.class);
         intent.putExtra("user_id", busSearchOnClick.searchUser.userId);
         intent.putExtra("patient_id", busSearchOnClick.searchUser.patientId);

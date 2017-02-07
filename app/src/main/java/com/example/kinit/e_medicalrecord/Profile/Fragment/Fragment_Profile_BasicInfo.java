@@ -3,6 +3,7 @@ package com.example.kinit.e_medicalrecord.Profile.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,6 @@ public class Fragment_Profile_BasicInfo extends Fragment {
     tv_civilStatus, tv_religion;
     //CardView
     CardView cardView_medicalProfession;
-    //Linearlayout
-    LinearLayout layout_occupation, layout_address;
 
     //User Class
     User user;
@@ -56,9 +55,6 @@ public class Fragment_Profile_BasicInfo extends Fragment {
         tv_civilStatus = (TextView) rootView.findViewById(R.id.tv_civilStatus);
         tv_nationality = (TextView) rootView.findViewById(R.id.tv_nationality);
         tv_religion = (TextView) rootView.findViewById(R.id.tv_religion);
-        //LinearLayout
-        layout_occupation = (LinearLayout) rootView.findViewById(R.id.layout_occupation);
-        layout_address = (LinearLayout) rootView.findViewById(R.id.layout_address);
 
         if(user.patient_id != 0){
             cardView_medicalProfession.setVisibility(View.GONE);
@@ -72,14 +68,19 @@ public class Fragment_Profile_BasicInfo extends Fragment {
             cardView_medicalProfession.setVisibility(View.VISIBLE);
             tv_profession = (TextView)rootView.findViewById(R.id.tv_profession);
             tv_license = (TextView)rootView.findViewById(R.id.tv_license);
-            layout_occupation.setVisibility(View.GONE);
-            layout_address.setVisibility(View.GONE);
+            tv_birthday.setVisibility(View.GONE);
+            tv_occupation.setVisibility(View.GONE);
+            tv_address.setVisibility(View.GONE);
         }
         setTextViewText();
     }
 
     public void setUser(User user){
         this.user = user;
+
+        if(tv_name != null){
+            setTextViewText();
+        }
     }
 
     void setTextViewText(){
@@ -98,6 +99,5 @@ public class Fragment_Profile_BasicInfo extends Fragment {
         tv_occupation.setText(user.occupation);
         tv_contactNumber.setText(user.contactNumber);
         tv_email.setText(user.emailAddress);
-
     }
 }

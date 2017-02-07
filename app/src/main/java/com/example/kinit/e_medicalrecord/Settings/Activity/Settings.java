@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
     TextView tv_personalInformation, tv_medicalStaff, tv_password, tv_patient;
     User user;
+    boolean isInformationChanged, isImageChanged;
 
     Intent intent;
 
@@ -26,7 +29,8 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     }
 
     void init() {
-
+        isInformationChanged = false;
+        isInformationChanged = false;
         user = getIntent().getExtras().getParcelable("user");
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -43,11 +47,25 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         tv_medicalStaff.setOnClickListener(this);
         tv_password.setOnClickListener(this);
         tv_patient.setOnClickListener(this);
+
+        if(user.medical_staff_id != 0){
+            tv_patient.setVisibility(View.GONE);
+        } else {
+            tv_patient.setVisibility(View.VISIBLE);
+        }
     }
 
     void setUpIntent() {
         intent.putExtra("user", user);
         startActivityForResult(intent, 1);
+    }
+
+    void setUpChanged(){
+        Intent intent = new Intent();
+        intent.putExtra("isInformationChanged", isInformationChanged);
+        intent.putExtra("isImageChanged", isImageChanged);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
@@ -75,8 +93,18 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
+            Log.d("fh", "vhjk");
             if (resultCode == RESULT_OK) {
-                user = data.getExtras().getParcelable("user");
+                if(data.getBooleanExtra("isInformationChanged", false)){
+                    user = data.getExtras().getParcelable("user");
+                    isInformationChanged = true;
+                }
+
+                if(data.hasExtra("isImageChanged")){
+                    if(data.getBooleanExtra("isImageChanged", false)){
+                        isImageChanged = true;
+                    }
+                }
             }
         }
     }
@@ -85,9 +113,26 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                setUpChanged();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
+                && keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        setUpChanged();
     }
 }

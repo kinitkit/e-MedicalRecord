@@ -4,8 +4,9 @@ public class UrlString {
 
     public static final int POST = 1;
 
-    //static final String ipAddress = "http://192.168.56.2:80/Medical%20Record/";
-    static final String ipAddress = "http://192.168.0.146:80/medical_record/";
+    static final String ipAddress = "http://192.168.0.146:80/medical_record/"; //sa balay
+    //static final String ipAddress = "http://192.168.43.19:80/medical_record/"; //sa cp
+
     public static final String URL = ipAddress + "main.php";
     public static final String URL_ADMISSION = ipAddress + "/mobile_functions/admission.php";
     public static final String URL_REGISTRATION = ipAddress + "/mobile_functions/registration.php";

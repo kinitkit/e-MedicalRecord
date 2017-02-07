@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kinit.e_medicalrecord.General.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.General.BusStation.Bus_Mode;
 import com.example.kinit.e_medicalrecord.Profile.Class.User;
@@ -65,10 +66,7 @@ public class Fragment_Profile extends Fragment {
 
         ib_profPic = (ImageButton) rootView.findViewById(R.id.ib_profPic);
 
-        Glide.with(getActivity())
-                .load(UrlString.getImageUrl(user.image))
-                .error(R.mipmap.icon_user_default)
-                .into(ib_profPic);
+        setImage();
 
         initializeViewPager();
     }
@@ -114,6 +112,22 @@ public class Fragment_Profile extends Fragment {
         this.user = user;
         this.mode = mode;
         this.viewer = viewer;
+
+        if (fragment_profile != null) {
+            fragment_profile.setUser(user);
+        }
+        if (fragment_medicalInfo != null) {
+            fragment_medicalInfo.setUser(user, viewer);
+        }
+    }
+
+    public void setImage(){
+        Glide.with(getActivity())
+                .load(UrlString.getImageUrl(user.image))
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .error(R.mipmap.icon_user_default)
+                .into(ib_profPic);
     }
 
     @Override
