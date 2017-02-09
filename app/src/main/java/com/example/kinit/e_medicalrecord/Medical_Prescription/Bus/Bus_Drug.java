@@ -19,7 +19,7 @@ public class Bus_Drug implements Parcelable {
             return new Bus_Drug[size];
         }
     };
-    public String drug, strength, amount, route, frequency, why, many, refill;
+    public String drug, strength, amount, route, frequency, why, quantity, refill;
     public Query_Type queryType;
     public int position;
 
@@ -27,27 +27,39 @@ public class Bus_Drug implements Parcelable {
         this.queryType = queryType;
     }
 
-    public Bus_Drug(String drug, String strength, String amount, String route, String frequency, String why, String many, String refill, Query_Type queryType, int position) {
+    public Bus_Drug(Query_Type queryType, int position, String drug, String strength, String amount, String route, String frequency, String why, String quantity) {
         this.drug = drug;
         this.strength = strength;
         this.amount = amount;
         this.route = route;
         this.frequency = frequency;
         this.why = why;
-        this.many = many;
+        this.quantity = quantity;
+        this.queryType = queryType;
+        this.position = position;
+    }
+
+    public Bus_Drug(String drug, String strength, String amount, String route, String frequency, String why, String quantity, String refill, Query_Type queryType, int position) {
+        this.drug = drug;
+        this.strength = strength;
+        this.amount = amount;
+        this.route = route;
+        this.frequency = frequency;
+        this.why = why;
+        this.quantity = quantity;
         this.refill = refill;
         this.queryType = queryType;
         this.position = position;
     }
 
-    public Bus_Drug(String drug, String strength, String amount, String route, String frequency, String why, String many, String refill) {
+    public Bus_Drug(String drug, String strength, String amount, String route, String frequency, String why, String quantity, String refill) {
         this.drug = drug;
         this.strength = strength;
         this.amount = amount;
         this.route = route;
         this.frequency = frequency;
         this.why = why;
-        this.many = many;
+        this.quantity = quantity;
         this.refill = refill;
     }
 
@@ -59,7 +71,7 @@ public class Bus_Drug implements Parcelable {
             this.route = jsonObject.getString("route");
             this.frequency = jsonObject.getString("frequency");
             this.why = jsonObject.getString("indication");
-            this.many =jsonObject.getString("how_many");
+            this.quantity =jsonObject.getString("how_many");
             this.refill = jsonObject.getString("refill");
         } catch (Exception e){
             e.printStackTrace();
@@ -73,7 +85,7 @@ public class Bus_Drug implements Parcelable {
         this.route = in.readString();
         this.frequency = in.readString();
         this.why = in.readString();
-        this.many = in.readString();
+        this.quantity = in.readString();
         this.refill = in.readString();
         int tmpQueryType = in.readInt();
         this.queryType = tmpQueryType == -1 ? null : Query_Type.values()[tmpQueryType];
@@ -93,7 +105,7 @@ public class Bus_Drug implements Parcelable {
         dest.writeString(this.route);
         dest.writeString(this.frequency);
         dest.writeString(this.why);
-        dest.writeString(this.many);
+        dest.writeString(this.quantity);
         dest.writeString(this.refill);
         dest.writeInt(this.queryType == null ? -1 : this.queryType.ordinal());
         dest.writeInt(this.position);

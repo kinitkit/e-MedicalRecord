@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -64,17 +66,16 @@ public class Allergy_Form extends AppCompatActivity implements View.OnClickListe
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if(allergy != null) {
-            getSupportActionBar().setTitle("Update Allergy_List");
+            getSupportActionBar().setTitle("Update Allergy");
             getSupportActionBar().setSubtitle(allergy.fr);
             et_allergicFrom.setText(allergy.fr);
             et_reaction.setText(allergy.reaction);
             et_treatment.setText(allergy.treatment);
         } else {
-            getSupportActionBar().setTitle("Allergy_List Form");
+            getSupportActionBar().setTitle("Allergy Form");
             getSupportActionBar().setSubtitle(patient.name);
         }
     }
@@ -105,26 +106,40 @@ public class Allergy_Form extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onResponse(String response) {
                             try {
+                                Log.d("allergy", response);
                                 JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
-                                    if (jsonObject.getString("code").equals("successful")) {
+                                    if (jsonObject.getString("code").equals("success")) {
+                                        progressDialog.dismiss();
+                                        if (allergy != null) {
+                                            Toast.makeText(getApplicationContext(), getString(R.string.record_updated), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
+                                        }
                                         Intent intent = new Intent();
                                         intent.putExtra("result", true);
                                         setResult(RESULT_OK, intent);
                                         finish();
+                                    } else {
+                                        alertDialog.show("Error", jsonObject.getString("code"));
                                     }
+                                } else if(jsonObject.has("exception")){
+                                    alertDialog.show("Error", jsonObject.getString("exception"));
                                 }
 
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            progressDialog.dismiss();
+                            alertDialog.show("Error", error.getMessage());
                         }
                     }) {
                 @Override
@@ -146,9 +161,8 @@ public class Allergy_Form extends AppCompatActivity implements View.OnClickListe
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
             progressDialog.dismiss();
+            e.printStackTrace();
         }
     }
 

@@ -1,10 +1,9 @@
 package com.example.kinit.e_medicalrecord.Settings.Activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,7 +92,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-            Log.d("fh", "vhjk");
             if (resultCode == RESULT_OK) {
                 if(data.getBooleanExtra("isInformationChanged", false)){
                     user = data.getExtras().getParcelable("user");

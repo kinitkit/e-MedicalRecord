@@ -2,16 +2,13 @@ package com.example.kinit.e_medicalrecord.Medical_Prescription.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -20,17 +17,18 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.CustomLinearLayoutManager;
 import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_Drug_List;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Medical_Prescription_Click;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressBar;
+import com.example.kinit.e_medicalrecord.General.Request.Custom_Singleton;
+import com.example.kinit.e_medicalrecord.General.Request.UrlString;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Medical_Prescription_Click;
 import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Drug_List;
 import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Profile.Class.Patient;
 import com.example.kinit.e_medicalrecord.Profile.Class.Viewer;
 import com.example.kinit.e_medicalrecord.R;
-import com.example.kinit.e_medicalrecord.General.Request.Custom_Singleton;
-import com.example.kinit.e_medicalrecord.General.Request.UrlString;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -103,7 +101,7 @@ public class Medical_Prescription_View extends AppCompatActivity {
 
     void loadToRecyclerView() {
         recyclerViewAdapter_Content = new RecyclerViewAdapter_Drug_List(drugLists);
-        recyclerViewLayoutM_Content = new LinearLayoutManager(this);
+        recyclerViewLayoutM_Content = new CustomLinearLayoutManager(this);
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
         setTextViewTexts();

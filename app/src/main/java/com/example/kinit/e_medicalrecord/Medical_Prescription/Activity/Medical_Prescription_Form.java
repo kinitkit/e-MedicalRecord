@@ -1,14 +1,12 @@
 package com.example.kinit.e_medicalrecord.Medical_Prescription.Activity;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,19 +23,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_Drug_List;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Drug;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Medical_Prescription_LongClick;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.DatePickerFragment;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Medical_Prescription;
-import com.example.kinit.e_medicalrecord.Profile.Class.Patient;
-import com.example.kinit.e_medicalrecord.Profile.Class.Viewer;
-import com.example.kinit.e_medicalrecord.General.Enum.Query_Type;
-import com.example.kinit.e_medicalrecord.R;
 import com.example.kinit.e_medicalrecord.General.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.General.Request.UrlString;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Drug;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Medical_Prescription_LongClick;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Medical_Prescription;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Fragment.Drug_Dialog;
+import com.example.kinit.e_medicalrecord.Profile.Class.Patient;
+import com.example.kinit.e_medicalrecord.Profile.Class.Viewer;
+import com.example.kinit.e_medicalrecord.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -69,6 +67,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
     Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick;
     Custom_ProgressDialog progressDialog;
     Custom_ProgressBar progressBar;
+    Drug_Dialog drugDialog;
 
     //App
     Custom_AlertDialog alertDialog;
@@ -130,6 +129,8 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
         });
 
         setCalendar(calendar);
+        drugDialog = new Drug_Dialog();
+
         if (viewer != null) {
             et_physicianName.setFocusableInTouchMode(false);
             et_physicianName.setKeyListener(null);
@@ -143,92 +144,46 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_add:
-                intent = new Intent(this, Drug_Form.class);
-                intent.putExtra("busDrug", new Bus_Drug(Query_Type.INSERT));
-                startActivityForResult(intent, Query_Type.INSERT.ordinal());
-                break;
-
-            case R.id.btn_save:
-                Custom_AlertDialog alertDialog = new Custom_AlertDialog(this);
-                String clinic = et_clinic.getText().toString().trim(),
-                        physicianName = et_physicianName.getText().toString().trim();
-                if (busDrugs.size() > 0) {
-                    if (!physicianName.isEmpty()) {
-                        sendData(physicianName, clinic);
-                    } else {
-                        et_physicianName.setError("This field is required.");
-                    }
-                } else {
-                    alertDialog.show("Ooops!", "Please add a drug/medication");
-                }
-                break;
-
-            case R.id.et_prescriptionDate:
-                datePickerFragment.show(getSupportFragmentManager(), "DatePicker");
-                datePickerFragment.setCurrentDate(calendar);
-                break;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Query_Type.INSERT.ordinal()) {
-            if (resultCode == RESULT_OK) {
-                Bus_Drug busDrug = data.getExtras().getParcelable("busDrug");
-                this.busDrugs.add(busDrug);
-                recyclerViewAdapter_Content.notifyDataSetChanged();
-            }
-        }
-    }
-
     void loadToRecyclerView() {
         recyclerViewAdapter_Content = new RecyclerViewAdapter_Drug_List(busDrugs);
         recyclerViewLayoutM_Content = new LinearLayoutManager(this);
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
-        setupItemTouchHelper();
     }
 
-    void setupItemTouchHelper() {
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
 
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                int swipedPosition = viewHolder.getAdapterPosition();
-                RecyclerViewAdapter_Drug_List adapter_surgery = (RecyclerViewAdapter_Drug_List) recyclerView_Content.getAdapter();
-                deleteItemConfirmation(swipedPosition, adapter_surgery);
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView_Content);
+    void setCalendar(Calendar calendar) {
+        simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        et_prescriptionDate.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
-    void deleteItemConfirmation(final int position, final RecyclerViewAdapter_Drug_List adapter_drug) {
-        alertDialog.builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                busDrugs.remove(position);
-                adapter_drug.notifyItemRemoved(position);
-                dialog.dismiss();
-            }
-        });
-        alertDialog.builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                adapter_drug.remove(position, false);
-                dialog.dismiss();
-            }
-        });
-        alertDialog.show("Confirm delete", "This item will be permanently deleted.");
+    void setUpdate() {
+        et_physicianName.setText(medicalPrescription.physicianName);
+        et_clinic.setText(medicalPrescription.clinic_name);
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(medicalPrescription.calendarStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar.setTime(date);
+        setCalendar(calendar);
+        progressDialog.dismiss();
+    }
+
+    void alertDialog_showError(String code) {
+        if (code.equals("medicalPrescriptionNotAvailable")) {
+            alertDialog.show("Notice", "Medical Prescription is not available!");
+        } else {
+            alertDialog.show("Error", getString(R.string.error_occured));
+        }
+    }
+
+    void showDialog(Bus_Drug busDrug) {
+        drugDialog.show(getSupportFragmentManager(), "Drug Dialog");
+        if (busDrug != null) {
+            drugDialog.setFields(busDrug);
+        }
     }
 
     void sendData(final String physicianName, final String clinicName) {
@@ -308,7 +263,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                         params.put("route[" + (x) + "]", busDrugs.get(x).route);
                         params.put("frequency[" + (x) + "]", busDrugs.get(x).frequency);
                         params.put("indication[" + (x) + "]", busDrugs.get(x).why);
-                        params.put("many[" + (x) + "]", busDrugs.get(x).many);
+                        params.put("many[" + (x) + "]", busDrugs.get(x).quantity);
                         params.put("refill[" + (x) + "]", busDrugs.get(x).refill);
                     }
                     return params;
@@ -319,25 +274,6 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
             progressDialog.dismiss();
             e.printStackTrace();
         }
-    }
-
-    void setCalendar(Calendar calendar) {
-        simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        et_prescriptionDate.setText(simpleDateFormat.format(calendar.getTime()));
-    }
-
-    void setUpdate() {
-        et_physicianName.setText(medicalPrescription.physicianName);
-        et_clinic.setText(medicalPrescription.clinic_name);
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(medicalPrescription.calendarStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        calendar.setTime(date);
-        setCalendar(calendar);
-        progressDialog.dismiss();
     }
 
     void fetchDrugList() {
@@ -408,11 +344,32 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
         }
     }
 
-    void alertDialog_showError(String code) {
-        if (code.equals("medicalPrescriptionNotAvailable")) {
-            alertDialog.show("Notice", "Medical Prescription is not available!");
-        } else {
-            alertDialog.show("Error", getString(R.string.error_occured));
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_add:
+                showDialog(null);
+                break;
+
+            case R.id.btn_save:
+                Custom_AlertDialog alertDialog = new Custom_AlertDialog(this);
+                String clinic = et_clinic.getText().toString().trim(),
+                        physicianName = et_physicianName.getText().toString().trim();
+                if (busDrugs.size() > 0) {
+                    if (!physicianName.isEmpty()) {
+                        sendData(physicianName, clinic);
+                    } else {
+                        et_physicianName.setError("This field is required.");
+                    }
+                } else {
+                    alertDialog.show("Ooops!", "Please add a drug/medication");
+                }
+                break;
+
+            case R.id.et_prescriptionDate:
+                datePickerFragment.show(getSupportFragmentManager(), "DatePicker");
+                datePickerFragment.setCurrentDate(calendar);
+                break;
         }
     }
 

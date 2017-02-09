@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.kinit.e_medicalrecord.Consultation.Class.Consultation;
 import com.example.kinit.e_medicalrecord.Consultation.Class.Consultation_ROS;
+import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.CustomLinearLayoutManager;
 import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_ReviewOfSystems;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressBar;
@@ -158,16 +159,16 @@ public class Consultation_View extends AppCompatActivity {
                 layoutManager_cardio, layoutManager_respi, layoutManager_gastro, layoutManager_genito,
                 layoutManager_musculo, layoutManager_neuro, layoutManager_allergic;
 
-        layoutManager_general = new LinearLayoutManager(this);
-        layoutManager_SkinBreast = new LinearLayoutManager(this);
-        layoutManager_eyesEars = new LinearLayoutManager(this);
-        layoutManager_cardio = new LinearLayoutManager(this);
-        layoutManager_respi = new LinearLayoutManager(this);
-        layoutManager_gastro = new LinearLayoutManager(this);
-        layoutManager_genito = new LinearLayoutManager(this);
-        layoutManager_musculo = new LinearLayoutManager(this);
-        layoutManager_neuro = new LinearLayoutManager(this);
-        layoutManager_allergic = new LinearLayoutManager(this);
+        layoutManager_general = new CustomLinearLayoutManager(this);
+        layoutManager_SkinBreast = new CustomLinearLayoutManager(this);
+        layoutManager_eyesEars = new CustomLinearLayoutManager(this);
+        layoutManager_cardio = new CustomLinearLayoutManager(this);
+        layoutManager_respi = new CustomLinearLayoutManager(this);
+        layoutManager_gastro = new CustomLinearLayoutManager(this);
+        layoutManager_genito = new CustomLinearLayoutManager(this);
+        layoutManager_musculo = new CustomLinearLayoutManager(this);
+        layoutManager_neuro = new CustomLinearLayoutManager(this);
+        layoutManager_allergic = new CustomLinearLayoutManager(this);
 
         recyclerView_general.setLayoutManager(layoutManager_general);
         recyclerView_skinBreast.setLayoutManager(layoutManager_SkinBreast);

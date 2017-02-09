@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dp_5"
+    android:paddingLeft="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_5">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="17sp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_drug"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/drug_medication"
+            android:inputType="text"
+            android:paddingTop="@dimen/dp_3"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="17sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="17sp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_strength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/strength"
+            android:inputType="text"
+            android:paddingTop="@dimen/dp_3"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="17sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="17sp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/dosage"
+            android:inputType="text"
+            android:paddingTop="@dimen/dp_3"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="17sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:text="@string/route"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="17sp" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_route"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:text="@string/Frequency"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="17sp" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_frequency"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="17sp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_why"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/indication"
+            android:inputType="text"
+            android:paddingTop="@dimen/dp_3"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="17sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="17sp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_many"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Quantity"
+            android:inputType="number"
+            android:paddingTop="@dimen/dp_3"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="17sp" />
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

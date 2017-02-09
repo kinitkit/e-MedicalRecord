@@ -49,19 +49,20 @@ public class RecyclerViewAdapter_Drug_List extends RecyclerView.Adapter<Recycler
             final String drug = drugArrayList.get(position).drug, strength = drugArrayList.get(position).strength,
                     amount = drugArrayList.get(position).amount, route = drugArrayList.get(position).route,
                     frequency = drugArrayList.get(position).frequency, why = drugArrayList.get(position).why,
-                    many = drugArrayList.get(position).many, refill = drugArrayList.get(position).refill;
+                    many = drugArrayList.get(position).quantity, refill = drugArrayList.get(position).refill;
             holder.tv_drug.setText(drugArrayList.get(position).drug);
             holder.tv_strength.setText(drugArrayList.get(position).strength);
             holder.tv_amount.setText(drugArrayList.get(position).amount);
             holder.tv_route.setText(drugArrayList.get(position).route);
             holder.tv_frequency.setText(drugArrayList.get(position).frequency);
             holder.tv_why.setText(drugArrayList.get(position).why);
-            holder.tv_many.setText(drugArrayList.get(position).many);
+            holder.tv_many.setText(drugArrayList.get(position).quantity);
             holder.tv_refill.setText(drugArrayList.get(position).refill);
-            holder.cardView.setOnClickListener(new View.OnClickListener() {
+            holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
+                public boolean onLongClick(View v) {
                     BusStation.getBus().post(new Bus_Open_Add_Drug(drug, strength, amount, route, frequency, why, many, refill, Query_Type.UPDATE, position));
+                    return true;
                 }
             });
         }

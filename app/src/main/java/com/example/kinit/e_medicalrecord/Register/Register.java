@@ -1,6 +1,7 @@
 package com.example.kinit.e_medicalrecord.Register;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -220,8 +221,17 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                                                     isDuplicateEmail = true;
                                                 if (code.equals("duplicate_username"))
                                                     isDuplicateUsername = true;
-                                                if (code.equals("reg_success"))
-                                                    custom_alertDialog.show("Successful", "Registration is successful. You may now sign in.");
+                                                if (code.equals("reg_success")) {
+                                                    custom_alertDialog.builder.setCancelable(false);
+                                                    custom_alertDialog.builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            finish();
+                                                        }
+                                                    });
+                                                    custom_alertDialog.show("Successful", "We have sent an email to " + eAddress + " to verify your email. Please" +
+                                                            " click the link in that email to continue.");
+                                                }
                                                 else if (code.equals("reg_unsuccess"))
                                                     custom_alertDialog.show("Oops!", "Registration failed. Please, try again.");
                                             } else if (resp.has("error")) {
