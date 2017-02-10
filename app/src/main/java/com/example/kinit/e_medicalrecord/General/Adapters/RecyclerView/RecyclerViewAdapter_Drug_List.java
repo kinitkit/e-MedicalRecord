@@ -44,12 +44,11 @@ public class RecyclerViewAdapter_Drug_List extends RecyclerView.Adapter<Recycler
             holder.tv_frequency.setText(drugLists[position].frequency);
             holder.tv_why.setText(drugLists[position].indication);
             holder.tv_many.setText(String.valueOf(drugLists[position].many));
-            holder.tv_refill.setText(String.valueOf(drugLists[position].refill));
         } else {
             final String drug = drugArrayList.get(position).drug, strength = drugArrayList.get(position).strength,
                     amount = drugArrayList.get(position).amount, route = drugArrayList.get(position).route,
                     frequency = drugArrayList.get(position).frequency, why = drugArrayList.get(position).why,
-                    many = drugArrayList.get(position).quantity, refill = drugArrayList.get(position).refill;
+                    many = drugArrayList.get(position).quantity;
             holder.tv_drug.setText(drugArrayList.get(position).drug);
             holder.tv_strength.setText(drugArrayList.get(position).strength);
             holder.tv_amount.setText(drugArrayList.get(position).amount);
@@ -57,11 +56,10 @@ public class RecyclerViewAdapter_Drug_List extends RecyclerView.Adapter<Recycler
             holder.tv_frequency.setText(drugArrayList.get(position).frequency);
             holder.tv_why.setText(drugArrayList.get(position).why);
             holder.tv_many.setText(drugArrayList.get(position).quantity);
-            holder.tv_refill.setText(drugArrayList.get(position).refill);
             holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    BusStation.getBus().post(new Bus_Open_Add_Drug(drug, strength, amount, route, frequency, why, many, refill, Query_Type.UPDATE, position));
+                    BusStation.getBus().post(new Bus_Open_Add_Drug(drug, strength, amount, route, frequency, why, many, Query_Type.UPDATE, position));
                     return true;
                 }
             });
@@ -87,7 +85,7 @@ public class RecyclerViewAdapter_Drug_List extends RecyclerView.Adapter<Recycler
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_drug, tv_strength, tv_amount, tv_route, tv_frequency, tv_why, tv_many, tv_refill;
+        TextView tv_drug, tv_strength, tv_amount, tv_route, tv_frequency, tv_why, tv_many;
         CardView cardView;
 
         ViewHolder(View view) {
@@ -99,7 +97,6 @@ public class RecyclerViewAdapter_Drug_List extends RecyclerView.Adapter<Recycler
             tv_frequency = (TextView) view.findViewById(R.id.tv_frequency);
             tv_why = (TextView) view.findViewById(R.id.tv_why);
             tv_many = (TextView) view.findViewById(R.id.tv_many);
-            tv_refill = (TextView) view.findViewById(R.id.tv_refill);
             cardView = (CardView) view.findViewById(R.id.cardView);
         }
     }

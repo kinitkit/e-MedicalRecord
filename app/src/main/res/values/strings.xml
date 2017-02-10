@@ -19,8 +19,7 @@
     <string name="Strength">Strength:</string>
     <string name="Route">Route:</string>
     <string name="frequency">Frequency:</string>
-    <string name="how_many">How Many:</string>
-    <string name="Refill">Refill:</string>
+    <string name="how_many">Quantity:</string>
     <string name="clinic_name">Clinic Name</string>
     <string name="add_drug">Add Drug</string>
     <string name="drugs_list">Drugs List</string>
@@ -28,8 +27,7 @@
     <string name="drug_medication">Drug/Medication</string>
     <string name="strength">Strength</string>
     <string name="route">Route</string>
-    <string name="How_Many">How Many</string>
-    <string name="refill">Refill</string>
+    <string name="How_Many">Quantity</string>
     <string name="add">ADD</string>
     <string name="remarks">Remarks</string>
     <string name="name_of_physician">Name of Physician</string>

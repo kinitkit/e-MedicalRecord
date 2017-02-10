@@ -32,7 +32,6 @@
         <activity android:name=".My_Physician.Activity.My_Physician" />
         <activity android:name=".Medical_Prescription.Activity.Medical_Prescription_List" />
         <activity android:name=".Medical_Prescription.Activity.Medical_Prescription_Form" />
-        <activity android:name=".Medical_Prescription.Activity.Drug_Form" />
         <activity android:name=".Medical_Prescription.Activity.Tagged_Medical_Prescription" />
         <activity android:name=".Medical_Prescription.Activity.Medical_Prescription_View" />
         <activity android:name=".Allergy.Activity.Allergy_List" />

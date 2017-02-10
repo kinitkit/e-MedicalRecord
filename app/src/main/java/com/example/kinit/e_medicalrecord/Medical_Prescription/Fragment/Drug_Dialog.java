@@ -16,7 +16,9 @@ import android.widget.Spinner;
 
 import com.example.kinit.e_medicalrecord.General.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.General.Enum.Query_Type;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Drug;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_DrugMedForm;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Drug_OnLongClick;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Drug;
 import com.example.kinit.e_medicalrecord.R;
 
 
@@ -29,7 +31,7 @@ public class Drug_Dialog extends DialogFragment {
     ArrayAdapter arrayAdapterRoute, arrayAdapterFrequency;
     Query_Type queryType;
     int position;
-    Bus_Drug busDrug;
+    Drug drug;
 
     @NonNull
     @Override
@@ -55,9 +57,6 @@ public class Drug_Dialog extends DialogFragment {
             }
         });
 
-        position = 0;
-        queryType = Query_Type.INSERT;
-
         et_drug = (EditText) view.findViewById(R.id.et_drug);
         et_strength = (EditText) view.findViewById(R.id.et_strength);
         et_amount = (EditText) view.findViewById(R.id.et_amount);
@@ -72,14 +71,24 @@ public class Drug_Dialog extends DialogFragment {
         arrayAdapterFrequency = ArrayAdapter.createFromResource(getActivity(), R.array.spinner_frequency, R.layout.support_simple_spinner_dropdown_item);
         spinner_frequency.setAdapter(arrayAdapterFrequency);
 
-        if (busDrug != null) {
-            queryType = Query_Type.UPDATE;
-            position = busDrug.position;
-            et_drug.setText(busDrug.drug);
-            et_strength.setText(busDrug.strength);
-            et_amount.setText(busDrug.amount);
-            et_why.setText(busDrug.why);
-            et_quantity.setText(busDrug.quantity);
+        if (drug != null) {
+            et_drug.setText(drug.drug);
+            et_strength.setText(drug.strength);
+            et_amount.setText(drug.dosage);
+            et_why.setText(drug.why);
+            et_quantity.setText(drug.quantity);
+            spinner_route.setSelection(arrayAdapterRoute.getPosition(drug.route));
+            spinner_frequency.setSelection(arrayAdapterFrequency.getPosition(drug.frequency));
+        } else {
+            position = 0;
+            queryType = Query_Type.INSERT;
+            et_drug.setText("");
+            et_strength.setText("");
+            et_amount.setText("");
+            et_why.setText("");
+            et_quantity.setText("");
+            spinner_route.setSelection(0);
+            spinner_frequency.setSelection(0);
         }
 
         return builder;
@@ -100,8 +109,9 @@ public class Drug_Dialog extends DialogFragment {
     }
 
     void sendData(String drug, String strength, String amount, String route, String frequency, String why, String quantity) {
-        BusStation.getBus().post(new Bus_Drug(queryType, position, drug, strength, amount, route, frequency, why, quantity));
+        BusStation.getBus().post(new Bus_DrugMedForm(queryType, position, new Drug(drug, strength, amount, route, frequency, why, quantity)));
         builder.dismiss();
+        this.drug = null;
     }
 
     boolean validateEditText(EditText editText, String inp) {
@@ -119,7 +129,9 @@ public class Drug_Dialog extends DialogFragment {
         return (inp.isEmpty()) ? "0" : String.valueOf(Integer.parseInt(inp));
     }
 
-    public void setFields(Bus_Drug busDrug) {
-        this.busDrug = busDrug;
+    public void setFields(Bus_Drug_OnLongClick busDrugOnLongClick) {
+        this.drug = busDrugOnLongClick.drug;
+        this.position =busDrugOnLongClick.position;
+        this.queryType = Query_Type.UPDATE;
     }
 }

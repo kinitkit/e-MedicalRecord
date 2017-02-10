@@ -1,8 +1,10 @@
 package com.example.kinit.e_medicalrecord.Medical_Prescription.Activity;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,20 +24,24 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_Drug_List;
+import com.example.kinit.e_medicalrecord.General.Adapters.RecyclerView.RecyclerViewAdapter_MedicalPrescriptionDrugForm;
+import com.example.kinit.e_medicalrecord.General.BusStation.BusStation;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressBar;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressDialog;
 import com.example.kinit.e_medicalrecord.General.Classes.Dialogs.DatePickerFragment;
 import com.example.kinit.e_medicalrecord.General.Request.Custom_Singleton;
 import com.example.kinit.e_medicalrecord.General.Request.UrlString;
-import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Drug;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_DrugMedForm;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Drug_OnLongClick;
 import com.example.kinit.e_medicalrecord.Medical_Prescription.Bus.Bus_Medical_Prescription_LongClick;
+import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Drug;
 import com.example.kinit.e_medicalrecord.Medical_Prescription.Class.Medical_Prescription;
 import com.example.kinit.e_medicalrecord.Medical_Prescription.Fragment.Drug_Dialog;
 import com.example.kinit.e_medicalrecord.Profile.Class.Patient;
 import com.example.kinit.e_medicalrecord.Profile.Class.Viewer;
 import com.example.kinit.e_medicalrecord.R;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,16 +61,17 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
     Button btn_save;
     ImageButton btn_add;
     RecyclerView recyclerView_Content;
-    RecyclerView.Adapter recyclerViewAdapter_Content;
+    RecyclerViewAdapter_MedicalPrescriptionDrugForm recyclerViewAdapter_Content;
     RecyclerView.LayoutManager recyclerViewLayoutM_Content;
 
     //Classes
-    ArrayList<Bus_Drug> busDrugs;
+    ArrayList<Drug> drugs;
     Patient patient;
     Viewer viewer;
     DatePickerFragment datePickerFragment;
     Medical_Prescription medicalPrescription;
     Bus_Medical_Prescription_LongClick busMedicalPrescriptionLongClick;
+    Bus_Drug_OnLongClick busDrugOnLongClick;
     Custom_ProgressDialog progressDialog;
     Custom_ProgressBar progressBar;
     Drug_Dialog drugDialog;
@@ -104,7 +111,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         alertDialog = new Custom_AlertDialog(this);
-        busDrugs = new ArrayList<>();
+        drugs = new ArrayList<>();
         et_clinic = (EditText) findViewById(R.id.et_clinic);
         et_physicianName = (EditText) findViewById(R.id.et_physicianName);
         et_prescriptionDate = (EditText) findViewById(R.id.et_prescriptionDate);
@@ -145,7 +152,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
     }
 
     void loadToRecyclerView() {
-        recyclerViewAdapter_Content = new RecyclerViewAdapter_Drug_List(busDrugs);
+        recyclerViewAdapter_Content = new RecyclerViewAdapter_MedicalPrescriptionDrugForm((ArrayList<Drug>)drugs.clone());
         recyclerViewLayoutM_Content = new LinearLayoutManager(this);
         recyclerView_Content.setLayoutManager(recyclerViewLayoutM_Content);
         recyclerView_Content.setAdapter(recyclerViewAdapter_Content);
@@ -179,11 +186,47 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
         }
     }
 
-    void showDialog(Bus_Drug busDrug) {
+    void showDialog(Bus_Drug_OnLongClick busDrugOnLongClick) {
         drugDialog.show(getSupportFragmentManager(), "Drug Dialog");
-        if (busDrug != null) {
-            drugDialog.setFields(busDrug);
+        if (busDrugOnLongClick != null) {
+            drugDialog.setFields(busDrugOnLongClick);
         }
+    }
+
+    void insertDrug(Bus_DrugMedForm busDrug) {
+        drugs.add(busDrug.drug);
+        recyclerViewAdapter_Content.addItem(busDrug.drug);
+    }
+
+    void updateDrug(Bus_DrugMedForm busDrug) {
+        drugs.set(busDrug.position, busDrug.drug);
+        recyclerViewAdapter_Content.updateItem(busDrug.position, busDrug.drug);
+    }
+
+    void removeDrug(int position) {
+        drugs.remove(position);
+        recyclerViewAdapter_Content.removeItem(position);
+    }
+
+    void action_AlertDialog(final Bus_Drug_OnLongClick busDrugOnLongClick) {
+        final CharSequence actions[] = {"Edit", "Delete"};
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("Choose Action");
+        builder.setItems(actions, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        showDialog(busDrugOnLongClick);
+                        break;
+                    case 1:
+                        removeDrug(busDrugOnLongClick.position);
+                        break;
+                }
+            }
+        });
+        builder.show();
     }
 
     void sendData(final String physicianName, final String clinicName) {
@@ -256,15 +299,14 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                         params.put("user_data_id", String.valueOf(patient.user_data_id));
                         params.put("medical_staff_id", "0");
                     }
-                    for (int x = 0; x < busDrugs.size(); x++) {
-                        params.put("drug[" + (x) + "]", busDrugs.get(x).drug);
-                        params.put("strength[" + (x) + "]", busDrugs.get(x).strength);
-                        params.put("dosage[" + (x) + "]", busDrugs.get(x).amount);
-                        params.put("route[" + (x) + "]", busDrugs.get(x).route);
-                        params.put("frequency[" + (x) + "]", busDrugs.get(x).frequency);
-                        params.put("indication[" + (x) + "]", busDrugs.get(x).why);
-                        params.put("many[" + (x) + "]", busDrugs.get(x).quantity);
-                        params.put("refill[" + (x) + "]", busDrugs.get(x).refill);
+                    for (int x = 0; x < drugs.size(); x++) {
+                        params.put("drug[" + (x) + "]", drugs.get(x).drug);
+                        params.put("strength[" + (x) + "]", drugs.get(x).strength);
+                        params.put("dosage[" + (x) + "]", drugs.get(x).dosage);
+                        params.put("route[" + (x) + "]", drugs.get(x).route);
+                        params.put("frequency[" + (x) + "]", drugs.get(x).frequency);
+                        params.put("indication[" + (x) + "]", drugs.get(x).why);
+                        params.put("many[" + (x) + "]", drugs.get(x).quantity);
                     }
                     return params;
                 }
@@ -304,7 +346,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                                             int jsonArrayLength = jsonArray.length();
                                             for (int x = 0; x < jsonArrayLength; x++) {
                                                 jsonObject = jsonArray.getJSONObject(x);
-                                                busDrugs.add(new Bus_Drug(jsonObject));
+                                                drugs.add(new Drug(jsonObject));
                                             }
                                             loadToRecyclerView();
                                         } else {
@@ -344,6 +386,25 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
         }
     }
 
+    @Subscribe
+    public void onClickDialogOk(Bus_DrugMedForm busDrugMedForm) {
+        Log.d("error", "qwe");
+        switch (busDrugMedForm.queryType) {
+            case INSERT:
+                insertDrug(busDrugMedForm);
+                break;
+            case UPDATE:
+                updateDrug(busDrugMedForm);
+                break;
+        }
+    }
+
+    @Subscribe
+    public void onLongClickDrug(Bus_Drug_OnLongClick busDrugOnLongClick) {
+        this.busDrugOnLongClick = busDrugOnLongClick;
+        action_AlertDialog(this.busDrugOnLongClick);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -355,7 +416,7 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
                 Custom_AlertDialog alertDialog = new Custom_AlertDialog(this);
                 String clinic = et_clinic.getText().toString().trim(),
                         physicianName = et_physicianName.getText().toString().trim();
-                if (busDrugs.size() > 0) {
+                if (drugs.size() > 0) {
                     if (!physicianName.isEmpty()) {
                         sendData(physicianName, clinic);
                     } else {
@@ -382,5 +443,17 @@ public class Medical_Prescription_Form extends AppCompatActivity implements View
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        BusStation.getBus().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusStation.getBus().unregister(this);
     }
 }

@@ -3,7 +3,7 @@ package com.example.kinit.e_medicalrecord.Medical_Prescription.Class;
 import org.json.JSONObject;
 
 public class Drug_List {
-    public int id, medical_prescription_id, refill, many;
+    public int id, medical_prescription_id, many;
     public String drug, strength, dosage, route, frequency, indication;
 
     public Drug_List() {
@@ -21,7 +21,6 @@ public class Drug_List {
             frequency = jsonObject.getString("frequency");
             indication = jsonObject.getString("indication");
             many = Integer.parseInt(jsonObject.getString("how_many"));
-            refill = Integer.parseInt(jsonObject.getString("refill"));
         } catch (Exception e) {
             e.printStackTrace();
         }
