@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.kinit.e_medicalrecord">
+    package="com.e_medicalRecord.kinit.e_medicalrecord">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".General.Request.Custom_Singleton"
+        android:name="com.e_medicalRecord.kinit.e_medicalrecord.General.Request.Custom_Singleton"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
-        android:icon="@mipmap/ic_logo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login.Login" />
-        <activity android:name=".Register.Register" />
-        <activity android:name=".Profile.Activity.Profile" />
-        <activity android:name=".Register.Base_Activity">
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Login.Login" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Register.Register" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Profile.Activity.Profile" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Register.Base_Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,43 +29,43 @@
                 android:name="android.app.search"
                 android:resource="@xml/search" />
         </activity>
-        <activity android:name=".My_Physician.Activity.My_Physician" />
-        <activity android:name=".Medical_Prescription.Activity.Medical_Prescription_List" />
-        <activity android:name=".Medical_Prescription.Activity.Medical_Prescription_Form" />
-        <activity android:name=".Medical_Prescription.Activity.Tagged_Medical_Prescription" />
-        <activity android:name=".Medical_Prescription.Activity.Medical_Prescription_View" />
-        <activity android:name=".Allergy.Activity.Allergy_List" />
-        <activity android:name=".Allergy.Activity.Allergy_Form" />
-        <activity android:name=".Laboratory.Activity.Laboratory_Tests" />
-        <activity android:name=".Laboratory.Activity.Laboratory_Results" />
-        <activity android:name=".Laboratory.Activity.Lab_Chemistry_Form" />
-        <activity android:name=".Laboratory.Activity.Laboratory_Result_View" />
-        <activity android:name=".Laboratory.Activity.Lab_Fecalysis_Form" />
-        <activity android:name=".Laboratory.Activity.Lab_Hematology_Form" />
-        <activity android:name=".Laboratory.Activity.Lab_Urinalysis_Form" />
-        <activity android:name=".Laboratory.Activity.Tagged_Laboratory" />
-        <activity android:name=".Admission.Activity.Admission_Form" />
-        <activity android:name=".Admission.Activity.Admission_List" />
-        <activity android:name=".Admission.Activity.Admission_View" />
-        <activity android:name=".Admission.Activity.Tagged_Admission" />
-        <activity android:name=".Settings.Activity.Settings" />
-        <activity android:name=".Settings.Activity.Settings_Personal_Information" />
-        <activity android:name=".Settings.Activity.Settings_Patient_Information" />
-        <activity android:name=".Settings.Activity.Settings_Password" />
-        <activity android:name=".Vaccination.Activity.Vaccination_Form" />
-        <activity android:name=".Vaccination.Activity.Vaccination_List" />
-        <activity android:name=".Past_Medical_History.Activity.Past_Medical_History_List" />
-        <activity android:name=".Past_Medical_History.Activity.Past_Medical_History_Form" />
-        <activity android:name=".Surgical_History.Activity.Surgical_History_List" />
-        <activity android:name=".Surgical_History.Activity.Surgical_History_Form" />
-        <activity android:name=".Family_History.Activity.Family_History_List" />
-        <activity android:name=".Family_History.Activity.Family_History_Form" />
-        <activity android:name=".Social_History.Activity.Social_History_List" />
-        <activity android:name=".Social_History.Activity.Social_History_Form" />
-        <activity android:name=".Consultation.Activity.Consultation_List" />
-        <activity android:name=".Consultation.Activity.Consultation_Form" />
-        <activity android:name=".Consultation.Activity.Consultation_View" />
-        <activity android:name=".Consultation.Activity.Tagged_Consultation"></activity>
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.My_Physician.Activity.My_Physician" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Medical_Prescription.Activity.Medical_Prescription_List" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Medical_Prescription.Activity.Medical_Prescription_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Medical_Prescription.Activity.Tagged_Medical_Prescription" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Medical_Prescription.Activity.Medical_Prescription_View" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Allergy.Activity.Allergy_List" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Allergy.Activity.Allergy_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Laboratory.Activity.Laboratory_Tests" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Laboratory.Activity.Laboratory_Results" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Laboratory.Activity.Lab_Chemistry_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Laboratory.Activity.Laboratory_Result_View" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Laboratory.Activity.Lab_Fecalysis_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Laboratory.Activity.Lab_Hematology_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Laboratory.Activity.Lab_Urinalysis_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Laboratory.Activity.Tagged_Laboratory" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Admission.Activity.Admission_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Admission.Activity.Admission_List" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Admission.Activity.Admission_View" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Admission.Activity.Tagged_Admission" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Settings.Activity.Settings" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Settings.Activity.Settings_Personal_Information" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Settings.Activity.Settings_Patient_Information" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Settings.Activity.Settings_Password" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Vaccination.Activity.Vaccination_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Vaccination.Activity.Vaccination_List" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Past_Medical_History.Activity.Past_Medical_History_List" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Past_Medical_History.Activity.Past_Medical_History_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Surgical_History.Activity.Surgical_History_List" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Surgical_History.Activity.Surgical_History_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Family_History.Activity.Family_History_List" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Family_History.Activity.Family_History_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Social_History.Activity.Social_History_List" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Social_History.Activity.Social_History_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Consultation.Activity.Consultation_List" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Consultation.Activity.Consultation_Form" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Consultation.Activity.Consultation_View" />
+        <activity android:name="com.e_medicalRecord.kinit.e_medicalrecord.Consultation.Activity.Tagged_Consultation"></activity>
     </application>
 
 </manifest>

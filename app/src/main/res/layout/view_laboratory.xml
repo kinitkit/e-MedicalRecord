@@ -38,8 +38,46 @@
                     android:id="@+id/et_physicianName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Physician"
-                    android:inputType="text"
+                    android:hint="Requesting Physician"
+                    android:inputType="textCapSentences"
+                    android:paddingTop="@dimen/dp_3"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="17sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColorHint="@color/colorPrimaryDark"
+                android:textSize="17sp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_pathologist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Pathologist"
+                    android:inputType="textCapSentences"
+                    android:paddingTop="@dimen/dp_3"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="17sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColorHint="@color/colorPrimaryDark"
+                android:textSize="17sp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_medTech"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Medical Technologist"
+                    android:inputType="textCapSentences"
                     android:paddingTop="@dimen/dp_3"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColor="@color/colorTextPrimary"
@@ -58,7 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Laboratory"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:paddingTop="@dimen/dp_3"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColor="@color/colorTextPrimary"

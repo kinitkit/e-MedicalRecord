@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="com.example.kinit.e_medicalrecord.Vaccination.Activity.Vaccination_Form">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Vaccination.Activity.Vaccination_Form">
 
     <include
         android:id="@+id/toolbar"
@@ -128,7 +128,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Place Taken"
-                            android:inputType="text"
+                            android:inputType="textCapSentences"
                             android:maxLength="50"
                             android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"

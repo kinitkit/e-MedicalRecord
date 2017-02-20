@@ -121,6 +121,8 @@
 
     <string-array name="spinner_lab_chem">
         <item name="physician">Physician</item>
+        <item name="pathologist">Pathologist</item>
+        <item name="medTech">Medical Technologist</item>
         <item name="laboratory">Laboratory</item>
         <item name="datePerformed">Date Performed</item>
         <item name="fbs">FBS (Glucose)</item>
@@ -236,4 +238,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="value_is_out_of_range">Value is out of range.</string>
 </resources>

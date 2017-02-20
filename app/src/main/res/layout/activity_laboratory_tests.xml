@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="com.example.kinit.e_medicalrecord.Laboratory.Activity.Laboratory_Tests">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Laboratory.Activity.Laboratory_Tests">
 
     <include
         android:id="@+id/toolbar"

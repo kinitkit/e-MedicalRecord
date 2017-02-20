@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="com.example.kinit.e_medicalrecord.Admission.Activity.Admission_Form">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Admission.Activity.Admission_Form">
 
     <include
         android:id="@+id/toolbar"

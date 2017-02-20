@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    tools:context="com.example.kinit.e_medicalrecord.My_Physician.Fragment.Fragment_My_Physician_List">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.My_Physician.Fragment.Fragment_My_Physician_List">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"

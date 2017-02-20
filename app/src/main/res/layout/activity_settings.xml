@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:fitsSystemWindows="true"
-    tools:context="com.example.kinit.e_medicalrecord.Settings.Activity.Settings">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Settings.Activity.Settings">
 
     <include
         android:id="@+id/toolbar"
@@ -52,7 +52,7 @@
                     android:textColor="@color/colorTextPrimary"
                     android:textSize="17sp" />
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/tv_medicalStaff"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                     android:text="Medical Staff Information"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColor="@color/colorTextPrimary"
-                    android:textSize="17sp" />
+                    android:textSize="17sp" />-->
 
                 <TextView
                     android:id="@+id/tv_password"

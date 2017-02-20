@@ -4,7 +4,7 @@
     android:id="@+id/activity_tagged_consultation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Consultation.Activity.Tagged_Consultation">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Consultation.Activity.Tagged_Consultation">
 
     <include
         android:id="@+id/toolbar"

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Allergy.Activity.Allergy_Form">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Allergy.Activity.Allergy_Form">
 
     <include
         android:id="@+id/toolbar"
@@ -42,7 +42,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Allergic From"
-                        android:inputType="text"
+                        android:inputType="textCapSentences"
                         android:maxLength="50"
                         android:paddingTop="@dimen/dp_3"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -63,7 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Reaction"
-                        android:inputType="text"
+                        android:inputType="textCapSentences"
                         android:maxLength="50"
                         android:paddingTop="@dimen/dp_3"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -83,6 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Treatment"
+                        android:inputType="textCapSentences"
                         android:maxLength="50"
                         android:paddingTop="3dp"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"

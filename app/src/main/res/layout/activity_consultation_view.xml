@@ -5,7 +5,7 @@
     android:id="@+id/activity_consultation_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Consultation.Activity.Consultation_View">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Consultation.Activity.Consultation_View">
 
     <include
         android:id="@+id/toolbar"
@@ -24,7 +24,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.example.kinit.e_medicalrecord.Medical_Prescription.Activity.Medical_Prescription_View">
+            tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Medical_Prescription.Activity.Medical_Prescription_View">
 
 
             <android.support.v4.widget.NestedScrollView

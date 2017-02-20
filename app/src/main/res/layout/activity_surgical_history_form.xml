@@ -4,7 +4,7 @@
     android:id="@+id/activity_surgical_history_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Surgical_History.Activity.Surgical_History_Form">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Surgical_History.Activity.Surgical_History_Form">
 
     <include
         android:id="@+id/toolbar"
@@ -51,7 +51,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/surgery"
-                            android:inputType="text"
+                            android:inputType="textCapWords"
                             android:paddingTop="@dimen/dp_3"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"

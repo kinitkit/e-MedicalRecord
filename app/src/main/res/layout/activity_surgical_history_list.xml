@@ -5,7 +5,7 @@
     android:id="@+id/activity_surgical_history_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kinit.e_medicalrecord.Surgical_History.Activity.Surgical_History_List">
+    tools:context="com.e_medicalRecord.kinit.e_medicalrecord.Surgical_History.Activity.Surgical_History_List">
 
     <include
         android:id="@+id/toolbar"
@@ -50,7 +50,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:src="@mipmap/ic_add"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     app:elevation="3dp"
                     app:fabSize="normal" />
             </android.support.design.widget.CoordinatorLayout>
