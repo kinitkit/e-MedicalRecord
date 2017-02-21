@@ -216,13 +216,6 @@
         <item name="transparency">Transparency</item>
         <item name="reaction">Reaction</item>
         <item name="specific_gravity">Specific Gravity</item>
-        <item name="pus_cells">Pus Cells</item>
-        <item name="RBC">RBC</item>
-        <item name="epith_cells">Epith Cells</item>
-        <item name="renal_cells">Renal Cells</item>
-        <item name="mucus_threads">Mucus Threads</item>
-        <item name="bacteria">Bacteria</item>
-        <item name="yeast_cells">Yeast Cells</item>
         <item name="sugar">Sugar</item>
         <item name="albumin">Albumin</item>
         <item name="ketone">Ketone</item>
@@ -231,6 +224,13 @@
         <item name="urobilinogen">Urobilinogen</item>
         <item name="bacteriaNit">BacteriaNit</item>
         <item name="leukocyte">Leukocyte</item>
+        <item name="pus_cells">Pus Cells</item>
+        <item name="RBC">RBC</item>
+        <item name="epith_cells">Epith Cells</item>
+        <item name="renal_cells">Renal Cells</item>
+        <item name="mucus_threads">Mucus Threads</item>
+        <item name="bacteria">Bacteria</item>
+        <item name="yeast_cells">Yeast Cells</item>
         <item name="amorphous_subs">Amorphous Subs</item>
         <item name="uric_acid">Uric Acid</item>
         <item name="calcium_oxalate">Calcium Oxalate</item>

@@ -130,7 +130,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="Specific Gravity"
                                     android:inputType="numberDecimal"
-                                    android:maxLength="20"
+                                    android:maxLength="5"
                                     android:paddingTop="@dimen/dp_3"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                                     android:textColor="@color/colorTextPrimary"
@@ -173,7 +173,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="Pus Cells"
                                     android:inputType="number"
-                                    android:maxLength="2"
+                                    android:maxLength="3"
                                     android:paddingTop="@dimen/dp_3"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                                     android:textColor="@color/colorTextPrimary"
@@ -193,7 +193,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="RBC"
                                     android:inputType="number"
-                                    android:maxLength="20"
+                                    android:maxLength="3"
                                     android:paddingTop="@dimen/dp_3"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                                     android:textColor="@color/colorTextPrimary"
@@ -324,6 +324,15 @@
                                 android:textColor="@color/colorPrimaryDark" />
 
                             <CheckBox
+                                android:id="@+id/cb_sugar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Sugar"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/sp_17" />
+
+                            <CheckBox
                                 android:id="@+id/cb_albumin"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -385,152 +394,12 @@
                                 android:textSize="17sp">
 
                                 <android.support.design.widget.TextInputEditText
-                                    android:id="@+id/et_sugar"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Sugar"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
-                                    android:paddingTop="@dimen/dp_3"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorTextPrimary"
-                                    android:textSize="@dimen/sp_17" />
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                                android:textColorHint="@color/colorPrimaryDark"
-                                android:textSize="17sp">
-
-                                <android.support.design.widget.TextInputEditText
-                                    android:id="@+id/et_albumin"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Albumin"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
-                                    android:paddingTop="@dimen/dp_3"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorTextPrimary"
-                                    android:textSize="@dimen/sp_17" />
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                                android:textColorHint="@color/colorPrimaryDark"
-                                android:textSize="17sp">
-
-                                <android.support.design.widget.TextInputEditText
-                                    android:id="@+id/et_ketone"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Ketone"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
-                                    android:paddingTop="@dimen/dp_3"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorTextPrimary"
-                                    android:textSize="@dimen/sp_17" />
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                                android:textColorHint="@color/colorPrimaryDark"
-                                android:textSize="17sp">
-
-                                <android.support.design.widget.TextInputEditText
-                                    android:id="@+id/et_bilirubin"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Bilirubin"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
-                                    android:paddingTop="@dimen/dp_3"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorTextPrimary"
-                                    android:textSize="@dimen/sp_17" />
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                                android:textColorHint="@color/colorPrimaryDark"
-                                android:textSize="17sp">
-
-                                <android.support.design.widget.TextInputEditText
-                                    android:id="@+id/et_blood"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Blood"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
-                                    android:paddingTop="@dimen/dp_3"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorTextPrimary"
-                                    android:textSize="@dimen/sp_17" />
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                                android:textColorHint="@color/colorPrimaryDark"
-                                android:textSize="17sp">
-
-                                <android.support.design.widget.TextInputEditText
                                     android:id="@+id/et_urobilinogen"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Urobilinogen"
                                     android:inputType="numberDecimal"
                                     android:maxLength="5"
-                                    android:paddingTop="@dimen/dp_3"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorTextPrimary"
-                                    android:textSize="@dimen/sp_17" />
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                                android:textColorHint="@color/colorPrimaryDark"
-                                android:textSize="17sp">
-
-                                <android.support.design.widget.TextInputEditText
-                                    android:id="@+id/et_bacteriaNit"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="BacteriaNit"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
-                                    android:paddingTop="@dimen/dp_3"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorTextPrimary"
-                                    android:textSize="@dimen/sp_17" />
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                                android:textColorHint="@color/colorPrimaryDark"
-                                android:textSize="17sp">
-
-                                <android.support.design.widget.TextInputEditText
-                                    android:id="@+id/et_leukocyte"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Leukocyte"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
                                     android:paddingTop="@dimen/dp_3"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                                     android:textColor="@color/colorTextPrimary"
@@ -674,8 +543,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Pus Cast"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
+                                    android:inputType="number"
+                                    android:maxLength="3"
                                     android:paddingTop="@dimen/dp_3"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                                     android:textColor="@color/colorTextPrimary"
@@ -694,8 +563,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Hyaline"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
+                                    android:inputType="number"
+                                    android:maxLength="3"
                                     android:paddingTop="@dimen/dp_3"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                                     android:textColor="@color/colorTextPrimary"
@@ -714,8 +583,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Fine Granular"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
+                                    android:inputType="number"
+                                    android:maxLength="3"
                                     android:paddingTop="@dimen/dp_3"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                                     android:textColor="@color/colorTextPrimary"
@@ -734,8 +603,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Coarse Granular"
-                                    android:inputType="textCapSentences"
-                                    android:maxLength="20"
+                                    android:inputType="number"
+                                    android:maxLength="3"
                                     android:paddingTop="@dimen/dp_3"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                                     android:textColor="@color/colorTextPrimary"

@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -48,6 +49,8 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
 
     Intent intent;
     //Classes
+    int dateIndex;
+
     Viewer viewer;
     Patient patient;
     Laboratory laboratory;
@@ -61,6 +64,7 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
     AppCompatSpinner spinner_lab_search;
     ArrayAdapter arrayAdapter_search;
     ArrayList<EditText> editTexts;
+    ArrayList<CheckBox> checkBoxes;
     Button btn_save;
 
     //Utils
@@ -76,6 +80,7 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
     }
 
     void init() {
+        dateIndex = 4;
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -103,13 +108,16 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
 
         editTexts = new ArrayList<>();
         editTexts.add((EditText) findViewById(R.id.et_physicianName));
+        editTexts.add((EditText) findViewById(R.id.et_pathologist));
+        editTexts.add((EditText) findViewById(R.id.et_medTech));
         editTexts.add((EditText) findViewById(R.id.et_laboratory));
         editTexts.add((EditText) findViewById(R.id.et_date));
-        editTexts.get(2).setOnClickListener(this);
+        editTexts.get(dateIndex).setOnClickListener(this);
         editTexts.add((EditText) findViewById(R.id.et_color));
         editTexts.add((EditText) findViewById(R.id.et_transparency));
         editTexts.add((EditText) findViewById(R.id.et_reaction));
         editTexts.add((EditText) findViewById(R.id.et_gravity));
+        editTexts.add((EditText) findViewById(R.id.et_urobilinogen));
         editTexts.add((EditText) findViewById(R.id.et_pusCells));
         editTexts.add((EditText) findViewById(R.id.et_rbc));
         editTexts.add((EditText) findViewById(R.id.et_epithCell));
@@ -117,14 +125,6 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
         editTexts.add((EditText) findViewById(R.id.et_mucusThreads));
         editTexts.add((EditText) findViewById(R.id.et_bacteria));
         editTexts.add((EditText) findViewById(R.id.et_yeastCell));
-        editTexts.add((EditText) findViewById(R.id.et_sugar));
-        editTexts.add((EditText) findViewById(R.id.et_albumin));
-        editTexts.add((EditText) findViewById(R.id.et_ketone));
-        editTexts.add((EditText) findViewById(R.id.et_bilirubin));
-        editTexts.add((EditText) findViewById(R.id.et_blood));
-        editTexts.add((EditText) findViewById(R.id.et_urobilinogen));
-        editTexts.add((EditText) findViewById(R.id.et_bacteriaNit));
-        editTexts.add((EditText) findViewById(R.id.et_leukocyte));
         editTexts.add((EditText) findViewById(R.id.et_amorphous));
         editTexts.add((EditText) findViewById(R.id.et_uricAcid));
         editTexts.add((EditText) findViewById(R.id.et_calciumOxalate));
@@ -134,6 +134,15 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
         editTexts.add((EditText) findViewById(R.id.et_fineGranular));
         editTexts.add((EditText) findViewById(R.id.et_coarseGranular));
         editTexts.add((EditText) findViewById(R.id.et_remarks));
+
+        checkBoxes = new ArrayList<>();
+        checkBoxes.add((CheckBox) findViewById(R.id.cb_sugar));
+        checkBoxes.add((CheckBox) findViewById(R.id.cb_albumin));
+        checkBoxes.add((CheckBox) findViewById(R.id.cb_ketone));
+        checkBoxes.add((CheckBox) findViewById(R.id.cb_bilirubin));
+        checkBoxes.add((CheckBox) findViewById(R.id.cb_blood));
+        checkBoxes.add((CheckBox) findViewById(R.id.cb_bacterialNit));
+        checkBoxes.add((CheckBox) findViewById(R.id.cb_leukocyte));
 
         btn_save = (Button) findViewById(R.id.btn_save);
         btn_save.setOnClickListener(this);
@@ -160,38 +169,81 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
     }
 
     void verifyData() {
-        int isLabTestEmpty = 1, isLabNameEmpty = 1;
-        String[] inps = new String[editTexts.size()];
-
+        int isLabTestEmpty = 1, isLabNameEmpty = 1, isPathoEmpty = 1, isMedTechEmpty = 1, isThereNoError = 1;
+        ArrayList<String> inps = new ArrayList<>();
+        double valD;
+        int valI;
         for (int x = 0; x < editTexts.size(); x++) {
-            inps[x] = editTexts.get(x).getText().toString().trim();
-            if (x == 0 || x == 1) {
-                if (inps[x].isEmpty()) {
-                    editTexts.get(x).requestFocus();
-                    editTexts.get(x).setError("Required Field!");
+            inps.add(editTexts.get(x).getText().toString().trim());
+            if (x == 1 || x == 2 || x == 3) {
+                if (inps.get(x).isEmpty()) {
+                    editTextError(editTexts.get(x), getString(R.string.required_field));
                 } else {
-                    isLabNameEmpty = 0;
+                    switch (x) {
+                        case 1:
+                            isPathoEmpty = 0;
+                            break;
+                        case 2:
+                            isMedTechEmpty = 0;
+                            break;
+                        case 3:
+                            isLabNameEmpty = 0;
+                            break;
+                    }
                 }
-            } else if (x > 2) {
-                if (!inps[x].isEmpty()) {
+            } else if (x > dateIndex) {
+                if (!inps.get(x).isEmpty()) {
+                    switch (x) {
+                        case 7:
+                        case 10:
+                        case 11:
+                        case 21:
+                        case 22:
+                        case 23:
+                        case 24:
+                            valI = Integer.parseInt(inps.get(x));
+                            if (valI < 0 || valI > 20) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                        case 8:
+                        case 9:
+                            valD = Double.parseDouble(inps.get(x));
+                            if (valD < 0 || valD > 10) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                    }
                     isLabTestEmpty = 0;
                 }
             }
         }
 
-        if (isLabNameEmpty == 0 && isLabTestEmpty == 0) {
+        if (isPathoEmpty == 0 && isMedTechEmpty == 0 && isLabNameEmpty == 0 && isLabTestEmpty == 0 && isThereNoError == 1) {
+            int x = 9;
+            for (CheckBox checkBox : checkBoxes) {
+                inps.set(x, (checkBox.isChecked() ? "1" : "0"));
+                ++x;
+            }
             insertData(inps);
         } else if (isLabTestEmpty == 1) {
             alertDialog.show("Error", "At least 1 field of the lab tests must be filled up.");
         }
     }
 
-    void setCalendar(Calendar calendar) {
-        simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        editTexts.get(2).setText(simpleDateFormat.format(calendar.getTime()));
+    void editTextError(EditText editText, String message) {
+        editText.requestFocus();
+        editText.setError(message);
     }
 
-    void insertData(final String[] inps) {
+    void setCalendar(Calendar calendar) {
+        simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        editTexts.get(dateIndex).setText(simpleDateFormat.format(calendar.getTime()));
+    }
+
+    void insertData(final ArrayList<String> inps) {
         progressDialog.show("Saving...");
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, UrlString.URL_LABORATORY,
@@ -204,7 +256,7 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
                                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
-                                        if(laboratory != null) {
+                                        if (laboratory != null) {
                                             Toast.makeText(getApplicationContext(), R.string.record_updated, Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
@@ -218,7 +270,7 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
                                         alertDialog_Close(getString(R.string.unauthorized_to_insert));
                                     } else if (jsonObject.getString("code").equals("empty")) {
                                         progressDialog.dismiss();
-                                        if(laboratory != null) {
+                                        if (laboratory != null) {
                                             alertDialog_Close("This result has been deleted.");
                                         } else {
                                             alertDialog.show("Error", "Something happened. Please try again.");
@@ -261,11 +313,11 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
                         params.put("user_data_id", String.valueOf(viewer.user_id));
                         params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
                     }
-                    for (int x = 0; x < inps.length; x++) {
-                        if (x == 2) {
+                    for (int x = 0; x < inps.size(); x++) {
+                        if (x == dateIndex) {
                             params.put("args[" + (x) + "]", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
                         } else {
-                            params.put("args[" + (x) + "]", inps[x]);
+                            params.put("args[" + (x) + "]", inps.get(x));
                         }
                     }
                     return params;
@@ -329,7 +381,7 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
         }
     }
 
-    void alertDialog_Close(String message){
+    void alertDialog_Close(String message) {
         alertDialog.builder.setNegativeButton(null, null);
         alertDialog.builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
@@ -342,42 +394,48 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
 
     void setToEditText() {
         editTexts.get(0).setText(labUrinalysis.physician_name);
-        editTexts.get(1).setText(labUrinalysis.lab_name);
+        editTexts.get(1).setText(labUrinalysis.pathologist);
+        editTexts.get(2).setText(labUrinalysis.medTech);
+        editTexts.get(3).setText(labUrinalysis.lab_name);
         setCalendar(labUrinalysis.datePerformed);
-        editTexts.get(3).setText(labUrinalysis.color);
-        editTexts.get(4).setText(labUrinalysis.transparency);
-        editTexts.get(5).setText(labUrinalysis.reaction);
-        editTexts.get(6).setText(labUrinalysis.specificGravity);
-        editTexts.get(7).setText(labUrinalysis.pusCells);
-        editTexts.get(8).setText(labUrinalysis.rbc);
-        editTexts.get(9).setText(labUrinalysis.epithCells);
-        editTexts.get(10).setText(labUrinalysis.renalCells);
-        editTexts.get(11).setText(labUrinalysis.mucusThreads);
-        editTexts.get(12).setText(labUrinalysis.bacteria);
-        editTexts.get(13).setText(labUrinalysis.yeastCells);
-        editTexts.get(14).setText(labUrinalysis.sugar);
-        editTexts.get(15).setText(labUrinalysis.albumin);
-        editTexts.get(16).setText(labUrinalysis.ketone);
-        editTexts.get(17).setText(labUrinalysis.bilirubin);
-        editTexts.get(18).setText(labUrinalysis.blood);
-        editTexts.get(19).setText(labUrinalysis.urobilinogen);
-        editTexts.get(20).setText(labUrinalysis.bacteriaNit);
-        editTexts.get(21).setText(labUrinalysis.leukocyte);
-        editTexts.get(22).setText(labUrinalysis.amorphousSubs);
-        editTexts.get(23).setText(labUrinalysis.uricAcid);
-        editTexts.get(24).setText(labUrinalysis.calciumOxalate);
-        editTexts.get(25).setText(labUrinalysis.triplePhosphate);
-        editTexts.get(26).setText(labUrinalysis.pusCast);
-        editTexts.get(27).setText(labUrinalysis.hyaline);
-        editTexts.get(28).setText(labUrinalysis.fineGranular);
-        editTexts.get(29).setText(labUrinalysis.coarseGranular);
-        editTexts.get(30).setText(labUrinalysis.remarks);
+        editTexts.get(5).setText(labUrinalysis.color);
+        editTexts.get(6).setText(labUrinalysis.transparency);
+        editTexts.get(7).setText(labUrinalysis.reaction);
+        editTexts.get(8).setText(labUrinalysis.specificGravity);
+        editTexts.get(9).setText(labUrinalysis.urobilinogen);
+        editTexts.get(10).setText(labUrinalysis.pusCells);
+        editTexts.get(11).setText(labUrinalysis.rbc);
+        editTexts.get(12).setText(labUrinalysis.epithCells);
+        editTexts.get(13).setText(labUrinalysis.renalCells);
+        editTexts.get(14).setText(labUrinalysis.mucusThreads);
+        editTexts.get(15).setText(labUrinalysis.bacteria);
+        editTexts.get(16).setText(labUrinalysis.yeastCells);
+        checkBoxes.get(0).setChecked(labUrinalysis.sugar.equals("1"));
+        checkBoxes.get(0).setChecked(labUrinalysis.albumin.equals("1"));
+        checkBoxes.get(0).setChecked(labUrinalysis.ketone.equals("1"));
+        checkBoxes.get(0).setChecked(labUrinalysis.bilirubin.equals("1"));
+        checkBoxes.get(0).setChecked(labUrinalysis.blood.equals("1"));
+        checkBoxes.get(0).setChecked(labUrinalysis.bacteriaNit.equals("1"));
+        checkBoxes.get(0).setChecked(labUrinalysis.leukocyte.equals("1"));
+        editTexts.get(17).setText(labUrinalysis.amorphousSubs);
+        editTexts.get(18).setText(labUrinalysis.uricAcid);
+        editTexts.get(19).setText(labUrinalysis.calciumOxalate);
+        editTexts.get(20).setText(labUrinalysis.triplePhosphate);
+        editTexts.get(21).setText(labUrinalysis.pusCast);
+        editTexts.get(22).setText(labUrinalysis.hyaline);
+        editTexts.get(23).setText(labUrinalysis.fineGranular);
+        editTexts.get(24).setText(labUrinalysis.coarseGranular);
+        editTexts.get(25).setText(labUrinalysis.remarks);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position == 2) {
+        if (position == dateIndex) {
             editTexts.get(position).performClick();
+        } else if ((position > 8 && position < 14) || position == 15 || position == 16) {
+            checkBoxes.get(position - 15).requestFocus();
+        } else if (position > 23) {
+            editTexts.get(position - 7).requestFocus();
         } else {
             editTexts.get(position).requestFocus();
         }
