@@ -149,7 +149,7 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
     }
 
     void verifyData() {
-        int isLabTestEmpty = 1, isLabNameEmpty = 1;
+        int isLabTestEmpty = 1, isLabNameEmpty = 1, isPathoEmpty = 1, isMedTechEmpty = 1, isThereNoError = 1;
         String[] inps = new String[editTexts.size()];
         double valD;
         for (int x = 0; x < editTexts.size(); x++) {
@@ -158,9 +158,19 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
                 if (inps[x].isEmpty()) {
                     editTextError(editTexts.get(x), getString(R.string.required_field));
                 } else {
-                    isLabNameEmpty = 0;
+                    switch (x) {
+                        case 1:
+                            isPathoEmpty = 0;
+                            break;
+                        case 2:
+                            isMedTechEmpty = 0;
+                            break;
+                        case 3:
+                            isLabNameEmpty = 0;
+                            break;
+                    }
                 }
-            } else if (x > 4) {
+            } else if (x > dateIndex) {
                 if (!inps[x].isEmpty()) {
                     switch (x) {
                         case 5:
@@ -170,14 +180,14 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
                             valD = Double.parseDouble(inps[x]);
                             if (valD < 0 || valD > 20) {
                                 editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
-                                break;
+                                isThereNoError = 0;
                             }
                             break;
                         case 6:
                             valD = Double.parseDouble(inps[x]);
                             if (valD < 0 || valD > 130) {
                                 editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
-                                break;
+                                isThereNoError = 0;
                             }
                             break;
                         case 8:
@@ -186,21 +196,21 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
                             valD = Double.parseDouble(inps[x]);
                             if (valD < 0 || valD > 5) {
                                 editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
-                                break;
+                                isThereNoError = 0;
                             }
                             break;
                         case 11:
                             valD = Double.parseDouble(inps[x]);
                             if (valD < 0 || valD > 90) {
                                 editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
-                                break;
+                                isThereNoError = 0;
                             }
                             break;
                         case 12:
                             valD = Double.parseDouble(inps[x]);
                             if (valD < 0 || valD > 200) {
                                 editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
-                                break;
+                                isThereNoError = 0;
                             }
                     }
                     isLabTestEmpty = 0;
@@ -208,7 +218,7 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
             }
         }
 
-        if (isLabNameEmpty == 0 && isLabTestEmpty == 0) {
+        if (isPathoEmpty == 0 && isMedTechEmpty == 0 && isLabNameEmpty == 0 && isLabTestEmpty == 0 && isThereNoError == 1) {
             insertData(inps);
         } else if (isLabTestEmpty == 1) {
             alertDialog.show("Error", "At least 1 field of the lab tests must be filled up.");

@@ -141,6 +141,8 @@
 
     <string-array name="spinner_lab_fecalysis">
         <item name="physician">Physician</item>
+        <item name="pathologist">Pathologist</item>
+        <item name="medTech">Medical Technologist</item>
         <item name="laboratory">Laboratory</item>
         <item name="datePerformed">Date Performed</item>
         <item name="color">Color</item>
@@ -165,6 +167,8 @@
 
     <string-array name="spinner_lab_hematology">
         <item name="physician">Physician</item>
+        <item name="pathologist">Pathologist</item>
+        <item name="medTech">Medical Technologist</item>
         <item name="laboratory">Laboratory</item>
         <item name="datePerformed">Date Performed</item>
         <item name="hemoglobin">Hemoglobin</item>
@@ -204,6 +208,8 @@
 
     <string-array name="spinner_lab_urinalysis">
         <item name="physician">Physician</item>
+        <item name="pathologist">Pathologist</item>
+        <item name="medTech">Medical Technologist</item>
         <item name="laboratory">Laboratory</item>
         <item name="datePerformed">Date Performed</item>
         <item name="color">Color</item>

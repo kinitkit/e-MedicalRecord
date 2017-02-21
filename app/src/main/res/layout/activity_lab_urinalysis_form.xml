@@ -173,7 +173,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="Pus Cells"
                                     android:inputType="number"
-                                    android:maxLength="20"
+                                    android:maxLength="2"
                                     android:paddingTop="@dimen/dp_3"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                                     android:textColor="@color/colorTextPrimary"
@@ -322,6 +322,60 @@
                                 android:text="Chemical"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                                 android:textColor="@color/colorPrimaryDark" />
+
+                            <CheckBox
+                                android:id="@+id/cb_albumin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Albumin"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/sp_17" />
+
+                            <CheckBox
+                                android:id="@+id/cb_ketone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Ketone"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/sp_17" />
+
+                            <CheckBox
+                                android:id="@+id/cb_bilirubin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Bilirubin"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/sp_17" />
+
+                            <CheckBox
+                                android:id="@+id/cb_blood"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Blood"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/sp_17" />
+
+                            <CheckBox
+                                android:id="@+id/cb_bacterialNit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="BacterialNit"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/sp_17" />
+
+                            <CheckBox
+                                android:id="@+id/cb_leukocyte"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Leukocyte"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/sp_17" />
 
                             <android.support.design.widget.TextInputLayout
                                 android:layout_width="match_parent"

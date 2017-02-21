@@ -154,35 +154,8 @@ public class Lab_Fecalysis_Form extends AppCompatActivity implements AdapterView
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_save:
-                verifyData();
-                break;
-            case R.id.et_date:
-                datePickerFragment.show(getSupportFragmentManager(), "DatePicker");
-                datePickerFragment.setCurrentDate(calendar);
-                break;
-        }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position == dateIndex) {
-            editTexts.get(position).performClick();
-        } else {
-            editTexts.get(position).requestFocus();
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
     void verifyData() {
-        int isLabTestEmpty = 1, isLabNameEmpty = 1;
+        int isLabTestEmpty = 1, isLabNameEmpty = 1, isPathoEmpty = 1, isMedTechEmpty = 1, isThereNoError = 1; // diri ngstop
         String[] inps = new String[editTexts.size()];
 
         for (int x = 0; x < editTexts.size(); x++) {
@@ -206,6 +179,48 @@ public class Lab_Fecalysis_Form extends AppCompatActivity implements AdapterView
         } else if (isLabTestEmpty == 1) {
             alertDialog.show("Error", "At least 1 field of the lab tests must be filled up.");
         }
+    }
+
+    void alertDialog_Close(String message){
+        alertDialog.builder.setNegativeButton(null, null);
+        alertDialog.builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        alertDialog.show("Error", message);
+    }
+
+    void setToEditText() {
+        editTexts.get(0).setText(labFecalysis.physician_name);
+        editTexts.get(1).setText(labFecalysis.pathologist);
+        editTexts.get(2).setText(labFecalysis.medTech);
+        editTexts.get(3).setText(labFecalysis.lab_name);
+        setCalendar(labFecalysis.datePerformed);
+        editTexts.get(5).setText(labFecalysis.color);
+        editTexts.get(6).setText(labFecalysis.consistency);
+        editTexts.get(7).setText(labFecalysis.ascarisLumbricoides);
+        editTexts.get(8).setText(labFecalysis.trichurisTrichiura);
+        editTexts.get(9).setText(labFecalysis.enterobiusVermicularis);
+        editTexts.get(10).setText(labFecalysis.hookwormOva);
+        editTexts.get(11).setText(labFecalysis.giardiaLambia);
+        editTexts.get(12).setText(labFecalysis.blastocystisHominis);
+        editTexts.get(13).setText(labFecalysis.cyst);
+        editTexts.get(14).setText(labFecalysis.trophozoite);
+        editTexts.get(15).setText(labFecalysis.occultBlood);
+        editTexts.get(16).setText(labFecalysis.pusCells);
+        editTexts.get(17).setText(labFecalysis.rbc);
+        editTexts.get(18).setText(labFecalysis.fatGlobules);
+        editTexts.get(19).setText(labFecalysis.yeastCells);
+        editTexts.get(20).setText(labFecalysis.undigestedFood);
+        editTexts.get(21).setText(labFecalysis.starchGranules);
+        editTexts.get(22).setText(labFecalysis.remarks);
+    }
+
+    void setCalendar(Calendar calendar) {
+        simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        editTexts.get(dateIndex).setText(simpleDateFormat.format(calendar.getTime()));
     }
 
     void insertData(final String[] inps) {
@@ -344,46 +359,31 @@ public class Lab_Fecalysis_Form extends AppCompatActivity implements AdapterView
         }
     }
 
-    void alertDialog_Close(String message){
-        alertDialog.builder.setNegativeButton(null, null);
-        alertDialog.builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        alertDialog.show("Error", message);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_save:
+                verifyData();
+                break;
+            case R.id.et_date:
+                datePickerFragment.show(getSupportFragmentManager(), "DatePicker");
+                datePickerFragment.setCurrentDate(calendar);
+                break;
+        }
     }
 
-    void setToEditText() {
-        editTexts.get(0).setText(labFecalysis.physician_name);
-        editTexts.get(1).setText(labFecalysis.pathologist);
-        editTexts.get(2).setText(labFecalysis.medTech);
-        editTexts.get(3).setText(labFecalysis.lab_name);
-        setCalendar(labFecalysis.datePerformed);
-        editTexts.get(5).setText(labFecalysis.color);
-        editTexts.get(6).setText(labFecalysis.consistency);
-        editTexts.get(7).setText(labFecalysis.ascarisLumbricoides);
-        editTexts.get(8).setText(labFecalysis.trichurisTrichiura);
-        editTexts.get(9).setText(labFecalysis.enterobiusVermicularis);
-        editTexts.get(10).setText(labFecalysis.hookwormOva);
-        editTexts.get(11).setText(labFecalysis.giardiaLambia);
-        editTexts.get(12).setText(labFecalysis.blastocystisHominis);
-        editTexts.get(13).setText(labFecalysis.cyst);
-        editTexts.get(14).setText(labFecalysis.trophozoite);
-        editTexts.get(15).setText(labFecalysis.occultBlood);
-        editTexts.get(16).setText(labFecalysis.pusCells);
-        editTexts.get(17).setText(labFecalysis.rbc);
-        editTexts.get(18).setText(labFecalysis.fatGlobules);
-        editTexts.get(19).setText(labFecalysis.yeastCells);
-        editTexts.get(20).setText(labFecalysis.undigestedFood);
-        editTexts.get(21).setText(labFecalysis.starchGranules);
-        editTexts.get(22).setText(labFecalysis.remarks);
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (position == dateIndex) {
+            editTexts.get(position).performClick();
+        } else {
+            editTexts.get(position).requestFocus();
+        }
     }
 
-    void setCalendar(Calendar calendar) {
-        simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        editTexts.get(dateIndex).setText(simpleDateFormat.format(calendar.getTime()));
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     @Override

@@ -46,6 +46,8 @@ public class Lab_Hematology_Form extends AppCompatActivity implements AdapterVie
 
     Intent intent;
     //Classes
+    int dateIndex;
+
     Viewer viewer;
     Patient patient;
     Laboratory laboratory;
@@ -73,6 +75,7 @@ public class Lab_Hematology_Form extends AppCompatActivity implements AdapterVie
     }
 
     void init() {
+        dateIndex = 4;
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -105,9 +108,11 @@ public class Lab_Hematology_Form extends AppCompatActivity implements AdapterVie
 
         editTexts = new ArrayList<>();
         editTexts.add((EditText) findViewById(R.id.et_physicianName));
+        editTexts.add((EditText) findViewById(R.id.et_pathologist));
+        editTexts.add((EditText) findViewById(R.id.et_medTech));
         editTexts.add((EditText) findViewById(R.id.et_laboratory));
         editTexts.add((EditText) findViewById(R.id.et_date));
-        editTexts.get(2).setOnClickListener(this);
+        editTexts.get(dateIndex).setOnClickListener(this);
         editTexts.add((EditText) findViewById(R.id.et_hemoglobin));
         editTexts.add((EditText) findViewById(R.id.et_hematocrit));
         editTexts.add((EditText) findViewById(R.id.et_rbc));
@@ -154,32 +159,162 @@ public class Lab_Hematology_Form extends AppCompatActivity implements AdapterVie
     }
 
     void verifyData() {
-        int isLabTestEmpty = 1, isLabNameEmpty = 1;
+        int isLabTestEmpty = 1, isLabNameEmpty = 1, isPathoEmpty = 1, isMedTechEmpty = 1, isThereNoError = 1;
         ArrayList<String> inps = new ArrayList<>();
+        double valD;
+        int valI;
 
         for (int x = 0; x < editTexts.size(); x++) {
             inps.add(editTexts.get(x).getText().toString().trim());
-            if (x == 0 || x == 1) {
+            if (x == 1 || x == 2 || x == 3) {
                 if (inps.get(x).isEmpty()) {
-                    editTexts.get(x).requestFocus();
-                    editTexts.get(x).setError("Required Field!");
+                    editTextError(editTexts.get(x), getString(R.string.required_field));
                 } else {
-                    isLabNameEmpty = 0;
+                    switch (x) {
+                        case 1:
+                            isPathoEmpty = 0;
+                            break;
+                        case 2:
+                            isMedTechEmpty = 0;
+                            break;
+                        case 3:
+                            isLabNameEmpty = 0;
+                            break;
+                    }
                 }
-            } else if (x > 2) {
+            } else if (x > dateIndex) {
                 if (!inps.get(x).isEmpty()) {
+                    switch (x) {
+                        case 5:
+                            valI = Integer.parseInt(inps.get(x));
+                            if (valI < 0 || valI > 300) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                        case 6:
+                        case 10:
+                        case 15:
+                            valD = Double.parseDouble(inps.get(x));
+                            if (valD < 0 || valD > 10) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                        case 7:
+                        case 8:
+                            valD = Double.parseDouble(inps.get(x));
+                            if (valD < 0 || valD > 40) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                        case 9:
+                            valI = Integer.parseInt(inps.get(x));
+                            if (valI < 0 || valI > 700) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                        case 11:
+                        case 12:
+                        case 13:
+                            valD = Double.parseDouble(inps.get(x));
+                            if (valD < 0 || valD > 200) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                        case 14:
+                            valI = Integer.parseInt(inps.get(x));
+                            if (valI < 0 || valI > 100) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                        case 16:
+                        case 17:
+                        case 18:
+                        case 19:
+                        case 20:
+                            valD = Double.parseDouble(inps.get(x));
+                            if (valD < 0 || valD > 20) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                        case 22:
+                        case 23:
+                            valI = Integer.parseInt(inps.get(x));
+                            if (valI < 0 || valI > 40) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                    }
                     isLabTestEmpty = 0;
                 }
             }
         }
 
-        inps.add(22, spinner_bloodType.getSelectedItem().toString());
+        inps.add(24, spinner_bloodType.getSelectedItem().toString());
 
-        if (isLabNameEmpty == 0 && isLabTestEmpty == 0) {
+        if (isPathoEmpty == 0 && isMedTechEmpty == 0 && isLabNameEmpty == 0 && isLabTestEmpty == 0 && isThereNoError == 1) {
             insertData(inps);
         } else if (isLabTestEmpty == 1) {
             alertDialog.show("Error", "At least 1 field of the lab tests must be filled up.");
         }
+    }
+
+    void editTextError(EditText editText, String message) {
+        editText.requestFocus();
+        editText.setError(message);
+    }
+
+    void alertDialog_Close(String message) {
+        alertDialog.builder.setNegativeButton(null, null);
+        alertDialog.builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        alertDialog.show("Error", message);
+    }
+
+    void setToEditText() {
+        editTexts.get(0).setText(labHematology.physician_name);
+        editTexts.get(1).setText(labHematology.lab_name);
+        editTexts.get(2).setText(labHematology.pathologist);
+        editTexts.get(3).setText(labHematology.medTech);
+        setCalendar(labHematology.datePerformed);
+        editTexts.get(5).setText(labHematology.hemoglobin);
+        editTexts.get(6).setText(labHematology.hematrocit);
+        editTexts.get(7).setText(labHematology.rbc);
+        editTexts.get(8).setText(labHematology.wbc);
+        editTexts.get(9).setText(labHematology.platelets);
+        editTexts.get(10).setText(labHematology.reticulocytes);
+        editTexts.get(11).setText(labHematology.mcv);
+        editTexts.get(12).setText(labHematology.mch);
+        editTexts.get(13).setText(labHematology.mchc);
+        editTexts.get(14).setText(labHematology.esr);
+        editTexts.get(15).setText(labHematology.segmenters);
+        editTexts.get(16).setText(labHematology.stab);
+        editTexts.get(17).setText(labHematology.lymphocytes);
+        editTexts.get(18).setText(labHematology.monocytes);
+        editTexts.get(19).setText(labHematology.eosinophils);
+        editTexts.get(20).setText(labHematology.basophils);
+        editTexts.get(21).setText(labHematology.malarialSmear);
+        editTexts.get(22).setText(labHematology.bleedingTime);
+        editTexts.get(23).setText(labHematology.clottingTime);
+        spinner_bloodType.setSelection(arrayAdapter_bloodType.getPosition(labHematology.bloodType));
+        editTexts.get(24).setText(labHematology.rh);
+        editTexts.get(25).setText(labHematology.remarks);
+    }
+
+    void setCalendar(Calendar calendar) {
+        simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        editTexts.get(dateIndex).setText(simpleDateFormat.format(calendar.getTime()));
     }
 
     void insertData(final ArrayList<String> inps) {
@@ -195,7 +330,7 @@ public class Lab_Hematology_Form extends AppCompatActivity implements AdapterVie
                                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
-                                        if(laboratory != null) {
+                                        if (laboratory != null) {
                                             Toast.makeText(getApplicationContext(), R.string.record_updated, Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
@@ -209,7 +344,7 @@ public class Lab_Hematology_Form extends AppCompatActivity implements AdapterVie
                                         alertDialog_Close(getString(R.string.unauthorized_to_insert));
                                     } else if (jsonObject.getString("code").equals("empty")) {
                                         progressDialog.dismiss();
-                                        if(laboratory != null) {
+                                        if (laboratory != null) {
                                             alertDialog_Close("This result has been deleted.");
                                         } else {
                                             alertDialog.show("Error", "Something happened. Please try again.");
@@ -252,7 +387,7 @@ public class Lab_Hematology_Form extends AppCompatActivity implements AdapterVie
                         params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
                     }
                     for (int x = 0; x < inps.size(); x++) {
-                        if (x == 2) {
+                        if (x == dateIndex) {
                             params.put("args[" + (x) + "]", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
                         } else {
                             params.put("args[" + (x) + "]", inps.get(x));
@@ -319,57 +454,13 @@ public class Lab_Hematology_Form extends AppCompatActivity implements AdapterVie
         }
     }
 
-    void alertDialog_Close(String message){
-        alertDialog.builder.setNegativeButton(null, null);
-        alertDialog.builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        alertDialog.show("Error", message);
-    }
-
-    void setToEditText() {
-        editTexts.get(0).setText(labHematology.physician_name);
-        editTexts.get(1).setText(labHematology.lab_name);
-        setCalendar(labHematology.datePerformed);
-        editTexts.get(3).setText(labHematology.hemoglobin);
-        editTexts.get(4).setText(labHematology.hematrocit);
-        editTexts.get(5).setText(labHematology.rbc);
-        editTexts.get(6).setText(labHematology.wbc);
-        editTexts.get(7).setText(labHematology.platelets);
-        editTexts.get(8).setText(labHematology.reticulocytes);
-        editTexts.get(9).setText(labHematology.mcv);
-        editTexts.get(10).setText(labHematology.mch);
-        editTexts.get(11).setText(labHematology.mchc);
-        editTexts.get(12).setText(labHematology.esr);
-        editTexts.get(13).setText(labHematology.segmenters);
-        editTexts.get(14).setText(labHematology.stab);
-        editTexts.get(15).setText(labHematology.lymphocytes);
-        editTexts.get(16).setText(labHematology.monocytes);
-        editTexts.get(17).setText(labHematology.eosinophils);
-        editTexts.get(18).setText(labHematology.basophils);
-        editTexts.get(19).setText(labHematology.malarialSmear);
-        editTexts.get(20).setText(labHematology.bleedingTime);
-        editTexts.get(21).setText(labHematology.clottingTime);
-        spinner_bloodType.setSelection(arrayAdapter_bloodType.getPosition(labHematology.bloodType));
-        editTexts.get(22).setText(labHematology.rh);
-        editTexts.get(23).setText(labHematology.remarks);
-    }
-
-    void setCalendar(Calendar calendar) {
-        simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        editTexts.get(2).setText(simpleDateFormat.format(calendar.getTime()));
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position == 20)
+        if (position == 24)
             spinner_bloodType.requestFocus();
-        else if (position == 2)
+        else if (position == dateIndex)
             editTexts.get(position).performClick();
-        else if (position > 20)
+        else if (position > 23)
             editTexts.get(position - 1).requestFocus();
         else
             editTexts.get(position).requestFocus();
