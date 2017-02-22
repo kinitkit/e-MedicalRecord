@@ -176,11 +176,14 @@ public class Laboratory_Result_View extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    void loadDetails(String physicianName, String labName, String datePerformed) {
-        TextView tv_physicianName = (TextView) findViewById(R.id.tv_physicianName), tv_labName = (TextView) findViewById(R.id.tv_labName),
+    void loadDetails(String physicianName, String pathologist, String medTech, String labName, String datePerformed) {
+        TextView tv_physicianName = (TextView) findViewById(R.id.tv_physicianName), tv_pathologist = (TextView) findViewById(R.id.tv_pathologist),
+                tv_medTech = (TextView) findViewById(R.id.tv_medTech), tv_labName = (TextView) findViewById(R.id.tv_labName),
                 tv_datePerformed = (TextView) findViewById(R.id.tv_date);
 
         tv_physicianName.setText(physicianName);
+        tv_pathologist.setText(pathologist);
+        tv_medTech.setText(medTech);
         tv_labName.setText(labName);
         tv_datePerformed.setText(datePerformed);
     }
@@ -191,50 +194,54 @@ public class Laboratory_Result_View extends AppCompatActivity {
     }
 
     void init_labChemistry() {
-        loadDetails(labChemistry.physician_name, labChemistry.lab_name, labChemistry.strDatePerformed);
+        getSupportActionBar().setSubtitle("Blood Chemistry");
+        loadDetails(labChemistry.physician_name, labChemistry.pathologist, labChemistry.medTech, labChemistry.lab_name,
+                labChemistry.strDatePerformed);
 
         RecyclerView recyclerView_LabTest = (RecyclerView) findViewById(R.id.recyclerView_labTest);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_labTest = new RecyclerViewAdapter_LaboratoryFields();
-        rvAdapter_labTest.addItem("FBS:", labChemistry.fbs);
-        rvAdapter_labTest.addItem("Creatine:", labChemistry.creatine);
-        rvAdapter_labTest.addItem("Triglycerides:", labChemistry.triglycerides);
-        rvAdapter_labTest.addItem("HDL:", labChemistry.hdl);
-        rvAdapter_labTest.addItem("LDL:", labChemistry.ldl);
-        rvAdapter_labTest.addItem("Uric Acid:", labChemistry.uricAcid);
-        rvAdapter_labTest.addItem("SGPT / ALAT:", labChemistry.sgpt_alat);
-        rvAdapter_labTest.addItem("Sodium:", labChemistry.sodium);
-        rvAdapter_labTest.addItem("Potassium:", labChemistry.potassium);
-        rvAdapter_labTest.addItem("Calcium:", labChemistry.calcium);
+        rvAdapter_labTest.addItem("FBS:", labChemistry.fbs, "4.2 - 6.4 mmol/L");
+        rvAdapter_labTest.addItem("Creatine:", labChemistry.creatine, "59 - 104 umol/L");
+        rvAdapter_labTest.addItem("Triglycerides:", labChemistry.triglycerides, "0.41 - 1.88 mmol/L");
+        rvAdapter_labTest.addItem("HDL:", labChemistry.hdl, "1.15 - 1.68 mmol/L");
+        rvAdapter_labTest.addItem("LDL:", labChemistry.ldl, "0.00 - 3.40 mmol/L");
+        rvAdapter_labTest.addItem("Uric Acid:", labChemistry.uricAcid, "0.201 - 0.413 mmol/L");
+        rvAdapter_labTest.addItem("SGPT / ALAT:", labChemistry.sgpt_alat, "0 - 41 U/L");
+        rvAdapter_labTest.addItem("Sodium:", labChemistry.sodium, "136 - 145 mmol/L");
+        rvAdapter_labTest.addItem("Potassium:", labChemistry.potassium, "3.5 - 5.1 mmol/L");
+        rvAdapter_labTest.addItem("Calcium:", labChemistry.calcium, "2.15-2.55 mmol/L");
         loadToRecyclerView(recyclerView_LabTest, rvAdapter_labTest);
 
         loadRemarks(labChemistry.remarks);
     }
 
     void init_labFecalysis() {
-        loadDetails(labFecalysis.physician_name, labFecalysis.lab_name, labFecalysis.strDatePerformed);
+        getSupportActionBar().setSubtitle("Fecalysis");
+        loadDetails(labFecalysis.physician_name, labFecalysis.pathologist, labFecalysis.medTech, labFecalysis.lab_name,
+                labFecalysis.strDatePerformed);
 
         RecyclerView recyclerView_physicalCharacteristics = (RecyclerView) findViewById(R.id.recyclerView_physicalCharacteristics);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_physicalCharacteristics = new RecyclerViewAdapter_LaboratoryFields();
-        rvAdapter_physicalCharacteristics.addItem("Color:", labFecalysis.color);
-        rvAdapter_physicalCharacteristics.addItem("Consistency:", labFecalysis.consistency);
+        rvAdapter_physicalCharacteristics.addItem("Color:", labFecalysis.color, null);
+        rvAdapter_physicalCharacteristics.addItem("Consistency:", labFecalysis.consistency, null);
 
         RecyclerView recyclerView_microscopicExamination = (RecyclerView) findViewById(R.id.recyclerView_microscopicExamination);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_microscopicExamination = new RecyclerViewAdapter_LaboratoryFields();
-        rvAdapter_microscopicExamination.addItem("Ascaris Lumbricoides:", labFecalysis.ascarisLumbricoides);
-        rvAdapter_microscopicExamination.addItem("Trichuris trichiura:", labFecalysis.trichurisTrichiura);
-        rvAdapter_microscopicExamination.addItem("Enterobius Vermicularis:", labFecalysis.enterobiusVermicularis);
-        rvAdapter_microscopicExamination.addItem("Hookworm Ova:", labFecalysis.hookwormOva);
-        rvAdapter_microscopicExamination.addItem("Giardia Lambia:", labFecalysis.giardiaLambia);
-        rvAdapter_microscopicExamination.addItem("Blastocystis Hominis:", labFecalysis.blastocystisHominis);
-        rvAdapter_microscopicExamination.addItem("Entamoeba Histolytica Cyst:", labFecalysis.cyst);
-        rvAdapter_microscopicExamination.addItem("Entamoeba Histolytica Troph:", labFecalysis.trophozoite);
-        rvAdapter_microscopicExamination.addItem("Occult Blood:", labFecalysis.occultBlood);
-        rvAdapter_microscopicExamination.addItem("Pus Cells:", labFecalysis.pusCells);
-        rvAdapter_microscopicExamination.addItem("Red Blood Cells:", labFecalysis.rbc);
-        rvAdapter_microscopicExamination.addItem("Fat Globules:", labFecalysis.fatGlobules);
-        rvAdapter_microscopicExamination.addItem("Yeast Cells:", labFecalysis.yeastCells);
-        rvAdapter_microscopicExamination.addItem("Undigested Food:", labFecalysis.undigestedFood);
-        rvAdapter_microscopicExamination.addItem("Starch Granules:", labFecalysis.starchGranules);
+        rvAdapter_microscopicExamination.addItem("Ascaris Lumbricoides:", labFecalysis.ascarisLumbricoides, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Trichuris trichiura:", labFecalysis.trichurisTrichiura, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Enterobius Vermicularis:", labFecalysis.enterobiusVermicularis, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Hookworm Ova:", labFecalysis.hookwormOva, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Giardia Lambia:", labFecalysis.giardiaLambia, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Blastocystis Hominis:", labFecalysis.blastocystisHominis, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Entamoeba Histolytica Cyst:", labFecalysis.cyst, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Entamoeba Histolytica Troph:", labFecalysis.trophozoite, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Occult Blood:", labFecalysis.occultBlood, null);
+        rvAdapter_microscopicExamination.addItem("Pus Cells:", labFecalysis.pusCells, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Red Blood Cells:", labFecalysis.rbc, "/hpf");
+        rvAdapter_microscopicExamination.addItem("Fat Globules:", labFecalysis.fatGlobules, null);
+        rvAdapter_microscopicExamination.addItem("Yeast Cells:", labFecalysis.yeastCells, null);
+        rvAdapter_microscopicExamination.addItem("Undigested Food:", labFecalysis.undigestedFood, null);
+        rvAdapter_microscopicExamination.addItem("Starch Granules:", labFecalysis.starchGranules, null);
 
         loadToRecyclerView(recyclerView_physicalCharacteristics, rvAdapter_physicalCharacteristics);
         loadToRecyclerView(recyclerView_microscopicExamination, rvAdapter_microscopicExamination);
@@ -243,80 +250,84 @@ public class Laboratory_Result_View extends AppCompatActivity {
     }
 
     void init_labHematology() {
-        loadDetails(labHematology.physician_name, labHematology.lab_name, labHematology.strDatePerformed);
+        getSupportActionBar().setSubtitle("Hematology");
+        loadDetails(labHematology.physician_name, labHematology.pathologist, labHematology.medTech, labHematology.lab_name,
+                labHematology.strDatePerformed);
 
         RecyclerView recyclerView_LabTest = (RecyclerView) findViewById(R.id.recyclerView_labTest);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_labTest = new RecyclerViewAdapter_LaboratoryFields();
-        rvAdapter_labTest.addItem("Hemoglobin:", labHematology.hemoglobin);
-        rvAdapter_labTest.addItem("Hematocrit:", labHematology.hematrocit);
-        rvAdapter_labTest.addItem("RBC:", labHematology.rbc);
-        rvAdapter_labTest.addItem("WBC:", labHematology.wbc);
-        rvAdapter_labTest.addItem("Platelets:", labHematology.platelets);
-        rvAdapter_labTest.addItem("Reticulocytes:", labHematology.reticulocytes);
-        rvAdapter_labTest.addItem("MCV:", labHematology.mcv);
-        rvAdapter_labTest.addItem("MCH:", labHematology.mch);
-        rvAdapter_labTest.addItem("MCHC:", labHematology.mchc);
-        rvAdapter_labTest.addItem("ESR (Sedimentation Rate):", labHematology.esr);
-        rvAdapter_labTest.addItem("Segmenters:", labHematology.segmenters);
-        rvAdapter_labTest.addItem("Stab:", labHematology.stab);
-        rvAdapter_labTest.addItem("Lymphocytes:", labHematology.lymphocytes);
-        rvAdapter_labTest.addItem("Monocytes:", labHematology.monocytes);
-        rvAdapter_labTest.addItem("Eosinophils:", labHematology.eosinophils);
-        rvAdapter_labTest.addItem("Basophils:", labHematology.basophils);
-        rvAdapter_labTest.addItem("Malarial Smear:", labHematology.malarialSmear);
-        rvAdapter_labTest.addItem("Bleeding Time:", labHematology.bleedingTime);
-        rvAdapter_labTest.addItem("Clotting Time:", labHematology.clottingTime);
-        rvAdapter_labTest.addItem("Blood Type:", labHematology.bloodType);
-        rvAdapter_labTest.addItem("Rh:", labHematology.rh);
+        rvAdapter_labTest.addItem("Hemoglobin:", labHematology.hemoglobin, "F: (120 - 140); M: (140 - 170) g/L");
+        rvAdapter_labTest.addItem("Hematocrit:", labHematology.hematrocit, "F: (0.38 - 0.48); M: (0.40 - 0.50) g/L");
+        rvAdapter_labTest.addItem("RBC:", labHematology.rbc, "F: (4.0 - 5.0); M: (4.5 - 6.0) x 10 12/L");
+        rvAdapter_labTest.addItem("WBC:", labHematology.wbc, "5.0 - 10.0 x 10 9/L");
+        rvAdapter_labTest.addItem("Platelets:", labHematology.platelets, "150 - 450 x 10 3/uL");
+        rvAdapter_labTest.addItem("Reticulocytes:", labHematology.reticulocytes, "0.005 - 0.015");
+        rvAdapter_labTest.addItem("MCV:", labHematology.mcv, "79.9 - 92.2");
+        rvAdapter_labTest.addItem("MCH:", labHematology.mch, "25.7 - 32.2");
+        rvAdapter_labTest.addItem("MCHC:", labHematology.mchc, "32.2 - 36.5");
+        rvAdapter_labTest.addItem("ESR (Sedimentation Rate):", labHematology.esr, "F: (0 - 20); M (0 - 10) mm/hr");
+        rvAdapter_labTest.addItem("Segmenters:", labHematology.segmenters, "0.50 - 0.70");
+        rvAdapter_labTest.addItem("Stab:", labHematology.stab, "0.01 - 0.06");
+        rvAdapter_labTest.addItem("Lymphocytes:", labHematology.lymphocytes, "0.20 - 0.40");
+        rvAdapter_labTest.addItem("Monocytes:", labHematology.monocytes, "0.02 - 0.07");
+        rvAdapter_labTest.addItem("Eosinophils:", labHematology.eosinophils, "0.01 - 0.05");
+        rvAdapter_labTest.addItem("Basophils:", labHematology.basophils, "0.00 - 0.01");
+        rvAdapter_labTest.addItem("Malarial Smear:", labHematology.malarialSmear, null);
+        rvAdapter_labTest.addItem("Bleeding Time:", labHematology.bleedingTime, "1 - 3 mins.");
+        rvAdapter_labTest.addItem("Clotting Time:", labHematology.clottingTime, "2 - 6 mins.");
+        rvAdapter_labTest.addItem("Blood Type:", labHematology.bloodType, null);
+        rvAdapter_labTest.addItem("Rh:", labHematology.rh, null);
         loadToRecyclerView(recyclerView_LabTest, rvAdapter_labTest);
 
         loadRemarks(labHematology.remarks);
     }
 
     void init_labUrinalysis() {
-        loadDetails(labUrinalysis.physician_name, labUrinalysis.lab_name, labUrinalysis.strDatePerformed);
+        getSupportActionBar().setSubtitle("Urinalysis");
+        loadDetails(labUrinalysis.physician_name, labUrinalysis.pathologist, labUrinalysis.medTech, labUrinalysis.lab_name,
+                labUrinalysis.strDatePerformed);
 
         RecyclerView recyclerView_physical = (RecyclerView) findViewById(R.id.recyclerView_physical);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_physical = new RecyclerViewAdapter_LaboratoryFields();
-        rvAdapter_physical.addItem("Color:", labUrinalysis.color);
-        rvAdapter_physical.addItem("Transparency:", labUrinalysis.transparency);
-        rvAdapter_physical.addItem("Reaction:", labUrinalysis.reaction);
-        rvAdapter_physical.addItem("Specific Gravity:", labUrinalysis.specificGravity);
+        rvAdapter_physical.addItem("Color:", labUrinalysis.color, null);
+        rvAdapter_physical.addItem("Transparency:", labUrinalysis.transparency, null);
+        rvAdapter_physical.addItem("Reaction:", labUrinalysis.reaction, null);
+        rvAdapter_physical.addItem("Specific Gravity:", labUrinalysis.specificGravity, "1.016 - 1.022");
 
         RecyclerView recyclerView_microscopic = (RecyclerView) findViewById(R.id.recyclerView_microscopic);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_microscopic = new RecyclerViewAdapter_LaboratoryFields();
-        rvAdapter_microscopic.addItem("Pus Cells:", labUrinalysis.pusCells);
-        rvAdapter_microscopic.addItem("RBC:", labUrinalysis.rbc);
-        rvAdapter_microscopic.addItem("Epith Cells:", labUrinalysis.epithCells);
-        rvAdapter_microscopic.addItem("Renal Cells:", labUrinalysis.renalCells);
-        rvAdapter_microscopic.addItem("Mucus Threads:", labUrinalysis.mucusThreads);
-        rvAdapter_microscopic.addItem("Bacteria:", labUrinalysis.bacteria);
-        rvAdapter_microscopic.addItem("Yeast Cells:", labUrinalysis.yeastCells);
+        rvAdapter_microscopic.addItem("Pus Cells:", labUrinalysis.pusCells, "/hpf");
+        rvAdapter_microscopic.addItem("RBC:", labUrinalysis.rbc, "/hpf");
+        rvAdapter_microscopic.addItem("Epith Cells:", labUrinalysis.epithCells, null);
+        rvAdapter_microscopic.addItem("Renal Cells:", labUrinalysis.renalCells, null);
+        rvAdapter_microscopic.addItem("Mucus Threads:", labUrinalysis.mucusThreads, null);
+        rvAdapter_microscopic.addItem("Bacteria:", labUrinalysis.bacteria, null);
+        rvAdapter_microscopic.addItem("Yeast Cells:", labUrinalysis.yeastCells, null);
 
         RecyclerView recyclerView_chemical = (RecyclerView) findViewById(R.id.recyclerView_chemical);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_chemical = new RecyclerViewAdapter_LaboratoryFields();
-        rvAdapter_chemical.addItem("Sugar:", labUrinalysis.sugar);
-        rvAdapter_chemical.addItem("Albumin:", labUrinalysis.albumin);
-        rvAdapter_chemical.addItem("Ketone:", labUrinalysis.ketone);
-        rvAdapter_chemical.addItem("Bilirubin:", labUrinalysis.bilirubin);
-        rvAdapter_chemical.addItem("Blood:", labUrinalysis.blood);
-        rvAdapter_chemical.addItem("Urobilinogen:", labUrinalysis.urobilinogen);
-        rvAdapter_chemical.addItem("BacteriaNit:", labUrinalysis.bacteriaNit);
-        rvAdapter_chemical.addItem("Leukocyte:", labUrinalysis.leukocyte);
+        rvAdapter_chemical.addItem("Sugar:", labUrinalysis.sugar.equals("1") ? "Positive" : "Negative", "Negative");
+        rvAdapter_chemical.addItem("Albumin:", labUrinalysis.albumin.equals("1") ? "Positive" : "Negative", "Negative");
+        rvAdapter_chemical.addItem("Ketone:", labUrinalysis.ketone.equals("1") ? "Positive" : "Negative", "Negative");
+        rvAdapter_chemical.addItem("Bilirubin:", labUrinalysis.bilirubin.equals("1") ? "Positive" : "Negative", "Negative");
+        rvAdapter_chemical.addItem("Blood:", labUrinalysis.blood.equals("1") ? "Positive" : "Negative", "Negative");
+        rvAdapter_chemical.addItem("Urobilinogen:", labUrinalysis.urobilinogen, "0.1 - 1.0");
+        rvAdapter_chemical.addItem("BacteriaNit:", labUrinalysis.bacteriaNit.equals("1") ? "Positive" : "Negative", "Negative");
+        rvAdapter_chemical.addItem("Leukocyte:", labUrinalysis.leukocyte.equals("1") ? "Positive" : "Negative", "Negative");
 
         RecyclerView recyclerView_crystals = (RecyclerView) findViewById(R.id.recyclerView_crystals);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_crystals = new RecyclerViewAdapter_LaboratoryFields();
-        rvAdapter_crystals.addItem("Amorphous Subs:", labUrinalysis.amorphousSubs);
-        rvAdapter_crystals.addItem("Uric Acid:", labUrinalysis.uricAcid);
-        rvAdapter_crystals.addItem("Calcium Oxalate:", labUrinalysis.calciumOxalate);
-        rvAdapter_crystals.addItem("Triple Phosphate:", labUrinalysis.triplePhosphate);
+        rvAdapter_crystals.addItem("Amorphous Subs:", labUrinalysis.amorphousSubs, null);
+        rvAdapter_crystals.addItem("Uric Acid:", labUrinalysis.uricAcid, null);
+        rvAdapter_crystals.addItem("Calcium Oxalate:", labUrinalysis.calciumOxalate, null);
+        rvAdapter_crystals.addItem("Triple Phosphate:", labUrinalysis.triplePhosphate, null);
 
         RecyclerView recyclerView_casts = (RecyclerView) findViewById(R.id.recyclerView_casts);
         RecyclerViewAdapter_LaboratoryFields rvAdapter_casts = new RecyclerViewAdapter_LaboratoryFields();
-        rvAdapter_casts.addItem("Pus Cast:", labUrinalysis.pusCast);
-        rvAdapter_casts.addItem("Hyaline:", labUrinalysis.hyaline);
-        rvAdapter_casts.addItem("Fine Granular:", labUrinalysis.fineGranular);
-        rvAdapter_casts.addItem("Coarse Granular:", labUrinalysis.coarseGranular);
+        rvAdapter_casts.addItem("Pus Cast:", labUrinalysis.pusCast, "/lpf");
+        rvAdapter_casts.addItem("Hyaline:", labUrinalysis.hyaline, "/lpf");
+        rvAdapter_casts.addItem("Fine Granular:", labUrinalysis.fineGranular, "/lpf");
+        rvAdapter_casts.addItem("Coarse Granular:", labUrinalysis.coarseGranular, "/lpf");
 
         loadToRecyclerView(recyclerView_physical, rvAdapter_physical);
         loadToRecyclerView(recyclerView_microscopic, rvAdapter_microscopic);

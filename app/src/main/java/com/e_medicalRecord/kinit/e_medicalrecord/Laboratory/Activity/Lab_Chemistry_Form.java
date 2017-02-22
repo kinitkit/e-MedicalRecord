@@ -194,7 +194,7 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
                         case 9:
                         case 10:
                             valD = Double.parseDouble(inps[x]);
-                            if (valD < 0 || valD > 5) {
+                            if (valD < 0 || valD > 10) {
                                 editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
                                 isThereNoError = 0;
                             }

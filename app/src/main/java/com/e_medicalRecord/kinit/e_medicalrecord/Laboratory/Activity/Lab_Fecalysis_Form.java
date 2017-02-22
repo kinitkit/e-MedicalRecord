@@ -155,33 +155,66 @@ public class Lab_Fecalysis_Form extends AppCompatActivity implements AdapterView
     }
 
     void verifyData() {
-        int isLabTestEmpty = 1, isLabNameEmpty = 1, isPathoEmpty = 1, isMedTechEmpty = 1, isThereNoError = 1; // diri ngstop
+        int isLabTestEmpty = 1, isLabNameEmpty = 1, isPathoEmpty = 1, isMedTechEmpty = 1, isThereNoError = 1;
         String[] inps = new String[editTexts.size()];
+        double valD;
 
         for (int x = 0; x < editTexts.size(); x++) {
             inps[x] = editTexts.get(x).getText().toString().trim();
             if (x == 1 || x == 2 || x == 3) {
                 if (inps[x].isEmpty()) {
-                    editTexts.get(x).requestFocus();
-                    editTexts.get(x).setError("Required Field!");
+                    editTextError(editTexts.get(x), getString(R.string.required_field));
                 } else {
-                    isLabNameEmpty = 0;
+                    switch (x) {
+                        case 1:
+                            isPathoEmpty = 0;
+                            break;
+                        case 2:
+                            isMedTechEmpty = 0;
+                            break;
+                        case 3:
+                            isLabNameEmpty = 0;
+                            break;
+                    }
                 }
-            } else if (x > 4) {
+            } else if (x > dateIndex) {
                 if (!inps[x].isEmpty()) {
+                    switch (x) {
+                        case 7:
+                        case 8:
+                        case 9:
+                        case 10:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 16:
+                        case 17:
+                            valD = Double.parseDouble(inps[x]);
+                            if (valD < 0 || valD > 90) {
+                                editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
+                                isThereNoError = 0;
+                            }
+                            break;
+                    }
                     isLabTestEmpty = 0;
                 }
             }
         }
 
-        if (isLabNameEmpty == 0 && isLabTestEmpty == 0) {
+        if (isPathoEmpty == 0 && isMedTechEmpty == 0 && isLabNameEmpty == 0 && isLabTestEmpty == 0 && isThereNoError == 1) {
             insertData(inps);
         } else if (isLabTestEmpty == 1) {
             alertDialog.show("Error", "At least 1 field of the lab tests must be filled up.");
         }
     }
 
-    void alertDialog_Close(String message){
+    void editTextError(EditText editText, String message) {
+        editText.requestFocus();
+        editText.setError(message);
+    }
+
+    void alertDialog_Close(String message) {
         alertDialog.builder.setNegativeButton(null, null);
         alertDialog.builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
@@ -236,7 +269,7 @@ public class Lab_Fecalysis_Form extends AppCompatActivity implements AdapterView
                                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                                 if (jsonObject.has("code")) {
                                     if (jsonObject.getString("code").equals("successful")) {
-                                        if(laboratory != null) {
+                                        if (laboratory != null) {
                                             Toast.makeText(getApplicationContext(), R.string.record_updated, Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(getApplicationContext(), R.string.record_added, Toast.LENGTH_SHORT).show();
@@ -250,7 +283,7 @@ public class Lab_Fecalysis_Form extends AppCompatActivity implements AdapterView
                                         alertDialog_Close(getString(R.string.unauthorized_to_insert));
                                     } else if (jsonObject.getString("code").equals("empty")) {
                                         progressDialog.dismiss();
-                                        if(laboratory != null) {
+                                        if (laboratory != null) {
                                             alertDialog_Close("This result has been deleted.");
                                         } else {
                                             alertDialog.show("Error", "Something happened. Please try again.");
@@ -293,7 +326,7 @@ public class Lab_Fecalysis_Form extends AppCompatActivity implements AdapterView
                         params.put("medical_staff_id", String.valueOf(viewer.medicalStaff_id));
                     }
                     for (int x = 0; x < inps.length; x++) {
-                        if(x == 2){
+                        if (x == dateIndex) {
                             params.put("args[" + (x) + "]", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
                         } else {
                             params.put("args[" + (x) + "]", inps[x]);

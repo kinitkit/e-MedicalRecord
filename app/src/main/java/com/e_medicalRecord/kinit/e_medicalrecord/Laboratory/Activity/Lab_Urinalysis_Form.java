@@ -90,9 +90,9 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
         viewer = intent.getExtras().getParcelable("viewer");
         if (intent.hasExtra("laboratory")) {
             laboratory = intent.getExtras().getParcelable("laboratory");
-            getSupportActionBar().setTitle("Update Blood Chemistry Test");
+            getSupportActionBar().setTitle("Update Urinalysis Test");
         } else {
-            getSupportActionBar().setTitle("Blood Chemistry Form");
+            getSupportActionBar().setTitle("Urinalysis Form");
         }
         progressDialog = new Custom_ProgressDialog(this);
         alertDialog = new Custom_AlertDialog(this);
@@ -117,7 +117,6 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
         editTexts.add((EditText) findViewById(R.id.et_transparency));
         editTexts.add((EditText) findViewById(R.id.et_reaction));
         editTexts.add((EditText) findViewById(R.id.et_gravity));
-        editTexts.add((EditText) findViewById(R.id.et_urobilinogen));
         editTexts.add((EditText) findViewById(R.id.et_pusCells));
         editTexts.add((EditText) findViewById(R.id.et_rbc));
         editTexts.add((EditText) findViewById(R.id.et_epithCell));
@@ -125,6 +124,7 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
         editTexts.add((EditText) findViewById(R.id.et_mucusThreads));
         editTexts.add((EditText) findViewById(R.id.et_bacteria));
         editTexts.add((EditText) findViewById(R.id.et_yeastCell));
+        editTexts.add((EditText) findViewById(R.id.et_urobilinogen));
         editTexts.add((EditText) findViewById(R.id.et_amorphous));
         editTexts.add((EditText) findViewById(R.id.et_uricAcid));
         editTexts.add((EditText) findViewById(R.id.et_calciumOxalate));
@@ -194,23 +194,23 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
             } else if (x > dateIndex) {
                 if (!inps.get(x).isEmpty()) {
                     switch (x) {
-                        case 7:
+                        case 9:
                         case 10:
-                        case 11:
                         case 21:
                         case 22:
                         case 23:
                         case 24:
                             valI = Integer.parseInt(inps.get(x));
-                            if (valI < 0 || valI > 20) {
+                            if (valI < 0 || valI > 50) {
                                 editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
                                 isThereNoError = 0;
                             }
                             break;
+                        case 7:
                         case 8:
-                        case 9:
+                        case 16:
                             valD = Double.parseDouble(inps.get(x));
-                            if (valD < 0 || valD > 10) {
+                            if (valD < 0 || valD > 50) {
                                 editTextError(editTexts.get(x), getString(R.string.value_is_out_of_range));
                                 isThereNoError = 0;
                             }
@@ -222,11 +222,14 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
         }
 
         if (isPathoEmpty == 0 && isMedTechEmpty == 0 && isLabNameEmpty == 0 && isLabTestEmpty == 0 && isThereNoError == 1) {
-            int x = 9;
-            for (CheckBox checkBox : checkBoxes) {
-                inps.set(x, (checkBox.isChecked() ? "1" : "0"));
-                ++x;
-            }
+            inps.add(16, (checkBoxes.get(0).isChecked() ? "1" : "0"));
+            inps.add(17, (checkBoxes.get(1).isChecked() ? "1" : "0"));
+            inps.add(18, (checkBoxes.get(2).isChecked() ? "1" : "0"));
+            inps.add(19, (checkBoxes.get(3).isChecked() ? "1" : "0"));
+            inps.add(20, (checkBoxes.get(4).isChecked() ? "1" : "0"));
+            inps.add(22, (checkBoxes.get(5).isChecked() ? "1" : "0"));
+            inps.add(23, (checkBoxes.get(6).isChecked() ? "1" : "0"));
+
             insertData(inps);
         } else if (isLabTestEmpty == 1) {
             alertDialog.show("Error", "At least 1 field of the lab tests must be filled up.");
@@ -402,21 +405,21 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
         editTexts.get(6).setText(labUrinalysis.transparency);
         editTexts.get(7).setText(labUrinalysis.reaction);
         editTexts.get(8).setText(labUrinalysis.specificGravity);
-        editTexts.get(9).setText(labUrinalysis.urobilinogen);
-        editTexts.get(10).setText(labUrinalysis.pusCells);
-        editTexts.get(11).setText(labUrinalysis.rbc);
-        editTexts.get(12).setText(labUrinalysis.epithCells);
-        editTexts.get(13).setText(labUrinalysis.renalCells);
-        editTexts.get(14).setText(labUrinalysis.mucusThreads);
-        editTexts.get(15).setText(labUrinalysis.bacteria);
-        editTexts.get(16).setText(labUrinalysis.yeastCells);
+        editTexts.get(9).setText(labUrinalysis.pusCells);
+        editTexts.get(10).setText(labUrinalysis.rbc);
+        editTexts.get(11).setText(labUrinalysis.epithCells);
+        editTexts.get(12).setText(labUrinalysis.renalCells);
+        editTexts.get(13).setText(labUrinalysis.mucusThreads);
+        editTexts.get(14).setText(labUrinalysis.bacteria);
+        editTexts.get(15).setText(labUrinalysis.yeastCells);
+        editTexts.get(16).setText(labUrinalysis.urobilinogen);
         checkBoxes.get(0).setChecked(labUrinalysis.sugar.equals("1"));
-        checkBoxes.get(0).setChecked(labUrinalysis.albumin.equals("1"));
-        checkBoxes.get(0).setChecked(labUrinalysis.ketone.equals("1"));
-        checkBoxes.get(0).setChecked(labUrinalysis.bilirubin.equals("1"));
-        checkBoxes.get(0).setChecked(labUrinalysis.blood.equals("1"));
-        checkBoxes.get(0).setChecked(labUrinalysis.bacteriaNit.equals("1"));
-        checkBoxes.get(0).setChecked(labUrinalysis.leukocyte.equals("1"));
+        checkBoxes.get(1).setChecked(labUrinalysis.albumin.equals("1"));
+        checkBoxes.get(2).setChecked(labUrinalysis.ketone.equals("1"));
+        checkBoxes.get(3).setChecked(labUrinalysis.bilirubin.equals("1"));
+        checkBoxes.get(4).setChecked(labUrinalysis.blood.equals("1"));
+        checkBoxes.get(5).setChecked(labUrinalysis.bacteriaNit.equals("1"));
+        checkBoxes.get(6).setChecked(labUrinalysis.leukocyte.equals("1"));
         editTexts.get(17).setText(labUrinalysis.amorphousSubs);
         editTexts.get(18).setText(labUrinalysis.uricAcid);
         editTexts.get(19).setText(labUrinalysis.calciumOxalate);
@@ -432,14 +435,22 @@ public class Lab_Urinalysis_Form extends AppCompatActivity implements View.OnCli
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position == dateIndex) {
             editTexts.get(position).performClick();
-        } else if ((position > 8 && position < 14) || position == 15 || position == 16) {
-            checkBoxes.get(position - 15).requestFocus();
+        } else if ((position >= 16 && position <= 20) || position == 22 || position == 23) {
+            /*Log.d("error", String.valueOf(position));
+            int pos = (position >= 16 && position <= 20) ? (position - 16) : (position - 17);
+            CheckBox checkBox = checkBoxes.get(pos);
+            checkBox.requestFocus();
+            checkBox.setFocusable(false);
+            checkBox.setFocusableInTouchMode(false);
+            checkBox.setFocusable(true);
+            checkBox.setFocusableInTouchMode(true);*/
         } else if (position > 23) {
             editTexts.get(position - 7).requestFocus();
+        } else if (position == 21) {
+            editTexts.get(position - 5).requestFocus();
         } else {
             editTexts.get(position).requestFocus();
         }
-
     }
 
     @Override
