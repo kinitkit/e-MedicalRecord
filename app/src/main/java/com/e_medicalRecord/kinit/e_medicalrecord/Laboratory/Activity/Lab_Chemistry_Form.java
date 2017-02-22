@@ -88,7 +88,7 @@ public class Lab_Chemistry_Form extends AppCompatActivity implements AdapterView
         viewer = intent.getExtras().getParcelable("viewer");
         if (intent.hasExtra("laboratory")) {
             laboratory = intent.getExtras().getParcelable("laboratory");
-            getSupportActionBar().setTitle("Update Blood Chemistry Test");
+            getSupportActionBar().setTitle("Upate Blood Chemistry Test");
         } else {
             getSupportActionBar().setTitle("Blood Chemistry Form");
         }
