@@ -19,7 +19,7 @@ public class Fragment_Profile_BasicInfo extends Fragment {
 
     //TextView
     TextView tv_profession, tv_license, tv_name, tv_gender, tv_birthday, tv_occupation, tv_address, tv_contactNumber, tv_email, tv_nationality,
-    tv_civilStatus, tv_religion;
+            tv_civilStatus, tv_religion, tv_height, tv_weight;
     //CardView
     CardView cardView_medicalProfession;
 
@@ -37,24 +37,26 @@ public class Fragment_Profile_BasicInfo extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState){
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         //Cardview
-        cardView_medicalProfession = (CardView)rootView.findViewById(R.id.cardView_medicalProfession);
+        cardView_medicalProfession = (CardView) rootView.findViewById(R.id.cardView_medicalProfession);
         //TextView
-        tv_name = (TextView)rootView.findViewById(R.id.tv_name);
-        tv_gender = (TextView)rootView.findViewById(R.id.tv_gender);
-        tv_birthday = (TextView)rootView.findViewById(R.id.tv_birthday);
-        tv_occupation = (TextView)rootView.findViewById(R.id.tv_occupation);
-        tv_address = (TextView)rootView.findViewById(R.id.tv_address);
-        tv_contactNumber = (TextView)rootView.findViewById(R.id.tv_contactNumber);
-        tv_email = (TextView)rootView.findViewById(R.id.tv_email);
+        tv_name = (TextView) rootView.findViewById(R.id.tv_name);
+        tv_gender = (TextView) rootView.findViewById(R.id.tv_gender);
+        tv_birthday = (TextView) rootView.findViewById(R.id.tv_birthday);
+        tv_height = (TextView) rootView.findViewById(R.id.tv_height);
+        tv_weight = (TextView) rootView.findViewById(R.id.tv_weight);
+        tv_occupation = (TextView) rootView.findViewById(R.id.tv_occupation);
+        tv_address = (TextView) rootView.findViewById(R.id.tv_address);
+        tv_contactNumber = (TextView) rootView.findViewById(R.id.tv_contactNumber);
+        tv_email = (TextView) rootView.findViewById(R.id.tv_email);
         tv_civilStatus = (TextView) rootView.findViewById(R.id.tv_civilStatus);
         tv_nationality = (TextView) rootView.findViewById(R.id.tv_nationality);
         tv_religion = (TextView) rootView.findViewById(R.id.tv_religion);
 
-        if(user.patient_id != 0){
+        if (user.patient_id != 0) {
             cardView_medicalProfession.setVisibility(View.GONE);
 
         } else {
@@ -62,10 +64,12 @@ public class Fragment_Profile_BasicInfo extends Fragment {
             tv_civilStatus.setVisibility(View.GONE);
             tv_religion.setVisibility(View.GONE);
         }
-        if(user.medical_staff_id != 0){
+        if (user.medical_staff_id != 0) {
             cardView_medicalProfession.setVisibility(View.VISIBLE);
-            tv_profession = (TextView)rootView.findViewById(R.id.tv_profession);
-            tv_license = (TextView)rootView.findViewById(R.id.tv_license);
+            tv_profession = (TextView) rootView.findViewById(R.id.tv_profession);
+            tv_license = (TextView) rootView.findViewById(R.id.tv_license);
+            tv_height.setVisibility(View.GONE);
+            tv_weight.setVisibility(View.GONE);
             tv_birthday.setVisibility(View.GONE);
             tv_occupation.setVisibility(View.GONE);
             tv_address.setVisibility(View.GONE);
@@ -73,20 +77,33 @@ public class Fragment_Profile_BasicInfo extends Fragment {
         setTextViewText();
     }
 
-    public void setUser(User user){
+    public void setUser(User user) {
         this.user = user;
 
-        if(tv_name != null){
+        if (tv_name != null) {
             setTextViewText();
         }
     }
 
-    void setTextViewText(){
-        if(user.medical_staff_id != 0){
+    void setTextViewText() {
+        if (user.medical_staff_id != 0) {
             tv_profession.setText(user.medical_staff_type);
             tv_license.setText(user.licenseNumber);
         } else {
             tv_birthday.setText(user.birthday);
+
+            if (user.height.equals("0")) {
+                tv_height.setVisibility(View.GONE);
+            } else {
+                tv_height.setText(String.format("%s cm", user.height));
+            }
+
+            if (user.weight.equals("0")) {
+                tv_weight.setVisibility(View.GONE);
+            } else {
+                tv_weight.setText(String.format("%s kg", user.weight));
+            }
+
             tv_address.setText(user.address);
             tv_civilStatus.setText(user.civilStatus);
             tv_nationality.setText(user.nationality);

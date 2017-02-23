@@ -238,7 +238,7 @@ public class Vaccination_List extends AppCompatActivity implements View.OnClickL
                                     jsonArray = rootJsonArray.getJSONArray(0);
                                     jsonObject = jsonArray.getJSONObject(0);
                                     if (jsonObject.has("isMyPhysician")) {
-                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
+                                        isButtonViewable = (viewer != null) && jsonObject.getString("isMyPhysician").equals("1");
                                     }
                                     if (rootJsonArray.get(1) instanceof JSONArray) {
                                         jsonArray = rootJsonArray.getJSONArray(1);

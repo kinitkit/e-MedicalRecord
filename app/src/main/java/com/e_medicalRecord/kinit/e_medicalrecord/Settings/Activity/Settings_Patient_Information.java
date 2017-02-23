@@ -2,8 +2,8 @@ package com.e_medicalRecord.kinit.e_medicalrecord.Settings.Activity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -22,10 +22,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.e_medicalRecord.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_AlertDialog;
 import com.e_medicalRecord.kinit.e_medicalrecord.General.Classes.Dialogs.Custom_ProgressDialog;
 import com.e_medicalRecord.kinit.e_medicalrecord.General.Classes.Dialogs.DatePickerFragment;
-import com.e_medicalRecord.kinit.e_medicalrecord.Profile.Class.User;
-import com.e_medicalRecord.kinit.e_medicalrecord.R;
 import com.e_medicalRecord.kinit.e_medicalrecord.General.Request.Custom_Singleton;
 import com.e_medicalRecord.kinit.e_medicalrecord.General.Request.UrlString;
+import com.e_medicalRecord.kinit.e_medicalrecord.Profile.Class.User;
+import com.e_medicalRecord.kinit.e_medicalrecord.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,7 +44,7 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
     Custom_ProgressDialog progressDialog;
 
     //Widgets
-    EditText et_bday, et_address, et_occupation, et_nationality, et_religion;
+    EditText et_bday, et_height, et_weight, et_address, et_occupation, et_nationality, et_religion;
     Spinner spinner_civilStatus;
     ArrayAdapter arrayAdapter_civilStatus;
     Button btn_save;
@@ -70,6 +70,8 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
         alertDialog = new Custom_AlertDialog(this);
 
         et_address = (EditText) findViewById(R.id.et_address);
+        et_height = (EditText) findViewById(R.id.et_height);
+        et_weight = (EditText) findViewById(R.id.et_weight);
         et_nationality = (EditText) findViewById(R.id.et_nationality);
         et_religion = (EditText) findViewById(R.id.et_religion);
         et_occupation = (EditText) findViewById(R.id.et_occupation);
@@ -101,6 +103,8 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
 
     void setEditText() {
         et_address.setText(user.address);
+        et_height.setText(user.height);
+        et_weight.setText(user.weight);
         et_nationality.setText(user.nationality);
         et_religion.setText(user.religion);
         et_occupation.setText(user.occupation);
@@ -119,24 +123,57 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
 
         if (text.isEmpty()) {
             editText.setError(getString(R.string.required_field));
+            editText.requestFocus();
             isThereNoError = false;
         }
 
         return isThereNoError;
     }
 
+    boolean validateHeightAndWeight(EditText editText, String text, String type) {
+        boolean isThereNoError = true;
+        double vald;
+
+        if (!text.isEmpty()) {
+            switch (type) {
+                case "height":
+                    vald = Double.parseDouble(text);
+                    if (vald < 50 || vald > 500) {
+                        editText.setError(getString(R.string.value_is_out_of_range));
+                        editText.requestFocus();
+                        isThereNoError = false;
+                    }
+                    break;
+                case "weight":
+                    vald = Double.parseDouble(text);
+                    if (vald < 10 || vald > 300) {
+                        editText.setError(getString(R.string.value_is_out_of_range));
+                        editText.requestFocus();
+                        isThereNoError = false;
+                    }
+                    break;
+            }
+        }
+
+        return isThereNoError;
+
+    }
+
     void onClickSave() {
         String strAddress = et_address.getText().toString().trim(), strNationality = et_nationality.getText().toString().trim(),
                 strReligion = et_religion.getText().toString().trim(), strOccupation = et_occupation.getText().toString().trim(),
-                strCivilStatus = spinner_civilStatus.getSelectedItem().toString();
+                strCivilStatus = spinner_civilStatus.getSelectedItem().toString(), strHeight = et_height.getText().toString(),
+                strWeight = et_weight.getText().toString();
 
         if (validateEditText(et_address, strAddress) && validateEditText(et_address, strAddress) &&
-                validateEditText(et_address, strAddress) && validateEditText(et_address, strAddress)) {
-            sendData(strAddress, strNationality, strReligion, strOccupation, strCivilStatus);
+                validateEditText(et_address, strAddress) && validateEditText(et_address, strAddress) &&
+                validateHeightAndWeight(et_height, strHeight, "height") && validateHeightAndWeight(et_weight, strWeight, "weight")) {
+            sendData(strAddress, strNationality, strReligion, strOccupation, strCivilStatus, strHeight, strWeight);
         }
     }
 
-    void sendData(final String strAddress, final String strNationality, final String strReligion, final String strOccupation, final String strCivilStatus) {
+    void sendData(final String strAddress, final String strNationality, final String strReligion, final String strOccupation, final String strCivilStatus,
+                  final String height, final String weight) {
         progressDialog.show("Saving...");
         try {
             StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_SETTINGS,
@@ -146,11 +183,13 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
                             try {
                                 JSONArray rootJsonArray = new JSONArray(response);
                                 JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if(jsonObject.has("code")){
+                                if (jsonObject.has("code")) {
                                     String code = jsonObject.getString("code");
-                                    if(code.equals("success") || code.equals("empty")){
+                                    if (code.equals("success") || code.equals("empty")) {
                                         Toast.makeText(getApplicationContext(), getString(R.string.record_updated), Toast.LENGTH_SHORT).show();
                                         user.address = strAddress;
+                                        user.height = height;
+                                        user.weight = weight;
                                         user.nationality = strNationality;
                                         user.religion = strReligion;
                                         user.occupation = strOccupation;
@@ -161,7 +200,7 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
                                     } else {
                                         alertDialog.show("Error", getString(R.string.error_occured));
                                     }
-                                } else if(jsonObject.has("exception")){
+                                } else if (jsonObject.has("exception")) {
                                     alertDialog.show("Error", jsonObject.getString("exception"));
                                 }
                             } catch (Exception e) {
@@ -184,6 +223,8 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
                     params.put("device", "mobile");
                     params.put("patient_id", String.valueOf(user.patient_id));
                     params.put("address", strAddress);
+                    params.put("height", (height.equals("")) ? "0" : height);
+                    params.put("weight", (weight.equals("")) ? "0" : weight);
                     params.put("nationality", strNationality);
                     params.put("religion", strReligion);
                     params.put("occupation", strOccupation);
@@ -194,12 +235,12 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
                 }
             };
             Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    void setUpChanged(){
+    void setUpChanged() {
         Intent intent = new Intent();
         intent.putExtra("user", user);
         intent.putExtra("isInformationChanged", isInformationChanged);
@@ -231,7 +272,7 @@ public class Settings_Patient_Information extends AppCompatActivity implements V
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
                 && keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {

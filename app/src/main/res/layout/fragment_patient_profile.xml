@@ -93,7 +93,8 @@
                             android:layout_marginBottom="10dp"
                             android:text="Personal"
                             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:textColor="@color/colorPrimaryDark"
+                            android:id="@+id/textView" />
 
                         <TextView
                             android:id="@+id/tv_name"
@@ -101,6 +102,17 @@
                             android:layout_height="match_parent"
                             android:drawablePadding="10dp"
                             android:drawableStart="@mipmap/ic_name"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/tv_birthday"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawablePadding="10dp"
+                            android:drawableStart="@mipmap/ic_calendar"
                             android:gravity="center_vertical"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
@@ -118,22 +130,33 @@
                             android:textSize="17sp" />
 
                         <TextView
-                            android:id="@+id/tv_nationality"
+                            android:id="@+id/tv_height"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:drawablePadding="10dp"
-                            android:drawableStart="@mipmap/ic_nationality"
+                            android:drawableStart="@mipmap/ic_height"
                             android:gravity="center_vertical"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="17sp" />
 
                         <TextView
-                            android:id="@+id/tv_birthday"
+                            android:id="@+id/tv_weight"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:drawablePadding="10dp"
-                            android:drawableStart="@mipmap/ic_calendar"
+                            android:drawableStart="@mipmap/ic_weight"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/tv_nationality"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawablePadding="10dp"
+                            android:drawableStart="@mipmap/ic_nationality"
                             android:gravity="center_vertical"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorTextPrimary"

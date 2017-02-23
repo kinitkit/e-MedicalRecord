@@ -98,6 +98,10 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
         recyclerView_Content = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerViewLayoutM_Content = new LinearLayoutManager(this);
 
+        if (viewer != null) {
+            btn_add.hide();
+        }
+
         fetchData();
     }
 
@@ -118,7 +122,7 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
                                     jsonArray = rootJsonArray.getJSONArray(0);
                                     jsonObject = jsonArray.getJSONObject(0);
                                     if (jsonObject.has("isMyPhysician")) {
-                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
+                                        isButtonViewable = (viewer != null) && jsonObject.getString("isMyPhysician").equals("1");
                                     }
                                     jsonObject = rootJsonArray.getJSONObject(1);
                                     if (jsonObject.getString("code").equals("success")) {
@@ -281,8 +285,6 @@ public class Admission_List extends AppCompatActivity implements SwipeRefreshLay
             if (busAdmissionOnLongClick.admission.userDataId == viewer.user_id) {
                 action_AlertDialog(busAdmissionOnLongClick);
             }
-        } else {
-            action_AlertDialog(busAdmissionOnLongClick);
         }
     }
 

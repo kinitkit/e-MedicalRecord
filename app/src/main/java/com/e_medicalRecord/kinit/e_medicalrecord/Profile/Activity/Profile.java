@@ -173,6 +173,8 @@ public class Profile extends AppCompatActivity {
                                                 user.civilStatus = jsonObject.getString("civil_status");
                                                 user.nationality = jsonObject.getString("nationality");
                                                 user.religion = jsonObject.getString("religion");
+                                                user.height = jsonObject.getString("height");
+                                                user.weight = jsonObject.getString("weight");
                                                 break;
                                             case "medicalStaff_data":
                                                 user.licenseNumber = jsonObject.getString("license_number");
@@ -297,8 +299,8 @@ public class Profile extends AppCompatActivity {
                 if (data.getBooleanExtra("isInformationChanged", false)) {
                     getUserData();
                 }
-                if(data.hasExtra("isImageChanged")){
-                    if(data.getBooleanExtra("isImageChanged", false)){
+                if (data.hasExtra("isImageChanged")) {
+                    if (data.getBooleanExtra("isImageChanged", false)) {
                         fragment_profile.setImage();
                     }
                 }

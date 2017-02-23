@@ -169,7 +169,7 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
                                     jsonArray = rootJsonArray.getJSONArray(0);
                                     jsonObject = jsonArray.getJSONObject(0);
                                     if (jsonObject.has("isMyPhysician")) {
-                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
+                                        isButtonViewable = (viewer != null) && jsonObject.getString("isMyPhysician").equals("1");
                                     }
                                     jsonObject = rootJsonArray.getJSONObject(1);
                                     if (jsonObject.getString("code").equals("success")) {
@@ -284,8 +284,6 @@ public class Consultation_List extends AppCompatActivity implements SwipeRefresh
                     if (busConsultation.consultation.userDataId == viewer.user_id) {
                         action_AlertDialog(busConsultation);
                     }
-                } else {
-                    action_AlertDialog(busConsultation);
                 }
                 break;
         }

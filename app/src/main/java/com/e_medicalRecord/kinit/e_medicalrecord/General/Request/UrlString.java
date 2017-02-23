@@ -6,9 +6,9 @@ public class UrlString {
 
     //private static final String ipAddress = "http://192.168.56.2:80/medical_record/"; //sa Virtual Box
     //private static final String ipAddress = "http://192.168.0.146:80/medical_record/"; //sa balay
-    private static final String ipAddress = "http://192.168.0.114:80/medical_record/"; //sa balay
+    //private static final String ipAddress = "http://192.168.0.114:80/medical_record/"; //sa balay
     //static final String ipAddress = "http://192.168.43.19:80/medical_record/"; //sa cp
-    //private static final String ipAddress = "http://emr.bsitcapstone.com/medical_record/"; //sa online
+    private static final String ipAddress = "http://emr.bsitcapstone.com/medical_record/"; //sa online
 
     public static final String URL = ipAddress + "main.php";
     public static final String URL_ADMISSION = ipAddress + "mobile_functions/admission.php";

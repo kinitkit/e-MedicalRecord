@@ -118,7 +118,7 @@ public class Medical_Prescription_List extends AppCompatActivity implements Swip
                                     jsonArray = rootJsonArray.getJSONArray(0);
                                     jsonObject = jsonArray.getJSONObject(0);
                                     if (jsonObject.has("isMyPhysician")) {
-                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
+                                        isButtonViewable = (viewer != null) && jsonObject.getString("isMyPhysician").equals("1");
                                     }
                                     jsonObject = rootJsonArray.getJSONObject(1);
                                     if (jsonObject.getString("code").equals("successful")) {
@@ -281,8 +281,6 @@ public class Medical_Prescription_List extends AppCompatActivity implements Swip
             if(viewer.user_id == busMedicalPrescriptionLongClick.user_data_id) {
                 action_AlertDialog(busMedicalPrescriptionLongClick);
             }
-        } else {
-            action_AlertDialog(busMedicalPrescriptionLongClick);
         }
     }
 

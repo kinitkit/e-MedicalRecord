@@ -109,118 +109,6 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
         fetchData();
     }
 
-    void fetchData() {
-        laboratories = new ArrayList<>();
-        try {
-            progressBar.show();
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_LABORATORY,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("error", response);
-                            try {
-                                boolean isButtonViewable = true;
-                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
-                                JSONObject jsonObject;
-                                if (rootJsonArray.get(0) instanceof JSONArray) {
-                                    jsonArray = rootJsonArray.getJSONArray(0);
-                                    jsonObject = jsonArray.getJSONObject(0);
-                                    if (jsonObject.has("isMyPhysician")) {
-                                        isButtonViewable = (viewer != null) ? jsonObject.getString("isMyPhysician").equals("1") : true;
-                                    }
-                                    jsonObject = rootJsonArray.getJSONObject(1);
-                                    if (jsonObject.getString("code").equals("successful")) {
-                                        jsonArray = rootJsonArray.getJSONArray(2);
-                                        int jsonArrayLength = jsonArray.length();
-                                        for (int x = 0; x < jsonArrayLength; x++) {
-                                            jsonObject = jsonArray.getJSONObject(x);
-                                            laboratories.add(new Laboratory(jsonObject));
-                                        }
-                                        loadToRecyclerView();
-                                        btn_initializer(isButtonViewable);
-                                    } else if (jsonObject.getString("code").equals("empty")) {
-                                        loadToRecyclerView();
-                                        btn_initializer(isButtonViewable);
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                progressBar.hide();
-                                NothingToShow.showNothingToShow(laboratories, recyclerView_Content, nothingToShow);
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    progressBar.hide();
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("action", "getLabResult");
-                    params.put("device", "mobile");
-                    params.put("patient_id", String.valueOf(patient.id));
-                    params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
-                    params.put("user_data_id", String.valueOf((viewer != null) ? viewer.user_id : patient.user_data_id));
-                    params.put("table_name", table_name);
-                    return params;
-                }
-            };
-            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
-            progressBar.hide();
-        }
-    }
-
-    void deleteData(final Bus_Laboratory_OnLongClick busLaboratoryOnLongClick) {
-        progressDialog.show("Deleting...");
-        try {
-            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_LABORATORY,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("error", response);
-                            try {
-                                JSONArray rootJsonArray = new JSONArray(response);
-                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
-                                if (jsonObject.getString("code").equals("successful")) {
-                                    laboratories.remove(busLaboratoryOnLongClick.position);
-                                    recyclerViewAdapter_Content.notifyItemRemoved(busLaboratoryOnLongClick.position);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                progressDialog.dismiss();
-                                NothingToShow.showNothingToShow(laboratories, recyclerView_Content, nothingToShow);
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            progressDialog.dismiss();
-                        }
-                    }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("action", "deleteLabTest");
-                    params.put("device", "mobile");
-                    params.put("id", String.valueOf(busLaboratoryOnLongClick.laboratory.lab_id));
-                    return params;
-                }
-            };
-            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
-        } catch (Exception e) {
-            progressDialog.dismiss();
-            e.printStackTrace();
-        }
-    }
-
     void btn_initializer(boolean isButtonViewable) {
         if (isButtonViewable) {
             btn_add.show();
@@ -341,6 +229,118 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
         }
     }
 
+    void fetchData() {
+        laboratories = new ArrayList<>();
+        try {
+            progressBar.show();
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_LABORATORY,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                boolean isButtonViewable = true;
+                                JSONArray rootJsonArray = new JSONArray(response), jsonArray;
+                                JSONObject jsonObject;
+                                if (rootJsonArray.get(0) instanceof JSONArray) {
+                                    jsonArray = rootJsonArray.getJSONArray(0);
+                                    jsonObject = jsonArray.getJSONObject(0);
+                                    if (jsonObject.has("isMyPhysician")) {
+                                        isButtonViewable = (viewer != null) && jsonObject.getString("isMyPhysician").equals("1");
+                                    }
+                                    jsonObject = rootJsonArray.getJSONObject(1);
+                                    if (jsonObject.getString("code").equals("successful")) {
+                                        jsonArray = rootJsonArray.getJSONArray(2);
+                                        int jsonArrayLength = jsonArray.length();
+                                        for (int x = 0; x < jsonArrayLength; x++) {
+                                            jsonObject = jsonArray.getJSONObject(x);
+                                            laboratories.add(new Laboratory(jsonObject));
+                                        }
+                                        loadToRecyclerView();
+                                        btn_initializer(isButtonViewable);
+                                    } else if (jsonObject.getString("code").equals("empty")) {
+                                        loadToRecyclerView();
+                                        btn_initializer(isButtonViewable);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                progressBar.hide();
+                                NothingToShow.showNothingToShow(laboratories, recyclerView_Content, nothingToShow);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    progressBar.hide();
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "getLabResult");
+                    params.put("device", "mobile");
+                    params.put("patient_id", String.valueOf(patient.id));
+                    params.put("medical_staff_id", (viewer != null) ? String.valueOf(viewer.medicalStaff_id) : "0");
+                    params.put("user_data_id", String.valueOf((viewer != null) ? viewer.user_id : patient.user_data_id));
+                    params.put("table_name", table_name);
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            progressBar.hide();
+        }
+    }
+
+    void deleteData(final Bus_Laboratory_OnLongClick busLaboratoryOnLongClick) {
+        progressDialog.show("Deleting...");
+        try {
+            StringRequest stringRequest = new StringRequest(UrlString.POST, UrlString.URL_LABORATORY,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("error", response);
+                            try {
+                                JSONArray rootJsonArray = new JSONArray(response);
+                                JSONObject jsonObject = rootJsonArray.getJSONObject(0);
+                                if (jsonObject.getString("code").equals("successful")) {
+                                    laboratories.remove(busLaboratoryOnLongClick.position);
+                                    recyclerViewAdapter_Content.notifyItemRemoved(busLaboratoryOnLongClick.position);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                progressDialog.dismiss();
+                                NothingToShow.showNothingToShow(laboratories, recyclerView_Content, nothingToShow);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressDialog.dismiss();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("action", "deleteLabTest");
+                    params.put("device", "mobile");
+                    params.put("id", String.valueOf(busLaboratoryOnLongClick.laboratory.lab_id));
+                    return params;
+                }
+            };
+            Custom_Singleton.getInstance(this).addToRequestQueue(stringRequest);
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+
     @Subscribe
     public void onClickItem(Bus_Laboratory_OnClick busLaboratoryOnClick) {
         intent = new Intent(this, Laboratory_Result_View.class);
@@ -357,8 +357,6 @@ public class Laboratory_Results extends AppCompatActivity implements View.OnClic
             if (busLaboratoryOnLongClick.laboratory.user_data_id == viewer.user_id) {
                 action_AlertDialog(busLaboratoryOnLongClick);
             }
-        } else {
-            action_AlertDialog(busLaboratoryOnLongClick);
         }
     }
 

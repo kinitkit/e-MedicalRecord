@@ -99,6 +99,10 @@ public class Past_Medical_History_List extends AppCompatActivity implements Swip
         recyclerView_Content = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerViewLayoutM_Content = new LinearLayoutManager(this);
 
+        if (viewer != null) {
+            btn_add.hide();
+        }
+
         fetchData();
     }
 
